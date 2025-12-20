@@ -170,3 +170,159 @@ export async function getUserEvent(id: string) {
     return { error: 'Failed to get event' }
   }
 }
+
+
+const UpdateEventSchema = z.object({
+  title: z.string().min(1, 'Title is required').max(100).optional(),
+  description: z.string().max(1000).optional(),
+  eventDate: z.string().optional(), // ISO date string
+  eventTime: z.string().optional(),
+  location: z.string().max(200).optional(),
+  locationAddress: z.string().max(500).optional(),
+  locationUrl: z.string().url().optional().or(z.literal('')),
+  dressCode: z.string().max(100).optional(),
+  giftRegistry: z.string().url().optional().or(z.literal('')),
+  menu: z.string().max(1000).optional(),
+  theme: z.string().optional(),
+  primaryColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  isPublished: z.boolean().optional(),
+})
+
+/**
+ * Actualizar evento
+ */
+export async function updateEvent(id: string, values: z.infer<typeof UpdateEventSchema>) {
+  try {
+    const session = await auth()
+    
+    if (!session?.user?.id) {
+      return { error: 'Unauthorized' }
+    }
+
+    // Verificar que el evento exista y pertenezca al usuario
+    const event = await prisma.event.findFirst({
+      where: {
+        id,
+        userId: session.user.id
+      }
+    })
+
+    if (!event) {
+      return { error: 'EventNotFound' }
+    }
+
+    // Validar datos
+    const validatedFields = UpdateEventSchema.safeParse(values)
+    
+    if (!validatedFields.success) {
+      return { error: 'InvalidFields' }
+    }
+
+    const data = validatedFields.data
+
+    // Convertir fecha ISO a DateTime si existe
+    const updateData: any = { ...data }
+    if (data.eventDate) {
+      updateData.eventDate = new Date(data.eventDate)
+    }
+
+    // Actualizar evento
+    const updatedEvent = await prisma.event.update({
+      where: { id },
+      data: updateData,
+      include: {
+        eventType: true
+      }
+    })
+
+    revalidatePath(`/events/${id}`)
+
+    console.log('[Events] ✅ Event updated:', updatedEvent.slug)
+
+    return { success: true, event: updatedEvent }
+  } catch (error) {
+    console.error('[Events] Error updating event:', error)
+    return { error: 'UpdateFailed' }
+  }
+}
+
+/**
+ * Eliminar evento
+ */
+export async function deleteEvent(id: string) {
+  try {
+    const session = await auth()
+    
+    if (!session?.user?.id) {
+      return { error: 'Unauthorized' }
+    }
+
+    // Verificar que el evento exista y pertenezca al usuario
+    const event = await prisma.event.findFirst({
+      where: {
+        id,
+        userId: session.user.id
+      }
+    })
+
+    if (!event) {
+      return { error: 'EventNotFound' }
+    }
+
+    // Eliminar evento (cascade eliminará guests)
+    await prisma.event.delete({
+      where: { id }
+    })
+
+    revalidatePath('/events')
+
+    console.log('[Events] ✅ Event deleted:', event.slug)
+
+    return { success: true }
+  } catch (error) {
+    console.error('[Events] Error deleting event:', error)
+    return { error: 'DeleteFailed' }
+  }
+}
+
+/**
+ * Publicar/Despublicar evento
+ */
+export async function togglePublishEvent(id: string) {
+  try {
+    const session = await auth()
+    
+    if (!session?.user?.id) {
+      return { error: 'Unauthorized' }
+    }
+
+    const event = await prisma.event.findFirst({
+      where: {
+        id,
+        userId: session.user.id
+      }
+    })
+
+    if (!event) {
+      return { error: 'EventNotFound' }
+    }
+
+    const updatedEvent = await prisma.event.update({
+      where: { id },
+      data: {
+        isPublished: !event.isPublished
+      }
+    })
+
+    revalidatePath(`/events/${id}`)
+    revalidatePath(`/e/${updatedEvent.slug}`)
+
+    console.log('[Events] ✅ Event publish toggled:', updatedEvent.slug, updatedEvent.isPublished)
+
+    return { success: true, event: updatedEvent }
+  } catch (error) {
+    console.error('[Events] Error toggling publish:', error)
+    return { error: 'ToggleFailed' }
+  }
+}
+
