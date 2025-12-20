@@ -104,14 +104,21 @@ export function UserMenu({ user, locale, isAuthenticated }: UserMenuProps) {
                   {t('profile')}
                 </Link>
 
-                {/* NUEVO: Mis Eventos */}
-                <Link
-                  href={`/${locale}/events`}
-                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-700"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {t('myEvents')}
-                </Link>
+                {/* NUEVO: Solo mostrar "Mis Eventos" si NO es admin */}
+                {user.role !== 'ADMIN' && (
+                  <Link
+                    href={`/${locale}/events`}
+                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-700"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {t('myEvents')}
+                  </Link>
+                )}
+                
+                {/* Separator before admin links */}
+                {user.role === 'ADMIN' && (
+                  <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+                )}
 
               {/* Admin Dashboard - Solo si es ADMIN */}
                 {user.role === 'ADMIN' && (

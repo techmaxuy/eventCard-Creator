@@ -160,7 +160,8 @@
     "login": "Iniciar Sesión",
     "register": "Registrarse",
     "adminDashboard": "Panel de Admin",
-    "myEvents": "Mis Eventos" 
+    "myEvents": "Mis Eventos" ,
+    "adminEvents": "Admin de Tarjetas" 
   },
   "Setup": {
     "title": "Bienvenido a EventCard",
@@ -434,6 +435,7 @@
       "InvalidFields": "Campos inválidos",
       "EventTypeNotFound": "Tipo de evento no encontrado",
       "CreateFailed": "Error al crear el evento"
-    }
+    },
+    "backToHome": "Volver al Inicio"
   }
 }

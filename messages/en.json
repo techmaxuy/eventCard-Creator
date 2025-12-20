@@ -152,7 +152,8 @@
     "login": "Login",
     "register": "Register",
     "adminDashboard": "Admin Dashboard",
-    "myEvents": "My Events" 
+    "myEvents": "My Events" ,
+    "adminEvents": "Admin Event Cards" 
   },
   "Setup": {
     "title": "Welcome to EventCard",
@@ -426,6 +427,7 @@
       "InvalidFields": "Invalid fields",
       "EventTypeNotFound": "Event type not found",
       "CreateFailed": "Failed to create event"
-    }
+    },
+    "backToHome": "Back to Home"
   }
 }
