@@ -237,7 +237,9 @@
     },
         "applyFilters": "Apply filters",
     "authMethod": "Auth method",
-    "systemSettingsDescription": "Configure app name, welcome messages and branding"
+    "systemSettingsDescription": "Configure app name, welcome messages and branding",
+    "eventTypes": "Event Types",
+    "eventTypesDescription": "Configure the event types available for users"
   },
   "Settings": {
     "title": "System Settings",
@@ -284,6 +286,73 @@
       "DeleteFailed": "Failed to delete file",
       "NoLogo": "No logo to delete",
       "NoFavicon": "No favicon to delete"
+    }
+  },
+  "EventTypes": {
+    "title": "Event Types",
+    "pageTitle": "Event Types",
+    "pageDescription": "Configure available event types for users",
+    "createNew": "Create New Type",
+    "createEventType": "Create Event Type",
+    "editEventType": "Edit Event Type",
+    "noEventTypes": "No event types configured",
+    "eventsUsing": "{count, plural, =0 {No events} =1 {1 event} other {# events}} using this type",
+    "edit": "Edit",
+    "delete": "Delete",
+    "backToList": "Back to list",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving...",
+    "created": "Event type created successfully!",
+    "updated": "Event type updated successfully!",
+    "confirmDelete": "Are you sure you want to delete '{name}'?",
+    "cannotDeleteWithEvents": "Cannot delete this type because it has {count} associated events",
+    "errorLoading": "Error loading event types",
+    
+    "basicInformation": "Basic Information",
+    "nameSpanish": "Name (Spanish)",
+    "nameEnglish": "Name (English)",
+    "slug": "Slug",
+    "slugHelp": "Only lowercase letters, numbers, and hyphens. Ex: birthday",
+    "icon": "Icon/Emoji",
+    "iconHelp": "Emoji or icon to represent this type. Ex: 🎂",
+    "color": "Theme Color",
+    "defaultTheme": "Default Theme",
+    "descriptionSpanish": "Description (Spanish)",
+    "descriptionEnglish": "Description (English)",
+    
+    "availableFields": "Available Fields",
+    "availableFieldsHelp": "Select which fields will be available for this event type",
+    
+    "fields": {
+      "date": "Event Date",
+      "time": "Event Time",
+      "location": "Location",
+      "dressCode": "Dress Code",
+      "giftRegistry": "Gift Registry",
+      "menu": "Menu"
+    },
+    
+    "themes": {
+      "classic": "Classic",
+      "modern": "Modern",
+      "elegant": "Elegant",
+      "fun": "Fun"
+    },
+    
+    "activeStatus": "Active Type",
+    "activeStatusHelp": "Inactive types won't be available for users",
+    
+    "errors": {
+      "Unauthorized": "Unauthorized",
+      "InvalidFields": "Invalid fields",
+      "SlugAlreadyExists": "This slug is already in use",
+      "EventTypeNotFound": "Event type not found",
+      "CannotDeleteWithEvents": "Cannot delete a type with associated events",
+      "CreateFailed": "Failed to create event type",
+      "UpdateFailed": "Failed to update event type",
+      "DeleteFailed": "Failed to delete event type",
+      "EventTypesAlreadyExist": "Event types already exist"
     }
   }
 }

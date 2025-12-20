@@ -1,7 +1,7 @@
 import { requireAdmin } from '@/core/auth/lib/auth-helpers'
 import { prisma } from '@/core/shared/lib/db'
 import { getTranslations } from 'next-intl/server'
-import { Users, UserCheck, ShieldAlert, Calendar } from 'lucide-react'
+import { Users, UserCheck, ShieldAlert, Calendar, Settings, Ticket } from 'lucide-react'
 import Link from 'next/link'
 
 interface AdminPageProps {
@@ -161,6 +161,22 @@ export default async function AdminPage({ params }: AdminPageProps) {
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               {t('systemSettingsDescription')}
+            </p>
+          </Link>
+          
+          {/* NUEVO: Event Types */}
+          <Link
+            href={`/${locale}/admin/event-types`}
+            className="block p-6 bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 hover:border-green-500 dark:hover:border-green-500 transition-colors"
+          >
+            <div className="flex items-center gap-3 mb-2">
+              <Ticket className="w-6 h-6 text-green-600 dark:text-green-400" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                {t('eventTypes')}
+              </h3>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {t('eventTypesDescription')}
             </p>
           </Link>
         </div>
