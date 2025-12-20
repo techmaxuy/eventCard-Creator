@@ -107,7 +107,7 @@ export function UserMenu({ user, locale, isAuthenticated }: UserMenuProps) {
                 {/* NUEVO: Solo mostrar "Mis Eventos" si NO es admin */}
                 {user.role !== 'ADMIN' && (
                   <Link
-                    href={`/${locale}/events`}
+                    href="/events"
                     className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-700"
                     onClick={() => setIsOpen(false)}
                   >
