@@ -22,6 +22,7 @@ model User {
   role          Role      @default(USER)
   accounts      Account[]
   sessions      Session[]
+  events        Event[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -76,4 +77,138 @@ model Settings {
   defaultLocale         String   @default("en")
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
+}
+
+// ========================================
+// FEATURE: EVENT CARDS
+// ========================================
+
+// Tipos de eventos pre-configurados por admins
+model EventType {
+  id                String   @id @default(cuid())
+  name              String   // "Cumpleaños", "Casamiento", etc.
+  nameEn            String   // "Birthday", "Wedding"
+  slug              String   @unique // "birthday", "wedding"
+  description       String?
+  descriptionEn     String?
+  icon              String?  // Emoji o nombre de ícono
+  color             String   @default("#3b82f6") // Color temático
+  
+  // Campos disponibles para este tipo
+  hasDate           Boolean  @default(true)
+  hasTime           Boolean  @default(true)
+  hasLocation       Boolean  @default(true)
+  hasDressCode      Boolean  @default(false)
+  hasGiftRegistry   Boolean  @default(false)
+  hasMenu           Boolean  @default(false)
+  customFields      Json?    // Campos adicionales personalizados
+  
+  // Configuración visual
+  defaultTheme      String   @default("classic")
+  allowedThemes     Json?    // Array de temas disponibles
+  
+  // Estado
+  isActive          Boolean  @default(true)
+  
+  // Relaciones
+  events            Event[]
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([slug])
+  @@index([isActive])
+}
+
+// Eventos creados por usuarios
+model Event {
+  id                String      @id @default(cuid())
+  userId            String
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  eventTypeId       String
+  eventType         EventType   @relation(fields: [eventTypeId], references: [id])
+  
+  // URL pública única
+  slug              String      @unique // "maria-cumple-30" 
+  
+  // Información básica
+  title             String      // "Cumpleaños de María"
+  description       String?     // Mensaje de bienvenida
+  
+  // Detalles del evento (campos comunes)
+  eventDate         DateTime?
+  eventTime         String?     // "19:00"
+  location          String?     // "Salón Las Flores"
+  locationAddress   String?     // Dirección completa
+  locationUrl       String?     // Google Maps URL
+  
+  // Campos opcionales según tipo
+  dressCode         String?     // "Formal", "Casual", etc.
+  giftRegistry      String?     // URL de registro de regalos
+  menu              String?     // Descripción del menú
+  customData        Json?       // Campos personalizados adicionales
+  
+  // Personalización visual
+  theme             String      @default("classic") // "classic", "modern", "elegant"
+  primaryColor      String      @default("#3b82f6")
+  coverImage        String?     // Imagen principal
+  gallery           Json?       // Array de URLs de imágenes
+  music             String?     // URL de música de fondo
+  
+  // Configuración
+  isPublished       Boolean     @default(false)
+  allowComments     Boolean     @default(false)
+  maxGuests         Int?        // Límite de confirmaciones
+  requirePhone      Boolean     @default(true)
+  
+  // Estadísticas
+  views             Int         @default(0)
+  shares            Int         @default(0)
+  
+  // Relaciones
+  guests            Guest[]
+  
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  
+  @@index([userId])
+  @@index([slug])
+  @@index([eventTypeId])
+  @@index([isPublished])
+}
+
+// Invitados que confirman asistencia
+model Guest {
+  id                String      @id @default(cuid())
+  eventId           String
+  event             Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  
+  // Información del invitado
+  name              String
+  phone             String
+  email             String?
+  
+  // Confirmación
+  status            GuestStatus @default(PENDING)
+  numberOfGuests    Int         @default(1) // Cuántas personas trae
+  message           String?     // Mensaje opcional del invitado
+  
+  // Metadata
+  ipAddress         String?
+  userAgent         String?
+  
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  
+  @@index([eventId])
+  @@index([phone])
+  @@index([status])
+}
+
+enum GuestStatus {
+  PENDING
+  CONFIRMED
+  DECLINED
+  MAYBE
 }
