@@ -355,7 +355,12 @@
       "UpdateFailed": "Failed to update event type",
       "DeleteFailed": "Failed to delete event type",
       "EventTypesAlreadyExist": "Event types already exist"
-    }
+    },
+    "createDefaults": "Create Defaults",
+    "creating": "Creating...",
+    "confirmSeed": "¿Create the default event types (BirthDay y Marriage)?",
+    "seedSuccess": "¡Event types creates sucessfully!",
+    "createDefaultsHint": "Use the green button to create default event types or create a custom one"
   },
   "AdminEvents": {
     "title": "Event Cards Admin Panel",

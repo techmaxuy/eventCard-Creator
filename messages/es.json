@@ -363,7 +363,12 @@
       "UpdateFailed": "Error al actualizar el tipo de evento",
       "DeleteFailed": "Error al eliminar el tipo de evento",
       "EventTypesAlreadyExist": "Ya existen tipos de eventos configurados"
-    }
+    },
+    "createDefaults": "Crear Tipos por Defecto",
+    "creating": "Creando...",
+    "confirmSeed": "¿Crear los tipos de eventos por defecto (Cumpleaños y Casamiento)?",
+    "seedSuccess": "¡Tipos de eventos creados exitosamente!",
+    "createDefaultsHint": "Usa el botón verde para crear tipos de eventos predefinidos o crea uno personalizado"
   },
    "AdminEvents": {
     "title": "Panel Admin Event Cards",

@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Plus, Edit, Trash2, Eye, EyeOff, Loader2 } from 'lucide-react'
+import { Plus, Edit, Trash2, Eye, EyeOff, Loader2, Sparkles } from 'lucide-react'
 import Link from 'next/link'
-import { deleteEventType } from '@/features/event-cards/actions/event-types'
+import { deleteEventType, seedDefaultEventTypes } from '@/features/event-cards/actions/event-types'
 
 interface EventType {
   id: string
@@ -30,6 +30,7 @@ export function EventTypesList({ eventTypes, locale }: EventTypesListProps) {
   const router = useRouter()
   const t = useTranslations('EventTypes')
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [isSeeding, setIsSeeding] = useState(false)
 
   const handleDelete = async (id: string, name: string, eventCount: number) => {
     if (eventCount > 0) {
@@ -54,6 +55,26 @@ export function EventTypesList({ eventTypes, locale }: EventTypesListProps) {
     setDeletingId(null)
   }
 
+
+   const handleSeedDefaults = async () => {
+    const confirmed = confirm(t('confirmSeed'))
+    
+    if (!confirmed) return
+
+    setIsSeeding(true)
+
+    const result = await seedDefaultEventTypes()
+
+    if (result.error) {
+      alert(t(`errors.${result.error}`) || result.error)
+    } else {
+      alert(t('seedSuccess'))
+      router.refresh()
+    }
+
+    setIsSeeding(false)
+  }
+
   return (
     <div className="space-y-4">
       {/* Header */}
@@ -61,6 +82,28 @@ export function EventTypesList({ eventTypes, locale }: EventTypesListProps) {
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
           {t('title')}
         </h2>
+
+        <div className="flex gap-2">  {/* ← CAMBIAR A flex */}
+          {/* Botón Seed (solo si no hay tipos) */}
+          {eventTypes.length === 0 && (
+            <button
+              onClick={handleSeedDefaults}
+              disabled={isSeeding}
+              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center gap-2"
+            >
+              {isSeeding ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <Sparkles className="w-5 h-5" />
+              )}
+              {isSeeding ? t('creating') : t('createDefaults')}
+            </button>
+          )}
+          </div>
+
+
+
+
         <Link
           href={`/${locale}/admin-events/event-types/new`}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
@@ -73,8 +116,12 @@ export function EventTypesList({ eventTypes, locale }: EventTypesListProps) {
       {/* Lista */}
       {eventTypes.length === 0 ? (
         <div className="text-center py-12 bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800">
+          <Sparkles className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <p className="text-gray-500 dark:text-gray-400">
             {t('noEventTypes')}
+          </p>
+          <p className="text-sm text-gray-400 dark:text-gray-500">
+            {t('createDefaultsHint')}
           </p>
         </div>
       ) : (
