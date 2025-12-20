@@ -101,7 +101,7 @@ export async function createEventType(values: z.infer<typeof EventTypeSchema>) {
       data: validatedFields.data
     })
 
-    revalidatePath('/admin/event-types')
+    revalidatePath('/admin-events/event-types')
 
     console.log('[EventTypes] ✅ Event type created:', eventType.slug)
 
@@ -157,7 +157,7 @@ export async function updateEventType(id: string, values: z.infer<typeof EventTy
       data: validatedFields.data
     })
 
-    revalidatePath('/admin/event-types')
+    revalidatePath('/admin-events/event-types')
 
     console.log('[EventTypes] ✅ Event type updated:', eventType.slug)
 
@@ -204,7 +204,7 @@ export async function deleteEventType(id: string) {
       where: { id }
     })
 
-    revalidatePath('/admin/event-types')
+    revalidatePath('/admin-events/event-types')
 
     console.log('[EventTypes] ✅ Event type deleted:', eventType.slug)
 
@@ -276,7 +276,7 @@ export async function seedDefaultEventTypes() {
       data: defaultTypes
     })
 
-    revalidatePath('/admin/event-types')
+    revalidatePath('/admin-events/event-types')
 
     console.log('[EventTypes] ✅ Default event types created')
 

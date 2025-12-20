@@ -247,7 +247,9 @@
     "authMethod": "Método de auth",
     "systemSettingsDescription": "Configura el nombre, mensajes de bienvenida y marca de la aplicación",
     "eventTypes": "Tipos de Eventos",
-    "eventTypesDescription": "Configura los tipos de eventos disponibles para los usuarios"
+    "eventTypesDescription": "Configura los tipos de eventos disponibles para los usuarios",
+    "eventCardsAdmin": "Admin Event Cards",
+    "eventCardsAdminDescription": "Gestiona tipos de eventos, tarjetas y configuración"
   },
   "Settings": {
     "title": "Configuración del Sistema",
@@ -362,5 +364,23 @@
       "DeleteFailed": "Error al eliminar el tipo de evento",
       "EventTypesAlreadyExist": "Ya existen tipos de eventos configurados"
     }
+  },
+   "AdminEvents": {
+    "title": "Panel Admin Event Cards",
+    "description": "Gestiona tipos de eventos, tarjetas y configuraciones",
+    "backToMainAdmin": "Panel Admin Principal",
+    "eventTypes": "Tipos de Eventos",
+    "activeTypes": "{count} activos",
+    "totalEvents": "Total de Eventos",
+    "publishedEvents": "{count} publicados",
+    "totalGuests": "Total de Invitados",
+    "confirmedGuests": "{count} confirmados",
+    "quickActions": "Acciones Rápidas",
+    "manageEventTypes": "Gestionar Tipos de Eventos",
+    "manageEventTypesDescription": "Crear, editar y eliminar tipos de eventos",
+    "analytics": "Analíticas",
+    "comingSoon": "Próximamente",
+    "recentActivity": "Actividad Reciente",
+    "noActivityYet": "No hay actividad reciente"
   }
 }

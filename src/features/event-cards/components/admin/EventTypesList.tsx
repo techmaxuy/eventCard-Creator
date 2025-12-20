@@ -62,7 +62,7 @@ export function EventTypesList({ eventTypes, locale }: EventTypesListProps) {
           {t('title')}
         </h2>
         <Link
-          href={`/${locale}/admin/event-types/new`}
+          href={`/${locale}/admin-events/event-types/new`}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
         >
           <Plus className="w-5 h-5" />
@@ -131,7 +131,7 @@ export function EventTypesList({ eventTypes, locale }: EventTypesListProps) {
               {/* Acciones */}
               <div className="flex items-center gap-2">
                 <Link
-                  href={`/${locale}/admin/event-types/${type.id}/edit`}
+                  href={`/${locale}/admin-events/event-types/${type.id}/edit`}
                   className="flex-1 px-3 py-2 text-sm text-blue-600 dark:text-blue-400 border border-blue-300 dark:border-blue-700 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center justify-center gap-2"
                 >
                   <Edit className="w-4 h-4" />

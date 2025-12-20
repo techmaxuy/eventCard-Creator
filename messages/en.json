@@ -239,7 +239,9 @@
     "authMethod": "Auth method",
     "systemSettingsDescription": "Configure app name, welcome messages and branding",
     "eventTypes": "Event Types",
-    "eventTypesDescription": "Configure the event types available for users"
+    "eventTypesDescription": "Configure the event types available for users",
+    "eventCardsAdmin": "Event Cards Admin",
+    "eventCardsAdminDescription": "Manage event types, cards and settings"
   },
   "Settings": {
     "title": "System Settings",
@@ -354,5 +356,23 @@
       "DeleteFailed": "Failed to delete event type",
       "EventTypesAlreadyExist": "Event types already exist"
     }
+  },
+  "AdminEvents": {
+    "title": "Event Cards Admin Panel",
+    "description": "Manage event types, cards and settings",
+    "backToMainAdmin": "Main Admin Panel",
+    "eventTypes": "Event Types",
+    "activeTypes": "{count} active",
+    "totalEvents": "Total Events",
+    "publishedEvents": "{count} published",
+    "totalGuests": "Total Guests",
+    "confirmedGuests": "{count} confirmed",
+    "quickActions": "Quick Actions",
+    "manageEventTypes": "Manage Event Types",
+    "manageEventTypesDescription": "Create, edit and delete event types",
+    "analytics": "Analytics",
+    "comingSoon": "Coming Soon",
+    "recentActivity": "Recent Activity",
+    "noActivityYet": "No recent activity"
   }
 }

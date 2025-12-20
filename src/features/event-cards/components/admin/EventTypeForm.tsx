@@ -101,7 +101,7 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
       } else {
         setMessage({ type: 'success', text: t(eventType ? 'updated' : 'created') })
         setTimeout(() => {
-          router.push(`/${locale}/admin/event-types`)
+          router.push(`/${locale}/admin-events/event-types`)
         }, 1000)
       }
     })
@@ -112,7 +112,7 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
       {/* Header */}
       <div className="mb-6">
         <Link
-          href={`/${locale}/admin/event-types`}
+          href={`/${locale}/admin-events/event-types`}
           className="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-4"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -390,7 +390,7 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
         {/* Submit Button */}
         <div className="flex justify-end gap-4">
           <Link
-            href={`/${locale}/admin/event-types`}
+            href={`/${locale}/admin-events/event-types`}
             className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
           >
             {t('cancel')}

@@ -163,20 +163,20 @@ export default async function AdminPage({ params }: AdminPageProps) {
               {t('systemSettingsDescription')}
             </p>
           </Link>
-          
-          {/* NUEVO: Event Types */}
+
+           {/* NUEVO: Event Cards Admin */}
           <Link
-            href={`/${locale}/admin/event-types`}
+            href={`/${locale}/admin-events`}
             className="block p-6 bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 hover:border-green-500 dark:hover:border-green-500 transition-colors"
           >
             <div className="flex items-center gap-3 mb-2">
               <Ticket className="w-6 h-6 text-green-600 dark:text-green-400" />
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {t('eventTypes')}
+                {t('eventCardsAdmin')}
               </h3>
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              {t('eventTypesDescription')}
+              {t('eventCardsAdminDescription')}
             </p>
           </Link>
         </div>
