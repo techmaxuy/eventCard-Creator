@@ -151,7 +151,8 @@
     "language": "Language",
     "login": "Login",
     "register": "Register",
-    "adminDashboard": "Admin Dashboard"
+    "adminDashboard": "Admin Dashboard",
+    "myEvents": "My Events" 
   },
   "Setup": {
     "title": "Welcome to EventCard",
@@ -379,5 +380,52 @@
     "comingSoon": "Coming Soon",
     "recentActivity": "Recent Activity",
     "noActivityYet": "No recent activity"
+  },
+  "Events": {
+    "myEvents": "My Events",
+    "myEventsDescription": "Manage your event cards",
+    "createEvent": "Create Event",
+    "noEvents": "You have no events created",
+    "noEventsDescription": "Create your first event to start inviting people",
+    "createFirstEvent": "Create My First Event",
+    "published": "Published",
+    "draft": "Draft",
+    
+    "createNewEvent": "Create New Event",
+    "createNewEventDescription": "Follow the steps to create your event card",
+    "backToEvents": "Back to My Events",
+    
+    "selectEventType": "Select Event Type",
+    "selectEventTypeDescription": "Choose what type of event you want to create",
+    "selectType": "Select Type",
+    "basicInfo": "Basic Info",
+    
+    "basicInformation": "Basic Information",
+    "basicInformationDescription": "Give your event a name and URL",
+    
+    "eventTitle": "Event Title",
+    "eventTitlePlaceholder": "Ex: Mary's 30th Birthday",
+    "eventTitleHelp": "This will be the main name of your event",
+    
+    "eventSlug": "Event URL",
+    "eventSlugHelp": "This will be your event's web address. Only lowercase letters, numbers and hyphens.",
+    
+    "continue": "Continue",
+    "back": "Back",
+    "creating": "Creating...",
+    "createAndContinue": "Create and Continue",
+    
+    "selectTypeFirst": "Please select an event type",
+    "fillAllFields": "Please fill all fields",
+    
+    "noEventTypesAvailable": "No event types available",
+    "noEventTypesDescription": "Contact the administrator to configure event types",
+    
+    "errors": {
+      "Unauthorized": "Unauthorized",
+      "InvalidFields": "Invalid fields",
+      "EventTypeNotFound": "Event type not found",
+      "CreateFailed": "Failed to create event"
+    }
   }
 }

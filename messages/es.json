@@ -159,7 +159,8 @@
     "language": "Idioma",
     "login": "Iniciar Sesión",
     "register": "Registrarse",
-    "adminDashboard": "Panel de Admin"
+    "adminDashboard": "Panel de Admin",
+    "myEvents": "Mis Eventos" 
   },
   "Setup": {
     "title": "Bienvenido a EventCard",
@@ -387,5 +388,52 @@
     "comingSoon": "Próximamente",
     "recentActivity": "Actividad Reciente",
     "noActivityYet": "No hay actividad reciente"
+  },
+  "Events": {
+    "myEvents": "Mis Eventos",
+    "myEventsDescription": "Gestiona tus tarjetas de eventos",
+    "createEvent": "Crear Evento",
+    "noEvents": "No tienes eventos creados",
+    "noEventsDescription": "Crea tu primer evento para comenzar a invitar personas",
+    "createFirstEvent": "Crear Mi Primer Evento",
+    "published": "Publicado",
+    "draft": "Borrador",
+    
+    "createNewEvent": "Crear Nuevo Evento",
+    "createNewEventDescription": "Sigue los pasos para crear tu tarjeta de evento",
+    "backToEvents": "Volver a Mis Eventos",
+    
+    "selectEventType": "Selecciona el Tipo de Evento",
+    "selectEventTypeDescription": "Elige qué tipo de evento quieres crear",
+    "selectType": "Seleccionar Tipo",
+    "basicInfo": "Información Básica",
+    
+    "basicInformation": "Información Básica",
+    "basicInformationDescription": "Dale un nombre y URL a tu evento",
+    
+    "eventTitle": "Título del Evento",
+    "eventTitlePlaceholder": "Ej: Cumpleaños de María 30 años",
+    "eventTitleHelp": "Este será el nombre principal de tu evento",
+    
+    "eventSlug": "URL del Evento",
+    "eventSlugHelp": "Esta será la dirección web de tu evento. Solo letras minúsculas, números y guiones.",
+    
+    "continue": "Continuar",
+    "back": "Atrás",
+    "creating": "Creando...",
+    "createAndContinue": "Crear y Continuar",
+    
+    "selectTypeFirst": "Por favor selecciona un tipo de evento",
+    "fillAllFields": "Por favor completa todos los campos",
+    
+    "noEventTypesAvailable": "No hay tipos de eventos disponibles",
+    "noEventTypesDescription": "Contacta al administrador para que configure los tipos de eventos",
+    
+    "errors": {
+      "Unauthorized": "No autorizado",
+      "InvalidFields": "Campos inválidos",
+      "EventTypeNotFound": "Tipo de evento no encontrado",
+      "CreateFailed": "Error al crear el evento"
+    }
   }
 }
