@@ -178,7 +178,7 @@ export default async function EventPage({ params }: EventPageProps) {
                   className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2"
                 >
                   <Users className="w-4 h-4" />
-                  {t('manageGuests')}
+                  {t('manageGuests')} ({event._count.guests})
                 </Link>
               </>
             )}

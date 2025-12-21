@@ -548,5 +548,41 @@
       "EventFull": "Lo sentimos, el evento está lleno",
       "ConfirmFailed": "Error al confirmar asistencia. Intenta nuevamente."
     }
+  },
+  "Guests": {
+    "pageTitle": "Gestión de Invitados",
+    "errorLoading": "Error al cargar los invitados",
+    
+    "total": "Total",
+    "confirmed": "Confirmados",
+    "declined": "No Asisten",
+    "maybe": "Tal Vez",
+    "totalPeople": "Total Personas",
+    
+    "searchPlaceholder": "Buscar por nombre o teléfono...",
+    "allStatuses": "Todos los estados",
+    "exportCSV": "Exportar CSV",
+    "exporting": "Exportando...",
+    
+    "guest": "Invitado",
+    "contact": "Contacto",
+    "status": "Estado",
+    "people": "Personas",
+    "date": "Fecha",
+    "actions": "Acciones",
+    
+    "noGuestsYet": "Aún no hay invitados confirmados",
+    "noGuestsFound": "No se encontraron invitados con esos filtros",
+    "showingResults": "Mostrando {count} de {total} invitados",
+    
+    "confirmDelete": "¿Estás seguro de eliminar a {name}?",
+    
+    "errors": {
+      "Unauthorized": "No autorizado",
+      "EventNotFound": "Evento no encontrado",
+      "DeleteFailed": "Error al eliminar invitado",
+      "ExportFailed": "Error al exportar datos"
+    },
+    "pending": "Pendientes"
   }
 }

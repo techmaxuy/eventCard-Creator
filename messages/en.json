@@ -538,5 +538,41 @@
       "EventFull": "Sorry, the event is full",
       "ConfirmFailed": "Failed to confirm attendance. Please try again."
     }
+  },
+  "Guests": {
+    "pageTitle": "Guest Management",
+    "errorLoading": "Error loading guests",
+    
+    "total": "Total",
+    "confirmed": "Confirmed",
+    "declined": "Declined",
+    "maybe": "Maybe",
+    "totalPeople": "Total People",
+    
+    "searchPlaceholder": "Search by name or phone...",
+    "allStatuses": "All statuses",
+    "exportCSV": "Export CSV",
+    "exporting": "Exporting...",
+    
+    "guest": "Guest",
+    "contact": "Contact",
+    "status": "Status",
+    "people": "People",
+    "date": "Date",
+    "actions": "Actions",
+    
+    "noGuestsYet": "No guests confirmed yet",
+    "noGuestsFound": "No guests found with those filters",
+    "showingResults": "Showing {count} of {total} guests",
+    
+    "confirmDelete": "Are you sure you want to delete {name}?",
+    
+    "errors": {
+      "Unauthorized": "Unauthorized",
+      "EventNotFound": "Event not found",
+      "DeleteFailed": "Failed to delete guest",
+      "ExportFailed": "Failed to export data"
+    },
+    "pending": "Pending"
   }
 }
