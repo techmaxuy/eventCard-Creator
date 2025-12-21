@@ -56,6 +56,12 @@ interface Event {
   gallery: any
   isPublished: boolean
   eventType: EventType
+  user?: {  // ← AGREGAR
+    name: string | null
+  }
+  _count?: {  // ← AGREGAR
+    guests: number
+  }
 }
 
 interface EventEditorProps {
@@ -112,7 +118,13 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
       } else {
         setMessage({ type: 'success', text: t('savedSuccessfully') })
         if (result.event) {
-          setEvent(result.event as any)
+          setEvent({
+          ...event,
+          ...result.event,
+          eventType: result.event.eventType || event.eventType,  // Puede venir o no
+          user: event.user,
+          _count: event._count,
+        } as any)
         }
         //router.refresh()
       }
@@ -120,6 +132,7 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
   }
 
   const handleTogglePublish = async () => {
+    try {
     setIsToggling(true)
     setMessage(null)
 
@@ -132,13 +145,23 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
         type: 'success', 
         text: result.event?.isPublished ? t('publishedSuccessfully') : t('unpublishedSuccessfully')
       })
-      if (result.event) {
-        setEvent(result.event as any)
-      }
+      if (result.event) { 
+        setEvent({
+          ...event,                    // Mantener todos los datos actuales
+          ...result.event,             // Sobrescribir con nuevos datos
+          eventType: event.eventType,  // Preservar eventType porque no viene en el result
+          user: event.user,            // Preservar user
+          _count: event._count,        // Preservar _count
+        } as any)}
       //router.refresh()
     }
 
-    setIsToggling(false)
+      } catch (error) {
+      console.error('[EventEditor] Unexpected error:', error)
+      setMessage({ type: 'error', text: 'Unexpected error occurred' })
+    } finally {
+      setIsToggling(false)
+    }
   }
 
   const handleDelete = async () => {
