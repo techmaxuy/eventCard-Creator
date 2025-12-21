@@ -142,8 +142,8 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
         menu,
         primaryColor,
         coverImage: event.coverImage || undefined,
-        welcomePhrase,  
-        musicUrl
+        welcomePhrase: welcomePhrase || undefined,  
+       musicUrl: musicUrl || undefined
       })
 
       if (result.error) {
