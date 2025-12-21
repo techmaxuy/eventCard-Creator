@@ -628,6 +628,95 @@
     "analytics": "Analíticas",
     "analyticsDescription": "Ver métricas del sistema",
     "systemActivity": "Actividad",
-    "systemActivityDescription": "Eventos recientes"
+    "systemActivityDescription": "Eventos recientes",
+    "assets": "Assets",
+    "assetsDescription": "Imágenes, audios y frases prediseñadas"
+  },
+  "Assets": {
+    "pageTitle": "Assets Prediseñados",
+    "pageDescription": "Gestiona imágenes, audios y frases para los eventos",
+    "title": "Assets",
+    "createNew": "Crear Nuevo",
+    "createAsset": "Crear Asset",
+    "editAsset": "Editar Asset",
+    "backToList": "Volver a la lista",
+    
+    "allTypes": "Todos los tipos",
+    "images": "Imágenes",
+    "audios": "Audios",
+    "phrases": "Frases",
+    "image": "Imagen",
+    "audio": "Audio",
+    "phrase": "Frase",
+    
+    "total": "Total",
+    "noAssets": "No hay assets creados aún",
+    "noAssetsOfType": "No hay assets de este tipo",
+    
+    "assetType": "Tipo de Asset",
+    "basicInformation": "Información Básica",
+    "imageContent": "Contenido de Imagen",
+    "audioContent": "Contenido de Audio",
+    "phraseContent": "Contenido de Frase",
+    
+    "name": "Nombre",
+    "namePlaceholder": "Ej: Imagen de cumpleaños 1",
+    "nameRequired": "El nombre es requerido",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Descripción opcional del asset",
+    "eventType": "Tipo de Evento",
+    "allEventTypes": "Todos los tipos de eventos",
+    "eventTypeHelp": "Deja vacío para que esté disponible en todos los tipos",
+    "order": "Orden",
+    "orderHelp": "Número para ordenar la visualización (menor = primero)",
+    
+    "uploadImage": "Haz clic para subir imagen",
+    "uploadAudio": "Haz clic para subir audio",
+    "imageUploaded": "Imagen subida correctamente",
+    "audioUploaded": "Audio subido correctamente",
+    "removeImage": "Quitar imagen",
+    "removeAudio": "Quitar audio",
+    "imageRequired": "Debes subir una imagen",
+    "audioRequired": "Debes subir un audio",
+    
+    "phraseSpanish": "Frase en Español",
+    "phraseEnglish": "Frase en Inglés",
+    "phraseSpanishPlaceholder": "Ej: ¡Feliz Cumpleaños!",
+    "phraseEnglishPlaceholder": "Ej: Happy Birthday!",
+    "phrasesRequired": "Debes ingresar la frase en ambos idiomas",
+    
+    "audioFile": "Archivo de audio",
+    "playing": "Reproduciendo...",
+    "readyToPlay": "Presiona para reproducir",
+    
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "activate": "Activar",
+    "deactivate": "Desactivar",
+    
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "created": "Asset creado correctamente",
+    "updated": "Asset actualizado correctamente",
+    "confirmDelete": "¿Estás seguro de eliminar '{name}'?",
+    "cannotChangeType": "No se puede cambiar el tipo de un asset existente",
+    
+    "errorLoading": "Error al cargar los assets",
+    "errorLoadingEventTypes": "Error al cargar los tipos de eventos",
+    
+    "errors": {
+      "InvalidFields": "Campos inválidos",
+      "ImageUrlRequired": "La URL de la imagen es requerida",
+      "AudioUrlRequired": "La URL del audio es requerida",
+      "PhrasesRequired": "Las frases en ambos idiomas son requeridas",
+      "EventTypeNotFound": "Tipo de evento no encontrado",
+      "AssetNotFound": "Asset no encontrado",
+      "CreateFailed": "Error al crear el asset",
+      "UpdateFailed": "Error al actualizar el asset",
+      "DeleteFailed": "Error al eliminar el asset",
+      "ToggleFailed": "Error al cambiar el estado",
+      "UploadFailed": "Error al subir el archivo"
+    }
   }
 }

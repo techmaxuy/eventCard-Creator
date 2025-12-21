@@ -618,6 +618,95 @@
     "analytics": "Analytics",
     "analyticsDescription": "View system metrics",
     "systemActivity": "Activity",
-    "systemActivityDescription": "Recent events"
+    "systemActivityDescription": "Recent events",
+    "assets": "Assets",
+    "assetsDescription": "Preset images, audios and phrases"
+  },
+  "Assets": {
+    "pageTitle": "Preset Assets",
+    "pageDescription": "Manage images, audios and phrases for events",
+    "title": "Assets",
+    "createNew": "Create New",
+    "createAsset": "Create Asset",
+    "editAsset": "Edit Asset",
+    "backToList": "Back to list",
+    
+    "allTypes": "All types",
+    "images": "Images",
+    "audios": "Audios",
+    "phrases": "Phrases",
+    "image": "Image",
+    "audio": "Audio",
+    "phrase": "Phrase",
+    
+    "total": "Total",
+    "noAssets": "No assets created yet",
+    "noAssetsOfType": "No assets of this type",
+    
+    "assetType": "Asset Type",
+    "basicInformation": "Basic Information",
+    "imageContent": "Image Content",
+    "audioContent": "Audio Content",
+    "phraseContent": "Phrase Content",
+    
+    "name": "Name",
+    "namePlaceholder": "E.g: Birthday image 1",
+    "nameRequired": "Name is required",
+    "description": "Description",
+    "descriptionPlaceholder": "Optional asset description",
+    "eventType": "Event Type",
+    "allEventTypes": "All event types",
+    "eventTypeHelp": "Leave empty to be available for all types",
+    "order": "Order",
+    "orderHelp": "Number for display ordering (lower = first)",
+    
+    "uploadImage": "Click to upload image",
+    "uploadAudio": "Click to upload audio",
+    "imageUploaded": "Image uploaded successfully",
+    "audioUploaded": "Audio uploaded successfully",
+    "removeImage": "Remove image",
+    "removeAudio": "Remove audio",
+    "imageRequired": "You must upload an image",
+    "audioRequired": "You must upload an audio",
+    
+    "phraseSpanish": "Spanish Phrase",
+    "phraseEnglish": "English Phrase",
+    "phraseSpanishPlaceholder": "E.g: ¡Feliz Cumpleaños!",
+    "phraseEnglishPlaceholder": "E.g: Happy Birthday!",
+    "phrasesRequired": "You must enter the phrase in both languages",
+    
+    "audioFile": "Audio file",
+    "playing": "Playing...",
+    "readyToPlay": "Press to play",
+    
+    "active": "Active",
+    "inactive": "Inactive",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "created": "Asset created successfully",
+    "updated": "Asset updated successfully",
+    "confirmDelete": "Are you sure you want to delete '{name}'?",
+    "cannotChangeType": "Cannot change the type of an existing asset",
+    
+    "errorLoading": "Error loading assets",
+    "errorLoadingEventTypes": "Error loading event types",
+    
+    "errors": {
+      "InvalidFields": "Invalid fields",
+      "ImageUrlRequired": "Image URL is required",
+      "AudioUrlRequired": "Audio URL is required",
+      "PhrasesRequired": "Phrases in both languages are required",
+      "EventTypeNotFound": "Event type not found",
+      "AssetNotFound": "Asset not found",
+      "CreateFailed": "Failed to create asset",
+      "UpdateFailed": "Failed to update asset",
+      "DeleteFailed": "Failed to delete asset",
+      "ToggleFailed": "Failed to toggle status",
+      "UploadFailed": "Failed to upload file"
+    }
   }
 }
