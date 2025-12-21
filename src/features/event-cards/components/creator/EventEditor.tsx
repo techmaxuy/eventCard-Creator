@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import { updateEvent, deleteEvent, togglePublishEvent } from '@/features/event-cards/actions/events'
+import Link from 'next/link'
 
 interface EventType {
   id: string
@@ -112,7 +113,7 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
         if (result.event) {
           setEvent(result.event as any)
         }
-        router.refresh()
+        //router.refresh()
       }
     })
   }
@@ -133,7 +134,7 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
       if (result.event) {
         setEvent(result.event as any)
       }
-      router.refresh()
+      //router.refresh()
     }
 
     setIsToggling(false)
@@ -233,16 +234,17 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
         </div>
         <div className="flex items-center gap-3">
           {/* Preview Button */}
+
           {event.isPublished && (
-            
-              <a href={`/e/${event.slug}`}
+            <Link
+              href={`/e/${event.slug}`}
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors flex items-center gap-2"
             >
               <Eye className="w-4 h-4" />
               {t('preview')}
-            </a>
+            </Link>
           )}
 
           {/* Publish Toggle */}
