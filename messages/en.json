@@ -489,5 +489,54 @@
       "UploadFailed": "Failed to upload image"
     },
     "backToHome": "Back to Home"
+  },
+  "EventPublic": {
+    "hostedBy": "Hosted by",
+    "eventDetails": "Event Details",
+    "date": "Date",
+    "time": "Time",
+    "location": "Location",
+    "viewMap": "View on map",
+    "dressCode": "Dress Code",
+    "giftRegistry": "Gift Registry",
+    "viewRegistry": "View registry",
+    "menu": "Menu",
+    "gallery": "Gallery",
+    "guestsConfirmed": "guests confirmed",
+    
+    "confirmAttendance": "Confirm Attendance",
+    "confirmAttendanceDescription": "Please complete the form to confirm your attendance",
+    "yourResponse": "Your Response",
+    "attending": "Attending",
+    "maybe": "Maybe",
+    "notAttending": "Not Attending",
+    
+    "yourName": "Your Name",
+    "namePlaceholder": "John Doe",
+    "yourPhone": "Your Phone",
+    "yourEmail": "Your Email",
+    "optional": "optional",
+    "numberOfGuests": "Number of Guests",
+    "numberOfGuestsHelp": "Including yourself",
+    "message": "Message",
+    "messagePlaceholder": "Leave a message for the host...",
+    
+    "submitting": "Submitting...",
+    "submitResponse": "Submit Confirmation",
+    
+    "thankYouConfirmed": "Thank You for Confirming!",
+    "thankYouDeclined": "Thank You for Letting Us Know",
+    "thankYouMaybe": "Thank You for Your Response",
+    "confirmationReceived": "We have received your confirmation",
+    "modifyResponse": "Modify my response",
+    
+    "poweredBy": "Powered by",
+    
+    "errors": {
+      "InvalidFields": "Please complete all required fields",
+      "EventNotFound": "Event not found",
+      "EventFull": "Sorry, the event is full",
+      "ConfirmFailed": "Failed to confirm attendance. Please try again."
+    }
   }
 }

@@ -499,5 +499,54 @@
     "backToHome": "Volver al Inicio"
 
 
+  },
+  "EventPublic": {
+    "hostedBy": "Organizado por",
+    "eventDetails": "Detalles del Evento",
+    "date": "Fecha",
+    "time": "Hora",
+    "location": "Ubicación",
+    "viewMap": "Ver en el mapa",
+    "dressCode": "Código de Vestimenta",
+    "giftRegistry": "Registro de Regalos",
+    "viewRegistry": "Ver registro",
+    "menu": "Menú",
+    "gallery": "Galería",
+    "guestsConfirmed": "invitados confirmados",
+    
+    "confirmAttendance": "Confirmar Asistencia",
+    "confirmAttendanceDescription": "Por favor completa el formulario para confirmar tu asistencia",
+    "yourResponse": "Tu Respuesta",
+    "attending": "Asistiré",
+    "maybe": "Tal vez",
+    "notAttending": "No asistiré",
+    
+    "yourName": "Tu Nombre",
+    "namePlaceholder": "Juan Pérez",
+    "yourPhone": "Tu Teléfono",
+    "yourEmail": "Tu Email",
+    "optional": "opcional",
+    "numberOfGuests": "Cantidad de Acompañantes",
+    "numberOfGuestsHelp": "Incluyéndote a ti",
+    "message": "Mensaje",
+    "messagePlaceholder": "Deja un mensaje para el anfitrión...",
+    
+    "submitting": "Enviando...",
+    "submitResponse": "Enviar Confirmación",
+    
+    "thankYouConfirmed": "¡Gracias por Confirmar!",
+    "thankYouDeclined": "Gracias por Avisar",
+    "thankYouMaybe": "Gracias por tu Respuesta",
+    "confirmationReceived": "Hemos recibido tu confirmación",
+    "modifyResponse": "Modificar mi respuesta",
+    
+    "poweredBy": "Creado con",
+    
+    "errors": {
+      "InvalidFields": "Por favor completa todos los campos requeridos",
+      "EventNotFound": "Evento no encontrado",
+      "EventFull": "Lo sentimos, el evento está lleno",
+      "ConfirmFailed": "Error al confirmar asistencia. Intenta nuevamente."
+    }
   }
 }
