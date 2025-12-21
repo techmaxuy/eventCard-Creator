@@ -428,14 +428,75 @@
     "fillAllFields": "Por favor completa todos los campos",
     
     "noEventTypesAvailable": "No hay tipos de eventos disponibles",
-    "noEventTypesDescription": "Contacta al administrador para que configure los tipos de eventos",
+    "noEventTypesDescription": "Contacta al administrador para que configure los tipos de eventos",   
+    "editEvent": "Editar Evento",
+    "preview": "Vista Previa",
+    "publish": "Publicar",
+    "unpublish": "Despublicar",
+    "saveChanges": "Guardar Cambios",
+    "saving": "Guardando...",
+    "savedSuccessfully": "¡Cambios guardados exitosamente!",
+    "publishedSuccessfully": "¡Evento publicado exitosamente!",
+    "unpublishedSuccessfully": "¡Evento despublicado exitosamente!",
+    
+    "confirmDelete": "¿Estás seguro de eliminar este evento?",
+    "confirmDeleteWarning": "Esta acción no se puede deshacer. Todos los invitados confirmados se perderán.",
+    
+    "description": "Descripción",
+    "descriptionPlaceholder": "Escribe un mensaje de bienvenida para tus invitados...",
+    "primaryColor": "Color Principal",
+    
+    "dateAndTime": "Fecha y Hora",
+    "eventDate": "Fecha del Evento",
+    "eventTime": "Hora del Evento",
+    
+    "location": "Ubicación",
+    "locationName": "Nombre del Lugar",
+    "locationNamePlaceholder": "Ej: Salón Las Flores",
+    "locationAddress": "Dirección",
+    "locationAddressPlaceholder": "Calle 123, Ciudad",
+    "locationUrl": "Link de Google Maps",
+    "locationUrlHelp": "Pega aquí el enlace de Google Maps del lugar",
+    
+    "additionalDetails": "Detalles Adicionales",
+    "dressCode": "Código de Vestimenta",
+    "dressCodePlaceholder": "Ej: Formal, Casual, Elegante Sport",
+    "giftRegistry": "Registro de Regalos",
+    "menu": "Menú",
+    "menuPlaceholder": "Describe el menú del evento...",
+    
+    "coverImage": "Imagen de Portada",
+    "uploadCover": "Subir Imagen de Portada",
+    "removeCover": "Eliminar Portada",
+    "confirmDeleteCover": "¿Eliminar la imagen de portada?",
+    "coverUploaded": "¡Portada subida exitosamente!",
+    "coverDeleted": "¡Portada eliminada exitosamente!",
+    "coverImageHelp": "Recomendado: 1920x1080px, máximo 5MB",
+    
+    "eventInfo": "Información del Evento",
+    "status": "Estado",
+    "publicUrl": "URL Pública",
+    "publishToGetUrl": "Publica el evento para obtener la URL",
+    "eventType": "Tipo de Evento",
+    
+    "date": "Fecha",
+    "views": "vistas",
+    "guests": "invitados",
+    "viewPublic": "Ver Página Pública",
+    "manageGuests": "Gestionar Invitados",
     
     "errors": {
       "Unauthorized": "No autorizado",
       "InvalidFields": "Campos inválidos",
       "EventTypeNotFound": "Tipo de evento no encontrado",
-      "CreateFailed": "Error al crear el evento"
-    },
-    "backToHome": "Volver al Inicio"
+      "EventNotFound": "Evento no encontrado",
+      "CreateFailed": "Error al crear el evento",
+      "UpdateFailed": "Error al actualizar el evento",
+      "DeleteFailed": "Error al eliminar el evento",
+      "ToggleFailed": "Error al cambiar estado de publicación",
+      "UploadFailed": "Error al subir la imagen"
+    }
+
+
   }
 }

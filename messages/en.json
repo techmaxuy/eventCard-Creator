@@ -421,13 +421,72 @@
     
     "noEventTypesAvailable": "No event types available",
     "noEventTypesDescription": "Contact the administrator to configure event types",
+    "editEvent": "Edit Event",
+    "preview": "Preview",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "savedSuccessfully": "Changes saved successfully!",
+    "publishedSuccessfully": "Event published successfully!",
+    "unpublishedSuccessfully": "Event unpublished successfully!",
+    
+    "confirmDelete": "Are you sure you want to delete this event?",
+    "confirmDeleteWarning": "This action cannot be undone. All confirmed guests will be lost.",
+    
+    "description": "Description",
+    "descriptionPlaceholder": "Write a welcome message for your guests...",
+    "primaryColor": "Primary Color",
+    
+    "dateAndTime": "Date and Time",
+    "eventDate": "Event Date",
+    "eventTime": "Event Time",
+    
+    "location": "Location",
+    "locationName": "Venue Name",
+    "locationNamePlaceholder": "Ex: The Grand Hall",
+    "locationAddress": "Address",
+    "locationAddressPlaceholder": "123 Main St, City",
+    "locationUrl": "Google Maps Link",
+    "locationUrlHelp": "Paste the Google Maps link of the venue here",
+    
+    "additionalDetails": "Additional Details",
+    "dressCode": "Dress Code",
+    "dressCodePlaceholder": "Ex: Formal, Casual, Smart Casual",
+    "giftRegistry": "Gift Registry",
+    "menu": "Menu",
+    "menuPlaceholder": "Describe the event menu...",
+    
+    "coverImage": "Cover Image",
+    "uploadCover": "Upload Cover Image",
+    "removeCover": "Remove Cover",
+    "confirmDeleteCover": "Delete cover image?",
+    "coverUploaded": "Cover uploaded successfully!",
+    "coverDeleted": "Cover deleted successfully!",
+    "coverImageHelp": "Recommended: 1920x1080px, max 5MB",
+    
+    "eventInfo": "Event Info",
+    "status": "Status",
+    "publicUrl": "Public URL",
+    "publishToGetUrl": "Publish event to get URL",
+    "eventType": "Event Type",
+    
+    "date": "Date",
+    "views": "views",
+    "guests": "guests",
+    "viewPublic": "View Public Page",
+    "manageGuests": "Manage Guests",
     
     "errors": {
       "Unauthorized": "Unauthorized",
       "InvalidFields": "Invalid fields",
       "EventTypeNotFound": "Event type not found",
-      "CreateFailed": "Failed to create event"
-    },
-    "backToHome": "Back to Home"
+      "EventNotFound": "Event not found",
+      "CreateFailed": "Failed to create event",
+      "UpdateFailed": "Failed to update event",
+      "DeleteFailed": "Failed to delete event",
+      "ToggleFailed": "Failed to toggle publish status",
+      "UploadFailed": "Failed to upload image"
+    }
   }
 }
