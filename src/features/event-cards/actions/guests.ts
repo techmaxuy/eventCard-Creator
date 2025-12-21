@@ -26,6 +26,7 @@ export async function getPublicEvent(slug: string) {
       },
       include: {
         eventType: true,
+
         user: {
           select: {
             name: true,
