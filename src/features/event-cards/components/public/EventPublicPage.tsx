@@ -55,7 +55,7 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
   
   // Obtener tema visual según tipo de evento
   const theme = getEventTheme(
-    event.eventType.slug || 'default',
+    event.eventType.slug || event.eventType.name.toLowerCase() || 'default',
     event.primaryColor
   )
 

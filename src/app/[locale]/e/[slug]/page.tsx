@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getPublicEvent } from '@/features/event-cards/actions/guests'
 import { EventPublicPage } from '@/features/event-cards/components/public/EventPublicPage'
+import { headers } from 'next/headers'
 
 interface PublicEventPageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -17,7 +18,13 @@ export default async function PublicEventPage({ params }: PublicEventPageProps) 
     notFound()
   }
 
-  return <EventPublicPage event={result.event as any} locale={locale} />
+   // Construir URL completa desde headers del servidor
+  const headersList = await headers()
+  const host = headersList.get('host') || ''
+  const protocol = headersList.get('x-forwarded-proto') || 'http'
+  const fullEventUrl = `${protocol}://${host}/${locale}/e/${slug}`
+
+  return <EventPublicPage event={result.event as any} locale={locale} fullEventUrl={fullEventUrl} />
 }
 
 // Metadata dinámica para SEO
