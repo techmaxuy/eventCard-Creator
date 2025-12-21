@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
+import { ShareButtons } from '@/features/event-cards/components/share/ShareButtons'
 
 import { 
   Save, 
@@ -673,6 +674,21 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
                   </span>
                 </div>
               </div>
+
+              {/* NUEVO: Share Buttons (solo si está publicado) */}
+                {event.isPublished && (
+                  <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6">
+                    <ShareButtons
+                      eventTitle={event.title}
+                      eventUrl={`/${locale}/e/${event.slug}`}
+                      eventDescription={event.description || undefined}
+                      primaryColor={event.primaryColor}
+                      locale={locale}
+                    />
+                  </div>
+                )}
+
+
             </div>
           </div>
         </div>

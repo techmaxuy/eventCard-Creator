@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { Calendar, Clock, MapPin, Users, Gift, Utensils, Shirt } from 'lucide-react'
 import { GuestConfirmation } from './GuestConfirmation'
+import { ShareButtons } from '@/features/event-cards/components/share/ShareButtons'
 
 interface EventType {
   name: string
@@ -319,8 +320,23 @@ export function EventPublicPage({ event, locale }: EventPublicPageProps) {
             requirePhone={event.requirePhone}
             locale={locale}
           />
+
+          {/* NUEVO: Share Section */}
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg border border-gray-200 dark:border-zinc-800 p-6">
+            <ShareButtons
+              eventTitle={event.title}
+              eventUrl={`/${locale}/e/${event.slug}`}
+              eventDescription={event.description || undefined}
+              primaryColor={event.primaryColor}
+              locale={locale}
+            />
+          </div>
+
+
         </div>
       </div>
+
+
 
       {/* Footer */}
       <div className="border-t border-gray-200 dark:border-zinc-800 mt-12">

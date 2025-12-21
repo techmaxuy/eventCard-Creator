@@ -574,5 +574,15 @@
       "ExportFailed": "Failed to export data"
     },
     "pending": "Pending"
+  },
+  "Share": {
+    "shareEvent": "Share Event",
+    "copyLink": "Copy Link",
+    "linkCopied": "Link Copied!",
+    "showQR": "Show QR Code",
+    "hideQR": "Hide QR Code",
+    "qrDescription": "Scan this code to access the event",
+    "downloadQR": "Download QR",
+    "shareOn": "Share on {platform}"
   }
 }

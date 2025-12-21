@@ -22,7 +22,7 @@ export default async function PublicEventPage({ params }: PublicEventPageProps) 
 
 // Metadata dinámica para SEO
 export async function generateMetadata({ params }: PublicEventPageProps) {
-  const { slug } = await params
+  const { slug, locale } = await params
   const result = await getPublicEvent(slug)
 
   if (result.error || !result.event) {
@@ -32,13 +32,44 @@ export async function generateMetadata({ params }: PublicEventPageProps) {
   }
 
   const event = result.event
+  const eventTypeName = locale === 'es' ? event.eventType.name : event.eventType.nameEn
+
+  // Formatear fecha si existe
+  let formattedDate = ''
+  if (event.eventDate) {
+    formattedDate = new Date(event.eventDate).toLocaleDateString(locale, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  }
+
+  const description = event.description 
+    || `${eventTypeName} - ${event.title}${formattedDate ? ` | ${formattedDate}` : ''}`
 
   return {
-    title: event.title,
-    description: event.description || `${event.eventType.name} - ${event.title}`,
+    title: `${event.title} | ${eventTypeName}`,
+    description: description,
     openGraph: {
       title: event.title,
-      description: event.description || undefined,
+      description: description,
+      type: 'website',
+      locale: locale,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/e/${slug}`,
+      siteName: 'EventCards',
+      images: event.coverImage ? [
+        {
+          url: event.coverImage,
+          width: 1200,
+          height: 630,
+          alt: event.title,
+        }
+      ] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: event.title,
+      description: description,
       images: event.coverImage ? [event.coverImage] : [],
     },
   }

@@ -584,5 +584,15 @@
       "ExportFailed": "Error al exportar datos"
     },
     "pending": "Pendientes"
+  },
+  "Share": {
+    "shareEvent": "Compartir Evento",
+    "copyLink": "Copiar Link",
+    "linkCopied": "¡Link Copiado!",
+    "showQR": "Mostrar Código QR",
+    "hideQR": "Ocultar Código QR",
+    "qrDescription": "Escanea este código para acceder al evento",
+    "downloadQR": "Descargar QR",
+    "shareOn": "Compartir en {platform}"
   }
 }
