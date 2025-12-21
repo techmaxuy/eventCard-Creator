@@ -488,7 +488,15 @@
       "ToggleFailed": "Failed to toggle publish status",
       "UploadFailed": "Failed to upload image"
     },
-    "backToHome": "Back to Home"
+    "backToHome": "Back to Home",
+    "presetCoverImages": "Preset Cover Images",
+    "selectPresetImage": "Select preset image",
+    "backgroundMusic": "Background Music",
+    "selectBackgroundMusic": "Select background music",
+    "backgroundMusicHelp": "Music will autoplay on the public page",
+    "welcomePhrase": "Welcome Phrase",
+    "selectWelcomePhrase": "Select welcome phrase",
+    "welcomePhraseHelp": "This phrase will be featured on the event page"
   },
   "EventPublic": {
     "hostedBy": "Hosted by",

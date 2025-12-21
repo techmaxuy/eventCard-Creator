@@ -496,7 +496,15 @@
       "ToggleFailed": "Error al cambiar estado de publicación",
       "UploadFailed": "Error al subir la imagen"
     },
-    "backToHome": "Volver al Inicio"
+    "backToHome": "Volver al Inicio",
+    "presetCoverImages": "Imágenes de Portada Prediseñadas",
+    "selectPresetImage": "Seleccionar imagen prediseñada",
+    "backgroundMusic": "Música de Fondo",
+    "selectBackgroundMusic": "Seleccionar música de fondo",
+    "backgroundMusicHelp": "La música se reproducirá automáticamente en la página pública",
+    "welcomePhrase": "Frase de Bienvenida",
+    "selectWelcomePhrase": "Seleccionar frase de bienvenida",
+    "welcomePhraseHelp": "Esta frase aparecerá destacada en la página del evento"
 
 
   },
