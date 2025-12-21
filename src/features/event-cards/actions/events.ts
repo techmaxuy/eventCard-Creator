@@ -315,7 +315,14 @@ export async function togglePublishEvent(id: string) {
     })
 
     revalidatePath(`/events/${id}`)
-    revalidatePath(`/e/${updatedEvent.slug}`)
+    revalidatePath(`/events/${id}/edit`)
+    revalidatePath('/events')
+
+    // Solo revalidar la página pública si está publicado
+    if (updatedEvent.isPublished) {
+      revalidatePath(`/e/${updatedEvent.slug}`)
+    }
+    
 
     console.log('[Events] ✅ Event publish toggled:', updatedEvent.slug, updatedEvent.isPublished)
 
