@@ -236,6 +236,12 @@ export async function updateEvent(id: string, values: z.infer<typeof UpdateEvent
     })
 
     revalidatePath(`/events/${id}`)
+    revalidatePath(`/events/${id}/edit`)
+    revalidatePath('/events')
+
+    if (updatedEvent.isPublished) {
+      revalidatePath(`/e/${updatedEvent.slug}`)
+    }
 
     console.log('[Events] ✅ Event updated:', updatedEvent.slug)
 
