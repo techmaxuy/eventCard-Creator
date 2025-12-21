@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
+
 import { 
   Save, 
   Eye, 
@@ -184,7 +185,7 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
       } else {
         setMessage({ type: 'success', text: t('coverUploaded') })
         setEvent({ ...event, coverImage: result.imageUrl })
-        router.refresh()
+        
       }
     } catch (error) {
       setMessage({ type: 'error', text: t('errors.UploadFailed') })
@@ -211,7 +212,7 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
       } else {
         setMessage({ type: 'success', text: t('coverDeleted') })
         setEvent({ ...event, coverImage: null })
-        router.refresh()
+       
       }
     } catch (error) {
       setMessage({ type: 'error', text: t('errors.DeleteFailed') })
@@ -630,7 +631,7 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
                       rel="noopener noreferrer"
                       className="text-blue-600 dark:text-blue-400 hover:underline text-xs break-all"
                     >
-                      {typeof window !== 'undefined' ? window.location.origin : ''}/e/{event.slug}
+                      {typeof window !== 'undefined' ? `${window.location.origin}/${locale}/e/${event.slug}` : `/${locale}/e/${event.slug}`}
                     </a>
                   ) : (
                     <span className="text-gray-400 text-xs">
