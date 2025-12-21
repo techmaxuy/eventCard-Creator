@@ -138,27 +138,8 @@ export default async function Home({ params, searchParams }: HomePageProps) {
           </div>
         ) : (
           // Usuario autenticado
-          <div className="space-y-8">
-            {/* Welcome Message */}
-            <div className="text-center space-y-4">
-              <div className="inline-block p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-4">
-                <svg className="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-                {t('userWelcome', { 
-                  name: session.user?.name || 'User', 
-                  role: session.user?.role || 'User' 
-                })}
-              </h2>
-              <p className="text-xl text-gray-600 dark:text-gray-400">
-                {locale === 'es' 
-                  ? '¡Todo está listo para comenzar!' 
-                  : 'Everything is ready to get started!'}
-              </p>
-            </div>
-
+          <div className="space-y-8">       
+            
             {/* Quick Actions Component */}
             <div className="max-w-4xl mx-auto mt-12">
               {session.user.role === 'ADMIN' ? (
