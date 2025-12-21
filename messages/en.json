@@ -496,7 +496,9 @@
     "backgroundMusicHelp": "Music will autoplay on the public page",
     "welcomePhrase": "Welcome Phrase",
     "selectWelcomePhrase": "Select welcome phrase",
-    "welcomePhraseHelp": "This phrase will be featured on the event page"
+    "welcomePhraseHelp": "This phrase will be featured on the event page",
+    "presetCoverImagesHelp": "Select a preset image and then press 'Save Changes'",
+    "coverImageUpdated": "Cover image updated"
   },
   "EventPublic": {
     "hostedBy": "Hosted by",

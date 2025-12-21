@@ -56,6 +56,8 @@ interface Event {
   primaryColor: string
   coverImage: string | null
   gallery: any
+  welcomePhrase: string | null    // ← AGREGAR
+  musicUrl: string | null 
   isPublished: boolean
   eventType: EventType
   user?: {  // ← AGREGAR
@@ -120,6 +122,8 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   const [showCoverAssets, setShowCoverAssets] = useState(false)
   const [showMusicAssets, setShowMusicAssets] = useState(false)
   const [showPhraseAssets, setShowPhraseAssets] = useState(false)
+  const [welcomePhrase, setWelcomePhrase] = useState(event.welcomePhrase || '')
+  const [musicUrl, setMusicUrl] = useState(event.musicUrl || '')
 
   const handleSave = async () => {
     setMessage(null)
@@ -137,6 +141,9 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
         giftRegistry,
         menu,
         primaryColor,
+        coverImage: event.coverImage || undefined,
+        welcomePhrase,  
+        musicUrl
       })
 
       if (result.error) {
@@ -636,8 +643,8 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
             )}
           </div>
 
-          {/* NUEVO: Preset Cover Images */}
-          {availableAssets && availableAssets.filter(a => a.type === 'IMAGE').length > 0 && (
+         {/* NUEVO: Preset Cover Images */}
+          {availableAssets.filter(a => a.type === 'IMAGE').length > 0 && (
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {t('presetCoverImages')}
@@ -667,18 +674,24 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                     onSelect={(asset) => {
                       setSelectedCoverAsset(asset)
                       if (asset?.imageUrl) {
+                        // Solo actualizar el estado local, se guardará con handleSave
                         setEvent({ ...event, coverImage: asset.imageUrl })
+                      } else {
+                        setEvent({ ...event, coverImage: null })
                       }
                     }}
                     locale={locale}
                   />
                 </div>
               )}
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {t('presetCoverImagesHelp')}
+              </p>
             </div>
           )}
 
           {/* NUEVO: Background Music */}
-          {availableAssets && availableAssets.filter(a => a.type === 'AUDIO').length > 0 && (
+          {availableAssets.filter(a => a.type === 'AUDIO').length > 0 && (
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <Music className="w-4 h-4 inline mr-1" />
@@ -708,7 +721,11 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                     selectedId={selectedMusicAsset?.id}
                     onSelect={(asset) => {
                       setSelectedMusicAsset(asset)
-                      // TODO: Guardar audioUrl en el evento cuando actualicemos el modelo
+                      if (asset?.audioUrl) {
+                        setMusicUrl(asset.audioUrl)
+                      } else {
+                        setMusicUrl('')
+                      }
                     }}
                     locale={locale}
                   />
@@ -721,7 +738,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
           )}
 
           {/* NUEVO: Welcome Phrase */}
-          {availableAssets && availableAssets.filter(a => a.type === 'PHRASE').length > 0 && (
+          {availableAssets.filter(a => a.type === 'PHRASE').length > 0 && (
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <MessageSquare className="w-4 h-4 inline mr-1" />
@@ -734,13 +751,13 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
               >
                 <div className="flex items-center gap-2">
                   <MessageSquare className="w-5 h-5 text-green-600 dark:text-green-400" />
-                  <span className="text-gray-900 dark:text-white">
+                  <span className="text-gray-900 dark:text-white line-clamp-1">
                     {selectedPhraseAsset 
                       ? (locale === 'es' ? selectedPhraseAsset.phraseEs : selectedPhraseAsset.phraseEn)
                       : t('selectWelcomePhrase')}
                   </span>
                 </div>
-                <span className="text-gray-400">
+                <span className="text-gray-400 flex-shrink-0">
                   {showPhraseAssets ? '▼' : '▶'}
                 </span>
               </button>
@@ -753,7 +770,12 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                     selectedId={selectedPhraseAsset?.id}
                     onSelect={(asset) => {
                       setSelectedPhraseAsset(asset)
-                      // TODO: Guardar frase en el evento cuando actualicemos el modelo
+                      if (asset) {
+                        const phrase = locale === 'es' ? asset.phraseEs : asset.phraseEn
+                        setWelcomePhrase(phrase || '')
+                      } else {
+                        setWelcomePhrase('')
+                      }
                     }}
                     locale={locale}
                   />

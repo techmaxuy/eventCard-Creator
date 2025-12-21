@@ -112,7 +112,7 @@ model EventType {
   
   // Relaciones
   events            Event[]
-  assets        Asset[] 
+  assets            Asset[] 
   
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -156,6 +156,10 @@ model Event {
   coverImage        String?     // Imagen principal
   gallery           Json?       // Array de URLs de imágenes
   music             String?     // URL de música de fondo
+
+  // NUEVO: Assets seleccionados
+  welcomePhrase   String?      
+  musicUrl        String? 
   
   // Configuración
   isPublished       Boolean     @default(false)

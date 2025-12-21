@@ -30,7 +30,16 @@ export function AssetSelector({ type, assets, selectedId, onSelect, locale }: As
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null)
   const [audioElements, setAudioElements] = useState<Map<string, HTMLAudioElement>>(new Map())
 
-  const filteredAssets = assets.filter(a => a.type === type && a.imageUrl || a.audioUrl || a.phraseEs)
+    const filteredAssets = assets.filter(a => {
+    if (a.type !== type) return false
+    
+    // Verificar que tenga el contenido apropiado según el tipo
+    if (type === 'IMAGE') return !!a.imageUrl
+    if (type === 'AUDIO') return !!a.audioUrl
+    if (type === 'PHRASE') return !!a.phraseEs && !!a.phraseEn
+    
+    return false
+  })
 
   const handleAudioToggle = (asset: Asset) => {
     if (!asset.audioUrl) return

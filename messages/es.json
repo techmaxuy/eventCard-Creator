@@ -504,7 +504,9 @@
     "backgroundMusicHelp": "La música se reproducirá automáticamente en la página pública",
     "welcomePhrase": "Frase de Bienvenida",
     "selectWelcomePhrase": "Seleccionar frase de bienvenida",
-    "welcomePhraseHelp": "Esta frase aparecerá destacada en la página del evento"
+    "welcomePhraseHelp": "Esta frase aparecerá destacada en la página del evento",
+    "presetCoverImagesHelp": "Selecciona una imagen prediseñada y luego presiona 'Guardar Cambios'",
+    "coverImageUpdated": "Imagen de portada actualizada"
 
 
   },
