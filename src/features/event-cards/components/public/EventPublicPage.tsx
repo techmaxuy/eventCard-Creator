@@ -29,6 +29,8 @@ interface Event {
   primaryColor: string
   coverImage: string | null
   gallery: any
+  welcomePhrase: string | null    // ← AGREGAR
+  musicUrl: string | null 
   requirePhone: boolean
   eventType: EventType
   user: {
@@ -95,11 +97,20 @@ export function EventPublicPage({ event, locale }: EventPublicPageProps) {
                   <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-2">
                     {event.title}
                   </h1>
-                  {event.user.name && (
+
+                   {/* NUEVO: Welcome Phrase */}
+                    {event.welcomePhrase && (
+                      <p className="text-2xl font-semibold italic text-gray-700 dark:text-gray-300 my-4">
+                        "{event.welcomePhrase}"
+                      </p>
+                    )}
+                  {event.eventType.name !== 'Cumpleaños' && (
+                  event.user.name && (
                     <p className="text-gray-600 dark:text-gray-400">
                       {t('hostedBy')} {event.user.name}
                     </p>
-                  )}
+                  )
+                )}
                 </div>
               </div>
 

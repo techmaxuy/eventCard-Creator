@@ -24,9 +24,8 @@ export function ShareButtons({
   const [copied, setCopied] = useState(false)
   const [showQR, setShowQR] = useState(false)
 
-  const fullUrl = typeof window !== 'undefined' 
-    ? `${window.location.origin}${eventUrl}` 
-    : eventUrl
+ const baseUrl = process.env.NEXT_PUBLIC_APP_URL || ''
+const fullUrl = baseUrl ? `${baseUrl}${eventUrl}` : eventUrl
 
   const shareText = eventDescription 
     ? `${eventTitle} - ${eventDescription}`
@@ -127,7 +126,7 @@ export function ShareButtons({
               {copied ? t('linkCopied') : t('copyLink')}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[200px]">
-              {fullUrl}
+              {baseUrl}{eventUrl}
             </p>
           </div>
         </div>
