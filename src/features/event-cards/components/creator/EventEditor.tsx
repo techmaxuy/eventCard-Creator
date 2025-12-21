@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { ShareButtons } from '@/features/event-cards/components/share/ShareButtons'
+import { AssetSelector } from './AssetSelector'
 
 import { 
   Save, 
@@ -18,7 +19,7 @@ import {
   Palette,
   Image as ImageIcon,
   Music,
-  Globe
+  Globe,MessageSquare, Sparkles
 } from 'lucide-react'
 import Image from 'next/image'
 import { updateEvent, deleteEvent, togglePublishEvent } from '@/features/event-cards/actions/events'
@@ -70,7 +71,25 @@ interface EventEditorProps {
   locale: string
 }
 
-export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
+interface Asset {
+  id: string
+  type: 'IMAGE' | 'AUDIO' | 'PHRASE'
+  name: string
+  description: string | null
+  imageUrl: string | null
+  thumbnailUrl: string | null
+  audioUrl: string | null
+  phraseEs: string | null
+  phraseEn: string | null
+}
+
+interface EventEditorProps {
+  event: Event
+  locale: string
+  availableAssets?: Asset[]  // ← AGREGAR ESTO
+}
+
+export function EventEditor({ event: initialEvent, locale,availableAssets = [] }: EventEditorProps) {
   const router = useRouter()
   const t = useTranslations('Events')
   const [isPending, startTransition] = useTransition()
@@ -95,6 +114,12 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
   const [giftRegistry, setGiftRegistry] = useState(event.giftRegistry || '')
   const [menu, setMenu] = useState(event.menu || '')
   const [primaryColor, setPrimaryColor] = useState(event.primaryColor)
+  const [selectedCoverAsset, setSelectedCoverAsset] = useState<Asset | null>(null)
+  const [selectedMusicAsset, setSelectedMusicAsset] = useState<Asset | null>(null)
+  const [selectedPhraseAsset, setSelectedPhraseAsset] = useState<Asset | null>(null)
+  const [showCoverAssets, setShowCoverAssets] = useState(false)
+  const [showMusicAssets, setShowMusicAssets] = useState(false)
+  const [showPhraseAssets, setShowPhraseAssets] = useState(false)
 
   const handleSave = async () => {
     setMessage(null)
@@ -610,6 +635,136 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
               </div>
             )}
           </div>
+
+          {/* NUEVO: Preset Cover Images */}
+          {availableAssets && availableAssets.filter(a => a.type === 'IMAGE').length > 0 && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('presetCoverImages')}
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowCoverAssets(!showCoverAssets)}
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                  <span className="text-gray-900 dark:text-white">
+                    {selectedCoverAsset ? selectedCoverAsset.name : t('selectPresetImage')}
+                  </span>
+                </div>
+                <span className="text-gray-400">
+                  {showCoverAssets ? '▼' : '▶'}
+                </span>
+              </button>
+
+              {showCoverAssets && (
+                <div className="mt-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                  <AssetSelector
+                    type="IMAGE"
+                    assets={availableAssets}
+                    selectedId={selectedCoverAsset?.id}
+                    onSelect={(asset) => {
+                      setSelectedCoverAsset(asset)
+                      if (asset?.imageUrl) {
+                        setEvent({ ...event, coverImage: asset.imageUrl })
+                      }
+                    }}
+                    locale={locale}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* NUEVO: Background Music */}
+          {availableAssets && availableAssets.filter(a => a.type === 'AUDIO').length > 0 && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <Music className="w-4 h-4 inline mr-1" />
+                {t('backgroundMusic')}
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowMusicAssets(!showMusicAssets)}
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <Music className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                  <span className="text-gray-900 dark:text-white">
+                    {selectedMusicAsset ? selectedMusicAsset.name : t('selectBackgroundMusic')}
+                  </span>
+                </div>
+                <span className="text-gray-400">
+                  {showMusicAssets ? '▼' : '▶'}
+                </span>
+              </button>
+
+              {showMusicAssets && (
+                <div className="mt-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                  <AssetSelector
+                    type="AUDIO"
+                    assets={availableAssets}
+                    selectedId={selectedMusicAsset?.id}
+                    onSelect={(asset) => {
+                      setSelectedMusicAsset(asset)
+                      // TODO: Guardar audioUrl en el evento cuando actualicemos el modelo
+                    }}
+                    locale={locale}
+                  />
+                </div>
+              )}
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {t('backgroundMusicHelp')}
+              </p>
+            </div>
+          )}
+
+          {/* NUEVO: Welcome Phrase */}
+          {availableAssets && availableAssets.filter(a => a.type === 'PHRASE').length > 0 && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <MessageSquare className="w-4 h-4 inline mr-1" />
+                {t('welcomePhrase')}
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowPhraseAssets(!showPhraseAssets)}
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  <span className="text-gray-900 dark:text-white">
+                    {selectedPhraseAsset 
+                      ? (locale === 'es' ? selectedPhraseAsset.phraseEs : selectedPhraseAsset.phraseEn)
+                      : t('selectWelcomePhrase')}
+                  </span>
+                </div>
+                <span className="text-gray-400">
+                  {showPhraseAssets ? '▼' : '▶'}
+                </span>
+              </button>
+
+              {showPhraseAssets && (
+                <div className="mt-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                  <AssetSelector
+                    type="PHRASE"
+                    assets={availableAssets}
+                    selectedId={selectedPhraseAsset?.id}
+                    onSelect={(asset) => {
+                      setSelectedPhraseAsset(asset)
+                      // TODO: Guardar frase en el evento cuando actualicemos el modelo
+                    }}
+                    locale={locale}
+                  />
+                </div>
+              )}
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {t('welcomePhraseHelp')}
+              </p>
+            </div>
+          )}
+
 
           {/* Save Button */}
           <button

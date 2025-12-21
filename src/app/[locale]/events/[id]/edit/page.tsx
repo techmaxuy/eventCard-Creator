@@ -1,6 +1,7 @@
 import { auth } from '@/../auth'
 import { redirect, notFound } from 'next/navigation'
 import { getUserEvent } from '@/features/event-cards/actions/events'
+import { getAssets } from '@/features/event-cards/actions/assets'
 import { getTranslations } from 'next-intl/server'
 import { EventEditor } from '@/features/event-cards/components/creator/EventEditor'
 import Link from 'next/link'
@@ -27,6 +28,15 @@ export default async function EditEventPage({ params }: EditEventPageProps) {
     notFound()
   }
 
+  const event = result.event
+
+  // Obtener assets disponibles para el tipo de evento del usuario
+  const assetsResult = await getAssets({
+    eventTypeId: event.eventTypeId,
+    includeInactive: false
+  })
+
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-black">
       {/* Header con navegación */}
@@ -44,7 +54,7 @@ export default async function EditEventPage({ params }: EditEventPageProps) {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <EventEditor event={result.event as any} locale={locale} />
+        <EventEditor event={result.event as any} locale={locale} availableAssets={assetsResult.assets || []} />
       </div>
     </div>
   )
