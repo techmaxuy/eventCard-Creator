@@ -127,7 +127,8 @@ export async function confirmGuest(eventId: string, values: z.infer<typeof Guest
       })
     }
 
-    revalidatePath(`/e/${event.slug}`)
+    revalidatePath(`/es/e/${event.slug}`)
+    revalidatePath(`/en/e/${event.slug}`)
 
     console.log('[Guests] ✅ Guest confirmed:', guest.name, guest.status)
 

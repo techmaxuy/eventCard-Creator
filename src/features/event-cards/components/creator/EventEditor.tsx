@@ -237,7 +237,7 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
 
           {event.isPublished && (
             <Link
-              href={`/e/${event.slug}`}
+              href={`/${locale}/e/${event.slug}`}
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors flex items-center gap-2"
@@ -625,7 +625,7 @@ export function EventEditor({ event: initialEvent, locale }: EventEditorProps) {
                 <div className="mt-1">
                   {event.isPublished ? (
                     
-                      <a href={`/e/${event.slug}`}
+                      <a href={`/${locale}/e/${event.slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 dark:text-blue-400 hover:underline text-xs break-all"

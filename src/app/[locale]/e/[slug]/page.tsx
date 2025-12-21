@@ -3,16 +3,14 @@ import { getPublicEvent } from '@/features/event-cards/actions/guests'
 import { EventPublicPage } from '@/features/event-cards/components/public/EventPublicPage'
 
 interface PublicEventPageProps {
-  params: Promise<{ slug: string }>
+  params: Promise<{ locale: string; slug: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export default async function PublicEventPage({ params }: PublicEventPageProps) {
-  const { slug } = await params
+  const { locale,slug } = await params
   
-  // Determinar locale desde la URL o usar default
-  const locale = 'es' // Puedes mejorar esto después
-  
+    
   const result = await getPublicEvent(slug)
 
   if (result.error || !result.event) {

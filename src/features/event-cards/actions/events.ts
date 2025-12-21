@@ -240,8 +240,9 @@ export async function updateEvent(id: string, values: z.infer<typeof UpdateEvent
     revalidatePath('/events')
 
     if (updatedEvent.isPublished) {
-      revalidatePath(`/e/${updatedEvent.slug}`)
-    }
+  revalidatePath(`/es/e/${updatedEvent.slug}`)
+  revalidatePath(`/en/e/${updatedEvent.slug}`)
+}
 
     console.log('[Events] ✅ Event updated:', updatedEvent.slug)
 
@@ -326,7 +327,9 @@ export async function togglePublishEvent(id: string) {
 
     // Solo revalidar la página pública si está publicado
     if (updatedEvent.isPublished) {
-      revalidatePath(`/e/${updatedEvent.slug}`)
+      // Revalidar para ambos idiomas
+      revalidatePath(`/es/e/${updatedEvent.slug}`)
+      revalidatePath(`/en/e/${updatedEvent.slug}`)
     }
     
 
