@@ -487,6 +487,7 @@
       "DeleteFailed": "Failed to delete event",
       "ToggleFailed": "Failed to toggle publish status",
       "UploadFailed": "Failed to upload image"
-    }
+    },
+    "backToHome": "Back to Home"
   }
 }

@@ -495,7 +495,8 @@
       "DeleteFailed": "Error al eliminar el evento",
       "ToggleFailed": "Error al cambiar estado de publicación",
       "UploadFailed": "Error al subir la imagen"
-    }
+    },
+    "backToHome": "Volver al Inicio"
 
 
   }
