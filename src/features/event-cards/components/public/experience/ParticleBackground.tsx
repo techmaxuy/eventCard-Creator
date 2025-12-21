@@ -16,110 +16,100 @@ export function ParticleBackground({ theme, isActive = true }: ParticleBackgroun
 
   useEffect(() => {
     setMounted(true)
-  }, [])
+    console.log('[ParticleBackground] Mounted:', {
+      theme: theme.particles,
+      colors: theme.colors,
+      isActive,
+      width,
+      height
+    })
+  }, [theme, isActive, width, height])
 
-  if (!mounted || !isActive || theme.particles === 'none') {
+  // No renderizar hasta que esté montado (evita hidratación)
+  if (!mounted) {
+    console.log('[ParticleBackground] Not mounted yet')
     return null
   }
+
+  if (!isActive) {
+    console.log('[ParticleBackground] Not active')
+    return null
+  }
+
+  if (theme.particles === 'none') {
+    console.log('[ParticleBackground] Particles set to none')
+    return null
+  }
+
+  console.log('[ParticleBackground] Rendering particles:', theme.particles)
 
   // Confetti (cumpleaños, graduación)
   if (theme.particles === 'confetti') {
     return (
-      <Confetti
-        width={width}
-        height={height}
-        numberOfPieces={150}
-        recycle={true}
-        colors={theme.colors}
-        gravity={0.3}
-        opacity={0.8}
-        style={{ position: 'fixed', top: 0, left: 0, zIndex: 1, pointerEvents: 'none' }}
-      />
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
+        <Confetti
+          width={width}
+          height={height}
+          numberOfPieces={150}
+          recycle={true}
+          colors={theme.colors}
+          gravity={0.3}
+          opacity={0.8}
+        />
+      </div>
     )
   }
 
   // Pétalos (boda, aniversario)
   if (theme.particles === 'petals') {
     return (
-      <Confetti
-        width={width}
-        height={height}
-        numberOfPieces={100}
-        recycle={true}
-        colors={theme.colors}
-        gravity={0.15}
-        wind={0.01}
-        opacity={0.7}
-        drawShape={(ctx) => {
-          // Forma de pétalo
-          ctx.beginPath()
-          ctx.arc(0, 0, 8, 0, 2 * Math.PI)
-          ctx.fill()
-        }}
-        style={{ position: 'fixed', top: 0, left: 0, zIndex: 1, pointerEvents: 'none' }}
-      />
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
+        <Confetti
+          width={width}
+          height={height}
+          numberOfPieces={100}
+          recycle={true}
+          colors={theme.colors}
+          gravity={0.15}
+          wind={0.01}
+          opacity={0.7}
+        />
+      </div>
     )
   }
 
   // Burbujas (baby shower)
   if (theme.particles === 'bubbles') {
     return (
-      <Confetti
-        width={width}
-        height={height}
-        numberOfPieces={80}
-        recycle={true}
-        colors={theme.colors}
-        gravity={-0.1} // Flotan hacia arriba
-        wind={0}
-        opacity={0.5}
-        drawShape={(ctx) => {
-          // Forma de burbuja
-          ctx.beginPath()
-          ctx.arc(0, 0, 6, 0, 2 * Math.PI)
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)'
-          ctx.lineWidth = 2
-          ctx.stroke()
-        }}
-        style={{ position: 'fixed', top: 0, left: 0, zIndex: 1, pointerEvents: 'none' }}
-      />
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
+        <Confetti
+          width={width}
+          height={height}
+          numberOfPieces={80}
+          recycle={true}
+          colors={theme.colors}
+          gravity={-0.05} // Flotan hacia arriba
+          wind={0}
+          opacity={0.5}
+        />
+      </div>
     )
   }
 
-  // Estrellas (graduación, año nuevo)
+  // Estrellas (graduación)
   if (theme.particles === 'stars') {
     return (
-      <Confetti
-        width={width}
-        height={height}
-        numberOfPieces={60}
-        recycle={true}
-        colors={theme.colors}
-        gravity={0.2}
-        opacity={0.9}
-        drawShape={(ctx) => {
-          // Forma de estrella
-          const spikes = 5
-          const outerRadius = 8
-          const innerRadius = 4
-          
-          ctx.beginPath()
-          for (let i = 0; i < spikes * 2; i++) {
-            const radius = i % 2 === 0 ? outerRadius : innerRadius
-            const angle = (i * Math.PI) / spikes
-            const x = Math.cos(angle) * radius
-            const y = Math.sin(angle) * radius
-            if (i === 0) {
-              ctx.moveTo(x, y)
-            } else {
-              ctx.lineTo(x, y)
-            }
-          }
-          ctx.closePath()
-          ctx.fill()
-        }}
-        style={{ position: 'fixed', top: 0, left: 0, zIndex: 1, pointerEvents: 'none' }}
-      />
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
+        <Confetti
+          width={width}
+          height={height}
+          numberOfPieces={60}
+          recycle={true}
+          colors={theme.colors}
+          gravity={0.2}
+          opacity={0.9}
+        />
+      </div>
     )
   }
 

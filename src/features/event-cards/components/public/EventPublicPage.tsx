@@ -59,6 +59,14 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
     event.primaryColor
   )
 
+  // DEBUG: Ver qué tema se está usando
+  console.log('[EventPublicPage] Theme:', {
+    eventTypeSlug: event.eventType.slug,
+    eventTypeName: event.eventType.name,
+    theme: theme.particles,
+    colors: theme.colors
+  })
+
   const eventTypeName = locale === 'es' ? event.eventType.name : event.eventType.nameEn
 
   return (
