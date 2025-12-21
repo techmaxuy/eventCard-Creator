@@ -584,5 +584,40 @@
     "qrDescription": "Scan this code to access the event",
     "downloadQR": "Download QR",
     "shareOn": "Share on {platform}"
+  },
+  "Home": {
+    "welcome": "Welcome, {name}",
+    "adminSubtitle": "EventCards Administration Panel",
+    "userSubtitle": "Manage your events and celebrations",
+    "footerText": "Need help? Visit our documentation or contact support."
+  },
+  "QuickActions": {
+    "title": "Quick Actions",
+    "description": "Create and manage your events easily",
+    "totalEvents": "My Events",
+    "published": "Published",
+    "totalGuests": "Guests",
+    "createEvent": "Create Event",
+    "createEventDescription": "Start a new event now",
+    "myEvents": "My Events",
+    "myEventsDescription": "View all my events",
+    "viewStats": "View Statistics",
+    "viewStatsDescription": "Analyze your events performance"
+  },
+  "AdminQuickActions": {
+    "title": "EventCards Admin Panel",
+    "description": "Manage the events system",
+    "eventTypes": "Types",
+    "totalEvents": "Events",
+    "activeEvents": "Active",
+    "totalGuests": "Guests",
+    "manageEventTypes": "Event Types",
+    "manageEventTypesDescription": "Configure available types",
+    "eventDashboard": "Dashboard",
+    "eventDashboardDescription": "View control panel",
+    "analytics": "Analytics",
+    "analyticsDescription": "View system metrics",
+    "systemActivity": "Activity",
+    "systemActivityDescription": "Recent events"
   }
 }

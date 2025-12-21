@@ -594,5 +594,40 @@
     "qrDescription": "Escanea este código para acceder al evento",
     "downloadQR": "Descargar QR",
     "shareOn": "Compartir en {platform}"
+  },
+  "Home": {
+    "welcome": "Bienvenido, {name}",
+    "adminSubtitle": "Panel de administración de EventCards",
+    "userSubtitle": "Gestiona tus eventos y celebraciones",
+    "footerText": "¿Necesitas ayuda? Visita nuestra documentación o contacta soporte."
+  },
+  "QuickActions": {
+    "title": "Acciones Rápidas",
+    "description": "Crea y gestiona tus eventos fácilmente",
+    "totalEvents": "Mis Eventos",
+    "published": "Publicados",
+    "totalGuests": "Invitados",
+    "createEvent": "Crear Evento",
+    "createEventDescription": "Inicia un nuevo evento ahora",
+    "myEvents": "Mis Eventos",
+    "myEventsDescription": "Ver todos mis eventos",
+    "viewStats": "Ver Estadísticas",
+    "viewStatsDescription": "Analiza el rendimiento de tus eventos"
+  },
+  "AdminQuickActions": {
+    "title": "Panel Admin EventCards",
+    "description": "Gestiona el sistema de eventos",
+    "eventTypes": "Tipos",
+    "totalEvents": "Eventos",
+    "activeEvents": "Activos",
+    "totalGuests": "Invitados",
+    "manageEventTypes": "Tipos de Eventos",
+    "manageEventTypesDescription": "Configurar tipos disponibles",
+    "eventDashboard": "Dashboard",
+    "eventDashboardDescription": "Ver panel de control",
+    "analytics": "Analíticas",
+    "analyticsDescription": "Ver métricas del sistema",
+    "systemActivity": "Actividad",
+    "systemActivityDescription": "Eventos recientes"
   }
 }

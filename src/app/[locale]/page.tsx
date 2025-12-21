@@ -3,6 +3,9 @@ import { getTranslations } from 'next-intl/server';
 import { UserMenu } from '@/core/shared/components/UserMenu';
 import { getSettings } from '@/core/admin/actions/settings';
 import Image from 'next/image';
+import { prisma } from '@/core/shared/lib/db'
+import { QuickActions } from '@/features/event-cards/components/dashboard/QuickActions'
+import { AdminQuickActions } from '@/features/event-cards/components/admin/AdminQuickActions'
 
 interface HomePageProps {
   params: Promise<{ locale: string }>
@@ -31,6 +34,48 @@ export default async function Home({ params, searchParams }: HomePageProps) {
   
   const success = sp.success === 'true';
   const error = sp.error;
+
+  // Obtener estadísticas si el usuario está autenticado
+  let userStats = null
+  let adminStats = null
+
+  if (session?.user) {
+    const isAdmin = session.user.role === 'ADMIN'
+
+    if (isAdmin) {
+      // Stats para admin
+      const [totalEventTypes, totalEvents, totalGuests, activeEvents] = await Promise.all([
+        prisma.eventType.count(),
+        prisma.event.count(),
+        prisma.guest.count(),
+        prisma.event.count({ where: { isPublished: true } })
+      ])
+
+      adminStats = {
+        totalEventTypes,
+        totalEvents,
+        totalGuests,
+        activeEvents
+      }
+    } else {
+      // Stats para usuario regular
+      const [totalEvents, publishedEvents, totalGuests] = await Promise.all([
+        prisma.event.count({ where: { userId: session.user.id } }),
+        prisma.event.count({ where: { userId: session.user.id, isPublished: true } }),
+        prisma.guest.count({
+          where: {
+            event: { userId: session.user.id }
+          }
+        })
+      ])
+
+      userStats = {
+        totalEvents,
+        publishedEvents,
+        totalGuests
+      }
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-black dark:via-zinc-900 dark:to-black">
@@ -68,9 +113,11 @@ export default async function Home({ params, searchParams }: HomePageProps) {
             </div>
             
             {/* User Menu */}
-            <UserMenu user={session?.user || null}
-          locale={locale}
-          isAuthenticated={!!session}/>
+            <UserMenu 
+              user={session?.user || null}
+              locale={locale}
+              isAuthenticated={!!session}
+            />
           </div>
         </div>
       </nav>
@@ -78,6 +125,7 @@ export default async function Home({ params, searchParams }: HomePageProps) {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {!session ? (
+          // Usuario NO autenticado
           <div className="text-center space-y-6">
             <h2 className="text-5xl font-bold text-gray-900 dark:text-white">
               {welcomeMessage}
@@ -89,23 +137,36 @@ export default async function Home({ params, searchParams }: HomePageProps) {
             </p>
           </div>
         ) : (
-          <div className="text-center space-y-6">
-            <div className="inline-block p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-4">
-              <svg className="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
+          // Usuario autenticado
+          <div className="space-y-8">
+            {/* Welcome Message */}
+            <div className="text-center space-y-4">
+              <div className="inline-block p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-4">
+                <svg className="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
+                {t('userWelcome', { 
+                  name: session.user?.name || 'User', 
+                  role: session.user?.role || 'User' 
+                })}
+              </h2>
+              <p className="text-xl text-gray-600 dark:text-gray-400">
+                {locale === 'es' 
+                  ? '¡Todo está listo para comenzar!' 
+                  : 'Everything is ready to get started!'}
+              </p>
             </div>
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-              {t('userWelcome', { 
-                name: session.user?.name || 'User', 
-                role: session.user?.role || 'User' 
-              })}
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400">
-              {locale === 'es' 
-                ? '¡Todo está listo para comenzar!' 
-                : 'Everything is ready to get started!'}
-            </p>
+
+            {/* Quick Actions Component */}
+            <div className="max-w-4xl mx-auto mt-12">
+              {session.user.role === 'ADMIN' ? (
+                <AdminQuickActions locale={locale} stats={adminStats || undefined} />
+              ) : (
+                <QuickActions locale={locale} stats={userStats || undefined} />
+              )}
+            </div>
           </div>
         )}
       </main>
