@@ -111,7 +111,7 @@ export const eventThemes: Record<string, EventTheme> = {
   
   // Default
   default: {
-    particles: 'confetti',
+    particles: 'none',
     colors: ['#3B82F6', '#8B5CF6', '#EC4899'],
     animation: 'fade',
     background: 'gradient',

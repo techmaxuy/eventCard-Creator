@@ -1,9 +1,10 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
 import { EventTheme } from '@/features/event-cards/config/event-themes'
 import { ChevronDown } from 'lucide-react'
+import { useRef } from 'react'
 
 interface HeroSectionProps {
   title: string
@@ -24,6 +25,17 @@ export function HeroSection({
   theme,
   primaryColor,
 }: HeroSectionProps) {
+
+
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start']
+  })
+
+  // Parallax effect - la imagen se mueve más lento que el scroll
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%'])
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.5, 0])
   
   // Gradientes según tipo de background
   const getBackground = () => {
@@ -51,24 +63,38 @@ export function HeroSection({
   }
 
   return (
-    <div className="relative h-screen w-full overflow-hidden">
-      {/* Background */}
+    <div ref={ref} className="relative h-screen w-full overflow-hidden">
+      {/* Background con Parallax */}
       {coverImage ? (
         <>
-          <Image
-            src={coverImage}
-            alt={title}
-            fill
-            className="object-cover"
-            priority
+          <motion.div 
+            style={{ y }}
+            className="absolute inset-0 w-full h-[120%]"
+          >
+            <Image
+              src={coverImage}
+              alt={title}
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+            />
+          </motion.div>
+          <motion.div 
+            style={{ opacity }}
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm" 
           />
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
         </>
       ) : (
-        <div 
+        <motion.div 
+          style={{ opacity }}
           className="absolute inset-0"
-          style={{ background: getBackground() || primaryColor }}
-        />
+        >
+          <div 
+            className="w-full h-full"
+            style={{ background: getBackground() || primaryColor }}
+          />
+        </motion.div>
       )}
 
       {/* Content */}
@@ -150,6 +176,5 @@ export function HeroSection({
           </div>
         </motion.div>
       </div>
-    </div>
-  )
+    </div>)
 }
