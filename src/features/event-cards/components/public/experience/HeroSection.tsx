@@ -34,7 +34,7 @@ export function HeroSection({
   })
 
   // Parallax effect - la imagen se mueve más lento que el scroll
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%'])
+  const y = useTransform(scrollYProgress, [0, 1], ['50%', '0%'])
   const opacity = useTransform(scrollYProgress,[1, 0.5, 0],[0, 0.5, 1])
   
   // Gradientes según tipo de background
