@@ -70,23 +70,7 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
   const eventTypeName = locale === 'es' ? event.eventType.name : event.eventType.nameEn
 
   return (
-    <div className="min-h-screen  relative">
-
-    {/* Fondo global con imagen y partículas */}
-        <div 
-            className="fixed inset-0 -z-10 overflow-hidden"
-            style={{
-            backgroundImage: event.coverImage ? `url(${event.coverImage})` : undefined,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed',
-            }}
-        >
-            {/* Overlay oscuro para mejorar legibilidad */}
-            <div className="absolute inset-0 bg-black/50 dark:bg-black/70" />
-
-
-
+    <div className="min-h-screen bg-gray-50 dark:bg-black relative">
       {/* Particle Background */}
       <ParticleBackground theme={theme} />
 
@@ -249,7 +233,6 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
 
         </div>
       </div>
-    </div>
     </div>
   )
 }
