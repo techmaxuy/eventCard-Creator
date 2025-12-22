@@ -99,7 +99,6 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
         welcomePhrase={event.welcomePhrase}
         eventTypeName={eventTypeName}
         eventTypeIcon={event.eventType.icon}
-        coverImage={event.coverImage}
         theme={theme}
         primaryColor={event.primaryColor}
       />
