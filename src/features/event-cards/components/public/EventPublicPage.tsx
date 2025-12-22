@@ -96,7 +96,6 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="dark:bg-zinc-900 rounded-xl shadow-lg border border-gray-200 dark:border-zinc-800 p-8 text-center"
             >
               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 {event.description}
@@ -110,12 +109,10 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="dark:bg-zinc-900 rounded-xl shadow-lg border border-gray-200 dark:border-zinc-800 p-6"
           >
             <div className="flex items-center justify-center gap-4">
               <motion.div
                 whileHover={{ scale: 1.1, rotate: 5 }}
-                className="w-16 h-16 rounded-lg flex items-center justify-center"
                 style={{ backgroundColor: `${event.primaryColor}20` }}
               >
                 <Users className="w-8 h-8" style={{ color: event.primaryColor }} />
@@ -137,14 +134,12 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="dark:bg-zinc-900 rounded-xl shadow-lg border border-gray-200 dark:border-zinc-800 p-8"
           >
             <motion.h2
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center"
             >
               {t('eventDetails')}
             </motion.h2>
@@ -170,7 +165,6 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="dark:bg-zinc-900 rounded-xl shadow-lg border border-gray-200 dark:border-zinc-800 p-8"
             >
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
                 {t('gallery')}
@@ -184,7 +178,6 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                     whileHover={{ scale: 1.05, rotate: 2 }}
-                    className="relative aspect-square rounded-lg overflow-hidden shadow-md"
                   >
                     <Image
                       src={imageUrl}
@@ -220,7 +213,6 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="dark:bg-zinc-900 rounded-xl shadow-lg border border-gray-200 dark:border-zinc-800 p-6"
           >
             <ShareButtons
               eventTitle={event.title}
