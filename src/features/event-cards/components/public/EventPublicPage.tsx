@@ -90,6 +90,9 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
       {/* Particle Background */}
       <ParticleBackground theme={theme} />
 
+ </div>
+  {/* Contenido */}
+      <div className="relative z-10">
       {/* Hero Section */}
       <HeroSection
         title={event.title}
@@ -102,7 +105,7 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
       />
 
       {/* Main Content */}
-      <div className="relative z-10 ">
+      
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
           
           {/* Description (if exists) */}
@@ -112,7 +115,7 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg border border-gray-200 dark:border-zinc-800 p-8 text-center"
+              className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-8 text-center"
             >
               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 {event.description}
@@ -126,7 +129,7 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg border border-gray-200 dark:border-zinc-800 p-6"
+            className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-6"
           >
             <div className="flex items-center justify-center gap-4">
               <motion.div
@@ -153,7 +156,7 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg border border-gray-200 dark:border-zinc-800 p-8"
+            className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-8"
           >
             <motion.h2
               initial={{ opacity: 0, x: -20 }}
@@ -186,7 +189,7 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg border border-gray-200 dark:border-zinc-800 p-8"
+              className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-8"
             >
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
                 {t('gallery')}
@@ -236,7 +239,7 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg border border-gray-200 dark:border-zinc-800 p-6"
+            className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-6"
           >
             <ShareButtons
               eventTitle={event.title}
@@ -250,6 +253,6 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
         </div>
       </div>
     </div>
-    </div>
+   
   )
 }
