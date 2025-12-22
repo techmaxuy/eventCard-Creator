@@ -18,47 +18,6 @@ export function QuickActions({ locale, stats }: QuickActionsProps) {
 
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-lg border border-gray-200 dark:border-zinc-800 p-8">
-      <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-4">
-          <Sparkles className="w-8 h-8 text-white" />
-        </div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          {t('title')}
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400">
-          {t('description')}
-        </p>
-      </div>
-
-      {/* Stats */}
-      {stats && (
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-              {stats.totalEvents}
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              {t('totalEvents')}
-            </p>
-          </div>
-          <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-            <p className="text-3xl font-bold text-green-600 dark:text-green-400">
-              {stats.publishedEvents}
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              {t('published')}
-            </p>
-          </div>
-          <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-            <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-              {stats.totalGuests}
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              {t('totalGuests')}
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* Quick Action Buttons */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -123,6 +82,55 @@ export function QuickActions({ locale, stats }: QuickActionsProps) {
           <span className="text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300">→</span>
         </Link>
       </div>
+
+{/* Stats */}
+      {stats && (
+        <div className="grid grid-cols-3 gap-4 mb-8">
+          <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+              {stats.totalEvents}
+            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              {t('totalEvents')}
+            </p>
+          </div>
+          <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+            <p className="text-3xl font-bold text-green-600 dark:text-green-400">
+              {stats.publishedEvents}
+            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              {t('published')}
+            </p>
+          </div>
+          <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+            <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+              {stats.totalGuests}
+            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              {t('totalGuests')}
+            </p>
+          </div>
+        </div>
+      )}
+
+
     </div>
   )
 }
+
+
+/*
+
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-4">
+          <Sparkles className="w-8 h-8 text-white" />
+        </div>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          {t('title')}
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400">
+          {t('description')}
+        </p>
+      </div>
+
+*/
