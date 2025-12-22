@@ -34,8 +34,8 @@ export function HeroSection({
   })
 
   // Parallax effect - la imagen se mueve más lento que el scroll
-  const y = useTransform(scrollYProgress, [0, 1], ['50%', '0%'])
-  const opacity = useTransform(scrollYProgress,[1, 0.5, 0],[0, 0.5, 1])
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 0.5, 1],)
   
   // Gradientes según tipo de background
   const getBackground = () => {
@@ -69,7 +69,7 @@ export function HeroSection({
         <>
           <motion.div 
             style={{ y }}
-            className="absolute inset-0 w-full h-[120%]"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm w-full h-[120%]"
           >
             <Image
               src={coverImage}
@@ -82,7 +82,7 @@ export function HeroSection({
           </motion.div>
           <motion.div 
             style={{ opacity }}
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm" 
+            className="absolute inset-0 " 
           />
         </>
       ) : (
