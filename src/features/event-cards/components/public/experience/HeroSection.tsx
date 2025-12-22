@@ -35,7 +35,7 @@ export function HeroSection({
 
   // Parallax effect - la imagen se mueve más lento que el scroll
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%'])
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.5, 0])
+  const opacity = useTransform(scrollYProgress,[1, 0.5, 0],[0, 0.5, 1])
   
   // Gradientes según tipo de background
   const getBackground = () => {
@@ -102,8 +102,8 @@ export function HeroSection({
         
         {/* Icon Animado */}
         <motion.div
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
+          initial={{ scale: 0, rotate: -360 }}
+          animate={{ scale: 1.5, rotate: 0 }}
           transition={{
             type: 'spring',
             stiffness: 260,
@@ -127,7 +127,7 @@ export function HeroSection({
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
+          transition={{ duration: 1.6, delay: 0.3 }}
           className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl"
           style={{ textShadow: '0 4px 20px rgba(0,0,0,0.3)' }}
         >
@@ -139,7 +139,7 @@ export function HeroSection({
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+            transition={{ duration: 1.6, delay: 0.5 }}
             className="text-2xl md:text-4xl italic font-semibold mb-4 text-white/95 max-w-3xl drop-shadow-lg"
           >
             "{welcomePhrase}"
@@ -150,7 +150,7 @@ export function HeroSection({
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
+          transition={{ duration: 1.6, delay: 0.7 }}
           className="text-xl md:text-2xl text-white/90 font-medium"
         >
           {eventTypeName}
