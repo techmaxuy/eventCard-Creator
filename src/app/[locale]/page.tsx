@@ -123,7 +123,7 @@ export default async function Home({ params, searchParams }: HomePageProps) {
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8>
         {!session ? (
           // Usuario NO autenticado
           <div className="text-center space-y-6">
