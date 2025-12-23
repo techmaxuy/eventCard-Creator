@@ -126,34 +126,16 @@ export default async function Home({ params, searchParams }: HomePageProps) {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {!session ? (
           // Usuario NO autenticado
-          <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-            {/* Imagen de fondo Mobile (oculta en desktop) */}
-            <div 
-                className="absolute inset-0 md:hidden bg-cover bg-center"
-                style={{ backgroundImage: "url('/images/fondomobile.jpg')" }}
-            />
-            
-            {/* Imagen de fondo Desktop (oculta en mobile) */}
-            <div 
-                className="absolute inset-0 hidden md:block bg-cover bg-center"
-                style={{ backgroundImage: "url('/images/fondodesktop.jpg')" }}
-            />
-            
-            {/* Overlay oscuro para mejorar legibilidad */}
-            <div className="absolute inset-0 bg-black/50" />
-            
-            {/* Contenido del texto */}
-            <div className="relative z-10 text-center space-y-6 px-4">
-                <h2 className="text-5xl font-bold text-white drop-shadow-2xl">
-                {welcomeMessage}
-                </h2>
-                <p className="text-xl text-white/95 max-w-2xl mx-auto drop-shadow-lg">
-                {locale === 'es' 
-                    ? 'Inicia sesión o regístrate para comenzar' 
-                    : 'Sign in or register to get started'}
-                </p>
-            </div>
-            </div>
+          <div className="text-center space-y-6">
+            <h2 className="text-5xl font-bold text-gray-900 dark:text-white">
+              {welcomeMessage}
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              {locale === 'es' 
+                ? 'Inicia sesión o regístrate para comenzar' 
+                : 'Sign in or register to get started'}
+            </p>
+          </div>
         ) : (
           // Usuario autenticado
           <div className="space-y-8">       
@@ -172,8 +154,3 @@ export default async function Home({ params, searchParams }: HomePageProps) {
     </div>
   );
 }
-
-
-
-
-
