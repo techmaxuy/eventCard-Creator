@@ -85,7 +85,7 @@ export function QuickActions({ locale, stats }: QuickActionsProps) {
 
 {/* Stats */}
       {stats && (
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-2 gap-4 mb-8">
           <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
             <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
               {stats.totalEvents}
