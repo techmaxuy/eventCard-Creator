@@ -62,26 +62,7 @@ export function QuickActions({ locale, stats }: QuickActionsProps) {
         </Link>
       </div>
 
-      {/* Secondary Actions */}
-      <div className="my-4 grid grid-cols-1 gap-3">
-        <Link
-          href={`/${locale}/events`}
-          className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors group"
-        >
-          <div className="flex items-center gap-3">
-            <BarChart3 className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
-            <div>
-              <p className="font-medium text-gray-900 dark:text-white">
-                {t('viewStats')}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {t('viewStatsDescription')}
-              </p>
-            </div>
-          </div>
-          <span className="text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300">→</span>
-        </Link>
-      </div>
+     
 
 {/* Stats */}
       {stats && (
@@ -123,6 +104,28 @@ export function QuickActions({ locale, stats }: QuickActionsProps) {
         </p>
       </div>
 
+  //Secondary Actions 
+      <div className="my-4 grid grid-cols-1 gap-3">
+        <Link
+          href={`/${locale}/events`}
+          className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors group"
+        >
+          <div className="flex items-center gap-3">
+            <BarChart3 className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
+            <div>
+              <p className="font-medium text-gray-900 dark:text-white">
+                {t('viewStats')}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {t('viewStatsDescription')}
+              </p>
+            </div>
+          </div>
+          <span className="text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300">→</span>
+        </Link>
+      </div>
+
+      
 
                 <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
             <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
