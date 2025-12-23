@@ -63,7 +63,7 @@ export function QuickActions({ locale, stats }: QuickActionsProps) {
       </div>
 
       {/* Secondary Actions */}
-      <div className="m-y-4 grid grid-cols-1 gap-3">
+      <div className="my-4 grid grid-cols-1 gap-3">
         <Link
           href={`/${locale}/events`}
           className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors group"
