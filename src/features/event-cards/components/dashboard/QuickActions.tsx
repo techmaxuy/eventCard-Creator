@@ -102,18 +102,8 @@ export function QuickActions({ locale, stats }: QuickActionsProps) {
               {t('published')}
             </p>
           </div>
-          <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-            <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-              {stats.totalGuests}
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              {t('totalGuests')}
-            </p>
-          </div>
         </div>
       )}
-
-
     </div>
   )
 }
@@ -133,4 +123,13 @@ export function QuickActions({ locale, stats }: QuickActionsProps) {
         </p>
       </div>
 
+
+                <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+            <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+              {stats.totalGuests}
+            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              {t('totalGuests')}
+            </p>
+          </div>
 */
