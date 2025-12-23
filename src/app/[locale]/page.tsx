@@ -141,7 +141,7 @@ export default async function Home({ params, searchParams }: HomePageProps) {
           <div className="space-y-8">       
             
             {/* Quick Actions Component */}
-            <div className="max-w-4xl mx-auto mt-12">
+            <div className="max-w-4xl mx-auto mt-4">
               {session.user.role === 'ADMIN' ? (
                 <AdminQuickActions locale={locale} stats={adminStats || undefined} />
               ) : (
