@@ -31,6 +31,8 @@ export default async function Home({ params, searchParams }: HomePageProps) {
   
   // Logo
   const logo = settings?.logo;
+  const bgMobile = settings?.backgroundImageMobile || '/images/fondomobile.jpg'
+  const bgDesktop = settings?.backgroundImageDesktop || '/images/fondodesktop.jpg'
   
   const success = sp.success === 'true';
   const error = sp.error;
@@ -128,16 +130,10 @@ export default async function Home({ params, searchParams }: HomePageProps) {
           // Usuario NO autenticado
           <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
             {/* Imagen de fondo Mobile (oculta en desktop) */}
-            <div 
-                className="absolute inset-0 md:hidden bg-cover bg-center"
-                style={{ backgroundImage: "url('/images/fondomobile.jpg')" }}
-            />
-            
-            {/* Imagen de fondo Desktop (oculta en mobile) */}
-            <div 
-                className="absolute inset-0 hidden md:block bg-cover bg-center"
-                style={{ backgroundImage: "url('/images/fondodesktop.jpg')" }}
-            />
+            <div className="absolute inset-0 md:hidden bg-cover bg-center" 
+              style={{ backgroundImage: `url(${bgMobile})` }} />
+            <div className="absolute inset-0 hidden md:block bg-cover bg-center" 
+              style={{ backgroundImage: `url(${bgDesktop})` }} />
             
             {/* Overlay oscuro para mejorar legibilidad */}
             <div className="absolute inset-0 bg-black/50" />
@@ -157,6 +153,14 @@ export default async function Home({ params, searchParams }: HomePageProps) {
         ) : (
           // Usuario autenticado
           <div className="space-y-8">       
+            {/* Fondo global */}
+            <div className="absolute inset-0 -z-10 overflow-hidden">
+              <div className="absolute inset-0 md:hidden bg-cover bg-center" 
+                style={{ backgroundImage: `url(${bgMobile})` }} />
+              <div className="absolute inset-0 hidden md:block bg-cover bg-center" 
+                style={{ backgroundImage: `url(${bgDesktop})` }} />
+              <div className="absolute inset-0 bg-black/40" />
+            </div>
             
             {/* Quick Actions Component */}
             <div className="max-w-4xl mx-auto mt-4">
