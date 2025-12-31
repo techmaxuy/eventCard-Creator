@@ -111,36 +111,3 @@ export async function sendVerificationEmail(
     return { success: false, error }
   }
 }
-
-/**
- * Función genérica para enviar emails
- */
-export async function sendEmail({
-  to,
-  subject,
-  html,
-}: {
-  to: string
-  subject: string
-  html: string
-}) {
-  try {
-    const { data, error } = await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'noreply@yourdomain.com',
-      to,
-      subject,
-      html,
-    })
-
-    if (error) {
-      console.error('[Email] Error sending email:', error)
-      throw new Error(error.message)
-    }
-
-    console.log('[Email] ✅ Email sent:', data?.id)
-    return { success: true, data }
-  } catch (error) {
-    console.error('[Email] Failed to send email:', error)
-    throw error
-  }
-}

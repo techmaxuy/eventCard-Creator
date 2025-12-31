@@ -27,6 +27,7 @@ export interface UploadAudioOptions {
   folder?: string // Ej: 'audio', 'music'
 }
 
+
 /**
  * Sube una imagen a Azure Blob Storage
  */
@@ -95,6 +96,88 @@ export async function uploadImage(
 }
 
 /**
+ * Elimina una imagen de Azure Blob Storage
+ */
+export async function deleteImage(imageUrl: string): Promise<boolean> {
+  try {
+    // Extraer blob name de la URL
+    const url = new URL(imageUrl)
+    const blobName = url.pathname.split(`/${containerName}/`)[1]
+
+    if (!blobName) {
+      throw new Error('Invalid blob URL')
+    }
+
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName)
+    await blockBlobClient.deleteIfExists()
+
+    console.log(`[Azure] ✅ Image deleted: ${blobName}`)
+    
+    return true
+  } catch (error) {
+    console.error('[Azure] ❌ Delete error:', error)
+    return false
+  }
+}
+
+/**
+ * Obtiene información de una imagen
+ */
+export async function getImageMetadata(imageUrl: string) {
+  try {
+    const url = new URL(imageUrl)
+    const blobName = url.pathname.split(`/${containerName}/`)[1]
+
+    if (!blobName) {
+      throw new Error('Invalid blob URL')
+    }
+
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName)
+    const properties = await blockBlobClient.getProperties()
+
+    return {
+      size: properties.contentLength,
+      contentType: properties.contentType,
+      lastModified: properties.lastModified,
+      exists: true,
+    }
+  } catch (error) {
+    console.error('[Azure] ❌ Metadata error:', error)
+    return { exists: false }
+  }
+}
+
+/**
+ * Lista todas las imágenes en una carpeta
+ */
+export async function listImages(folder: string = 'uploads', limit: number = 100) {
+  try {
+    const images: string[] = []
+    
+    for await (const blob of containerClient.listBlobsFlat({ prefix: folder })) {
+      if (images.length >= limit) break
+      
+      const url = `${containerClient.url}/${blob.name}`
+      images.push(url)
+    }
+
+    return images
+  } catch (error) {
+    console.error('[Azure] ❌ List error:', error)
+    return []
+  }
+}
+
+/**
+ * Elimina un archivo de audio de Azure Blob Storage
+ * NUEVA FUNCIÓN (alias de deleteImage para claridad)
+ */
+export async function deleteAudio(audioUrl: string): Promise<boolean> {
+  return deleteImage(audioUrl)
+}
+
+
+/**
  * Sube un archivo de audio a Azure Blob Storage
  * NUEVA FUNCIÓN
  */
@@ -148,86 +231,5 @@ export async function uploadAudio(
   } catch (error) {
     console.error('[Azure] ❌ Audio upload error:', error)
     throw error
-  }
-}
-
-/**
- * Elimina una imagen de Azure Blob Storage
- */
-export async function deleteImage(imageUrl: string): Promise<boolean> {
-  try {
-    // Extraer blob name de la URL
-    const url = new URL(imageUrl)
-    const blobName = url.pathname.split(`/${containerName}/`)[1]
-
-    if (!blobName) {
-      throw new Error('Invalid blob URL')
-    }
-
-    const blockBlobClient = containerClient.getBlockBlobClient(blobName)
-    await blockBlobClient.deleteIfExists()
-
-    console.log(`[Azure] ✅ Image deleted: ${blobName}`)
-    
-    return true
-  } catch (error) {
-    console.error('[Azure] ❌ Delete error:', error)
-    return false
-  }
-}
-
-/**
- * Elimina un archivo de audio de Azure Blob Storage
- * NUEVA FUNCIÓN (alias de deleteImage para claridad)
- */
-export async function deleteAudio(audioUrl: string): Promise<boolean> {
-  return deleteImage(audioUrl)
-}
-
-/**
- * Obtiene información de una imagen
- */
-export async function getImageMetadata(imageUrl: string) {
-  try {
-    const url = new URL(imageUrl)
-    const blobName = url.pathname.split(`/${containerName}/`)[1]
-
-    if (!blobName) {
-      throw new Error('Invalid blob URL')
-    }
-
-    const blockBlobClient = containerClient.getBlockBlobClient(blobName)
-    const properties = await blockBlobClient.getProperties()
-
-    return {
-      size: properties.contentLength,
-      contentType: properties.contentType,
-      lastModified: properties.lastModified,
-      exists: true,
-    }
-  } catch (error) {
-    console.error('[Azure] ❌ Metadata error:', error)
-    return { exists: false }
-  }
-}
-
-/**
- * Lista todas las imágenes en una carpeta
- */
-export async function listImages(folder: string = 'uploads', limit: number = 100) {
-  try {
-    const images: string[] = []
-    
-    for await (const blob of containerClient.listBlobsFlat({ prefix: folder })) {
-      if (images.length >= limit) break
-      
-      const url = `${containerClient.url}/${blob.name}`
-      images.push(url)
-    }
-
-    return images
-  } catch (error) {
-    console.error('[Azure] ❌ List error:', error)
-    return []
   }
 }

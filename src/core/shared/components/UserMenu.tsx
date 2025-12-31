@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { User, LogOut, UserCircle, Globe, ChevronDown, ShieldAlert } from 'lucide-react'
+import { User, LogOut, UserCircle, Settings, Globe, ChevronDown, ShieldAlert } from 'lucide-react'
 import { Link } from '@/i18n/routing'
 import { LogoutButton } from '../../auth/components/LogoutButton'
 import Image from 'next/image'
@@ -34,6 +34,7 @@ export function UserMenu({ user, locale, isAuthenticated }: UserMenuProps) {
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside)
       return () => document.removeEventListener('mousedown', handleClickOutside)
+      
     }
   }, [isOpen])
 
@@ -103,22 +104,6 @@ export function UserMenu({ user, locale, isAuthenticated }: UserMenuProps) {
                   <UserCircle className="w-4 h-4" />
                   {t('profile')}
                 </Link>
-
-                {/* NUEVO: Solo mostrar "Mis Eventos" si NO es admin */}
-                {user.role !== 'ADMIN' && (
-                  <Link
-                    href="/events"
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-700"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {t('myEvents')}
-                  </Link>
-                )}
-                
-                {/* Separator before admin links */}
-                {user.role === 'ADMIN' && (
-                  <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
-                )}
 
               {/* Admin Dashboard - Solo si es ADMIN */}
                 {user.role === 'ADMIN' && (
