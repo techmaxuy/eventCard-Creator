@@ -76,7 +76,8 @@ model Settings {
   favicon               String?
   defaultLocale         String   @default("en")
   backgroundImageMobile   String?
-  backgroundImageDesktop  String? 
+  backgroundImageDesktop  String?
+  
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 }
