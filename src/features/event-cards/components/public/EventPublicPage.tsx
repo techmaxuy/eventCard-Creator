@@ -256,6 +256,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               eventSlug={event.slug}
               requirePhone={event.requirePhone}
               locale={locale}
+              fontFamily={event.fontFamily}
             />
           </motion.div>
 

@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     const formData = await request.formData()
     const file = formData.get('file') as File
-    const assetType = formData.get('assetType') as string // 'image' | 'audio'
+    const assetType = formData.get('assetType') as string // 'image' | 'audio' | 'decoration'
 
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 })
@@ -26,18 +26,20 @@ export async function POST(request: NextRequest) {
 
     let fileUrl: string
 
-    if (assetType === 'image') {
-      // Subir imagen (generar thumbnail también)
+    if (assetType === 'image' || assetType === 'decoration') {
+      // Subir imagen o decoración
+      const folder = assetType === 'decoration' ? 'assets/decorations' : 'assets/images'
+
       fileUrl = await uploadImage(file, {
-        folder: 'assets/images',
+        folder,
         maxWidth: 1920,
         maxHeight: 1080,
         quality: 90,
       })
 
-      // TODO: Generar thumbnail
+      // Generar thumbnail (más pequeño para decoraciones)
       const thumbnailUrl = await uploadImage(file, {
-        folder: 'assets/thumbnails',
+        folder: assetType === 'decoration' ? 'assets/decorations/thumbnails' : 'assets/thumbnails',
         maxWidth: 400,
         maxHeight: 400,
         quality: 80,
@@ -47,7 +49,7 @@ export async function POST(request: NextRequest) {
         success: true,
         imageUrl: fileUrl,
         thumbnailUrl: thumbnailUrl,
-        message: 'Image uploaded successfully'
+        message: assetType === 'decoration' ? 'Decoration uploaded successfully' : 'Image uploaded successfully'
       })
 
     } else if (assetType === 'audio') {

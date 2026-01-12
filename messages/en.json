@@ -651,7 +651,8 @@
     "createAsset": "Create Asset",
     "editAsset": "Edit Asset",
     "backToList": "Back to list",
-    
+    "uploading": "Uploading...",
+
     "allTypes": "All types",
     "images": "Images",
     "audios": "Audios",

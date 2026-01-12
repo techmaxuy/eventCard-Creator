@@ -1,21 +1,27 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Check, X, HelpCircle, Loader2, Mail, Phone, User, Users, MessageSquare } from 'lucide-react'
 import { confirmGuest } from '@/features/event-cards/actions/guests'
+import { getFontById } from '@/features/event-cards/config/fonts'
 
 interface GuestConfirmationProps {
   eventId: string
   eventSlug: string
   requirePhone: boolean
   locale: string
+  fontFamily?: string | null
 }
 
-export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale }: GuestConfirmationProps) {
+export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fontFamily }: GuestConfirmationProps) {
   const t = useTranslations('EventPublic')
   const [isPending, startTransition] = useTransition()
-  
+
+  // Obtener fuente personalizada si existe
+  const customFont = fontFamily && getFontById(fontFamily)
+  const fontStyle = customFont ? { fontFamily: `'${customFont.name}', cursive` } : {}
+
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
@@ -24,6 +30,25 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale }: 
   const [status, setStatus] = useState<'CONFIRMED' | 'DECLINED' | 'MAYBE'>('CONFIRMED')
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  // Cargar estado de confirmación previo desde localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storageKey = `event-confirmation-${eventSlug}`
+      const savedConfirmation = localStorage.getItem(storageKey)
+
+      if (savedConfirmation) {
+        try {
+          const data = JSON.parse(savedConfirmation)
+          setSubmitted(true)
+          setStatus(data.status)
+          setName(data.name)
+        } catch (e) {
+          // Si hay error parseando, ignorar
+        }
+      }
+    }
+  }, [eventSlug])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -46,13 +71,32 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale }: 
         setError(t(`errors.${result.error}`) || result.error)
       } else {
         setSubmitted(true)
+
+        // Guardar confirmación en localStorage
+        if (typeof window !== 'undefined') {
+          const storageKey = `event-confirmation-${eventSlug}`
+          localStorage.setItem(storageKey, JSON.stringify({
+            status,
+            name,
+            confirmedAt: new Date().toISOString()
+          }))
+        }
       }
     })
   }
 
+  const handleModifyResponse = () => {
+    // Limpiar localStorage al modificar respuesta
+    if (typeof window !== 'undefined') {
+      const storageKey = `event-confirmation-${eventSlug}`
+      localStorage.removeItem(storageKey)
+    }
+    setSubmitted(false)
+  }
+
   if (submitted) {
     return (
-      <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-lg border border-gray-200 dark:border-zinc-800 p-8 text-center">
+      <div className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md rounded-xl shadow-lg border border-white/30 dark:border-zinc-800/50 p-8 text-center">
         <div className={`w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center ${
           status === 'CONFIRMED' 
             ? 'bg-green-100 dark:bg-green-900/20' 
@@ -64,7 +108,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale }: 
           {status === 'DECLINED' && <X className="w-8 h-8 text-red-600 dark:text-red-400" />}
           {status === 'MAYBE' && <HelpCircle className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />}
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2" style={fontStyle}>
           {status === 'CONFIRMED' && t('thankYouConfirmed')}
           {status === 'DECLINED' && t('thankYouDeclined')}
           {status === 'MAYBE' && t('thankYouMaybe')}
@@ -73,7 +117,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale }: 
           {t('confirmationReceived')}
         </p>
         <button
-          onClick={() => setSubmitted(false)}
+          onClick={handleModifyResponse}
           className="text-blue-600 dark:text-blue-400 hover:underline"
         >
           {t('modifyResponse')}
@@ -83,8 +127,8 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale }: 
   }
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-lg border border-gray-200 dark:border-zinc-800 p-8">
-      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+    <div className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md rounded-xl shadow-lg border border-white/30 dark:border-zinc-800/50 p-8">
+      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2" style={fontStyle}>
         {t('confirmAttendance')}
       </h3>
       <p className="text-gray-600 dark:text-gray-400 mb-6">
