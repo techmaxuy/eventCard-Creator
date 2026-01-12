@@ -9,6 +9,7 @@ import { HeroSection } from './experience/HeroSection'
 import { AnimatedDetails } from './experience/AnimatedDetails'
 import { ParticleBackground } from './experience/ParticleBackground'
 import { GoogleFontLoader } from './GoogleFontLoader'
+import { DecorativeElements } from './DecorativeElements'
 import { getEventTheme } from '@/features/event-cards/config/event-themes'
 import { motion } from 'framer-motion'
 
@@ -19,6 +20,13 @@ interface EventType {
   color: string
   slug?: string
   hideGuestCount?: boolean
+}
+
+interface DecorationAsset {
+  id: string
+  decorationUrl: string | null
+  decorationType: string | null
+  name: string
 }
 
 interface Event {
@@ -41,6 +49,7 @@ interface Event {
   welcomePhrase: string | null
   musicUrl: string | null
   fontFamily: string | null
+  decorations: any
   eventType: EventType
   _count: {
     guests: number
@@ -51,9 +60,10 @@ interface EventPublicPageProps {
   event: Event
   locale: string
   fullEventUrl: string
+  decorationAssets?: DecorationAsset[]
 }
 
-export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPageProps) {
+export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets = [] }: EventPublicPageProps) {
   const t = useTranslations('EventPublic')
   
   // Obtener tema visual según tipo de evento
@@ -96,6 +106,15 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
       <ParticleBackground theme={theme} />
 
  </div>
+
+      {/* Decorative Elements */}
+      {event.decorations && Array.isArray(event.decorations) && event.decorations.length > 0 && (
+        <DecorativeElements
+          decorations={event.decorations}
+          assets={decorationAssets}
+        />
+      )}
+
   {/* Contenido */}
       <div className="relative z-10">
       {/* Hero Section */}

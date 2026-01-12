@@ -190,6 +190,10 @@ const UpdateEventSchema = z.object({
   welcomePhrase: z.string().optional(),
   musicUrl: z.string().url().optional().or(z.literal('')),
   fontFamily: z.string().optional(),
+  decorations: z.array(z.object({
+    assetId: z.string(),
+    position: z.string(),
+  })).optional(),
 })
 
 /**

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { ShareButtons } from '@/features/event-cards/components/share/ShareButtons'
 import { AssetSelector } from './AssetSelector'
 import { FontSelector } from './FontSelector'
+import { DecorationSelector } from './DecorationSelector'
 
 import { 
   Save, 
@@ -61,6 +62,7 @@ interface Event {
   welcomePhrase: string | null
   musicUrl: string | null
   fontFamily: string | null
+  decorations: any
   isPublished: boolean
   eventType: EventType
   user?: {  // ← AGREGAR
@@ -131,6 +133,9 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   const [welcomePhrase, setWelcomePhrase] = useState(event.welcomePhrase || '')
   const [musicUrl, setMusicUrl] = useState(event.musicUrl || '')
   const [fontFamily, setFontFamily] = useState(event.fontFamily || '')
+  const [selectedDecorations, setSelectedDecorations] = useState<Array<{ assetId: string, position: string }>>(
+    event.decorations ? (Array.isArray(event.decorations) ? event.decorations : []) : []
+  )
 
   const handleSave = async () => {
     setMessage(null)
@@ -151,7 +156,8 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
         coverImage: event.coverImage || undefined,
         welcomePhrase: welcomePhrase || undefined,
         musicUrl: musicUrl || undefined,
-        fontFamily: fontFamily || undefined
+        fontFamily: fontFamily || undefined,
+        decorations: selectedDecorations.length > 0 ? selectedDecorations : undefined
       })
 
       if (result.error) {
@@ -445,6 +451,16 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
               selectedFontId={fontFamily}
               onSelect={(fontId) => setFontFamily(fontId || '')}
               eventTitle={title}
+            />
+          </div>
+
+          {/* Decoration Selector */}
+          <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6">
+            <DecorationSelector
+              assets={availableAssets}
+              selectedDecorations={selectedDecorations}
+              onUpdate={setSelectedDecorations}
+              locale={locale}
             />
           </div>
 

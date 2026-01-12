@@ -728,11 +728,36 @@
     "errorLoading": "Error al cargar los assets",
     "errorLoadingEventTypes": "Error al cargar los tipos de eventos",
     
+    "decorationContent": "Contenido de Decoración",
+    "decorationImage": "Imagen de Decoración",
+    "decorationType": "Tipo de Decoración",
+    "decorationTypes": {
+      "balloon": "Globos",
+      "cake": "Torta",
+      "candles": "Velas",
+      "confetti": "Confetti",
+      "banner": "Banner",
+      "stars": "Estrellas",
+      "gift": "Regalo",
+      "party": "Fiesta"
+    },
+    "decorationPosition": "Posición de Decoración",
+    "positions": {
+      "topLeft": "Superior Izquierda",
+      "topRight": "Superior Derecha",
+      "bottomLeft": "Inferior Izquierda",
+      "bottomRight": "Inferior Derecha",
+      "floating": "Flotante"
+    },
+    "uploadDecoration": "Haz clic para subir decoración",
+    "decorationRequired": "Debes subir una decoración",
+
     "errors": {
       "InvalidFields": "Campos inválidos",
       "ImageUrlRequired": "La URL de la imagen es requerida",
       "AudioUrlRequired": "La URL del audio es requerida",
       "PhrasesRequired": "Las frases en ambos idiomas son requeridas",
+      "DecorationUrlRequired": "La URL de la decoración es requerida",
       "EventTypeNotFound": "Tipo de evento no encontrado",
       "AssetNotFound": "Asset no encontrado",
       "CreateFailed": "Error al crear el asset",
@@ -753,5 +778,20 @@
     "clearSelection": "Quitar fuente",
     "noFonts": "No hay fuentes disponibles para esta categoría",
     "selectedFont": "Fuente seleccionada"
+  },
+  "DecorationSelector": {
+    "title": "Decoraciones",
+    "description": "Selecciona decoraciones para tu evento. Puedes elegir varias y posicionarlas donde quieras.",
+    "noDecorationsAvailable": "No hay decoraciones disponibles",
+    "clearAll": "Quitar todas",
+    "selectedCount": "{count, plural, =1 {1 decoración seleccionada} other {# decoraciones seleccionadas}}",
+    "position": "Posición"
+  },
+  "AssetSelector": {
+    "noAssetsAvailable": "No hay assets disponibles",
+    "assetSelected": "Asset seleccionado",
+    "clear": "Quitar",
+    "playing": "Reproduciendo...",
+    "preview": "Vista previa"
   }
 }

@@ -67,6 +67,12 @@ export function AssetForm({ asset, eventTypes, locale }: AssetFormProps) {
   const [phraseEs, setPhraseEs] = useState(asset?.phraseEs || '')
   const [phraseEn, setPhraseEn] = useState(asset?.phraseEn || '')
 
+  // Decoration state
+  const [decorationUrl, setDecorationUrl] = useState(asset?.decorationUrl || '')
+  const [decorationType, setDecorationType] = useState(asset?.decorationType || 'balloon')
+  const [decorationPosition, setDecorationPosition] = useState(asset?.decorationPosition || 'floating')
+  const [uploadingDecoration, setUploadingDecoration] = useState(false)
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -152,6 +158,38 @@ export function AssetForm({ asset, eventTypes, locale }: AssetFormProps) {
     }
   }
 
+  const handleDecorationUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploadingDecoration(true)
+    setMessage(null)
+
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('assetType', 'decoration')
+
+    try {
+      const response = await fetch('/api/upload/asset', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const result = await response.json()
+
+      if (!response.ok || result.error) {
+        setMessage({ type: 'error', text: result.error || 'Upload failed' })
+      } else {
+        setDecorationUrl(result.imageUrl)
+        setMessage({ type: 'success', text: t('imageUploaded') })
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Upload failed' })
+    } finally {
+      setUploadingDecoration(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setMessage(null)
@@ -177,6 +215,11 @@ export function AssetForm({ asset, eventTypes, locale }: AssetFormProps) {
       return
     }
 
+    if (type === 'DECORATION' && !decorationUrl) {
+      setMessage({ type: 'error', text: t('decorationRequired') })
+      return
+    }
+
     startTransition(async () => {
       const values = {
         type,
@@ -188,6 +231,9 @@ export function AssetForm({ asset, eventTypes, locale }: AssetFormProps) {
         audioUrl: type === 'AUDIO' ? audioUrl : undefined,
         phraseEs: type === 'PHRASE' ? phraseEs : undefined,
         phraseEn: type === 'PHRASE' ? phraseEn : undefined,
+        decorationUrl: type === 'DECORATION' ? decorationUrl : undefined,
+        decorationType: type === 'DECORATION' ? decorationType : undefined,
+        decorationPosition: type === 'DECORATION' ? decorationPosition : undefined,
         order,
       }
 
@@ -239,7 +285,7 @@ export function AssetForm({ asset, eventTypes, locale }: AssetFormProps) {
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             {t('assetType')}
           </h2>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             <button
               type="button"
               onClick={() => setType('IMAGE')}
@@ -280,6 +326,20 @@ export function AssetForm({ asset, eventTypes, locale }: AssetFormProps) {
             >
               <Upload className="w-6 h-6 mx-auto mb-2 text-green-600 dark:text-green-400" />
               <span className="text-sm font-medium">{t('phrase')}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setType('DECORATION')}
+              disabled={!!asset}
+              className={`p-4 rounded-lg border-2 transition-all ${
+                type === 'DECORATION'
+                  ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20'
+                  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+              } ${asset ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              <span className="text-2xl">🎈</span>
+              <span className="text-sm font-medium block mt-1">{t('decoration')}</span>
             </button>
           </div>
           {asset && (
@@ -534,6 +594,101 @@ export function AssetForm({ asset, eventTypes, locale }: AssetFormProps) {
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                   placeholder={t('phraseEnglishPlaceholder')}
                 />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* DECORATION Content */}
+        {type === 'DECORATION' && (
+          <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              {t('decorationContent')}
+            </h2>
+
+            <div className="space-y-4">
+              {/* Upload Decoration Image */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('decorationImage')} * (PNG/SVG con fondo transparente)
+                </label>
+                {decorationUrl ? (
+                  <div className="relative">
+                    <div className="relative w-full h-48 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600">
+                      <img
+                        src={decorationUrl}
+                        alt="Decoration preview"
+                        className="max-h-44 max-w-full object-contain"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setDecorationUrl('')}
+                      className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <label className="block w-full p-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-gray-400 dark:hover:border-gray-500 cursor-pointer transition-colors">
+                    <input
+                      type="file"
+                      accept="image/png,image/svg+xml"
+                      onChange={handleDecorationUpload}
+                      className="hidden"
+                      disabled={uploadingDecoration}
+                    />
+                    <div className="text-center">
+                      {uploadingDecoration ? (
+                        <Loader2 className="w-8 h-8 mx-auto mb-2 text-gray-400 animate-spin" />
+                      ) : (
+                        <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                      )}
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {uploadingDecoration ? t('uploading') : t('uploadDecoration')}
+                      </p>
+                    </div>
+                  </label>
+                )}
+              </div>
+
+              {/* Decoration Type */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('decorationType')}
+                </label>
+                <select
+                  value={decorationType}
+                  onChange={(e) => setDecorationType(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="balloon">🎈 {t('decorationTypes.balloon')}</option>
+                  <option value="cake">🎂 {t('decorationTypes.cake')}</option>
+                  <option value="candles">🕯️ {t('decorationTypes.candles')}</option>
+                  <option value="confetti">🎊 {t('decorationTypes.confetti')}</option>
+                  <option value="banner">🎏 {t('decorationTypes.banner')}</option>
+                  <option value="stars">⭐ {t('decorationTypes.stars')}</option>
+                  <option value="gift">🎁 {t('decorationTypes.gift')}</option>
+                  <option value="party">🎉 {t('decorationTypes.party')}</option>
+                </select>
+              </div>
+
+              {/* Decoration Position */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('decorationPosition')}
+                </label>
+                <select
+                  value={decorationPosition}
+                  onChange={(e) => setDecorationPosition(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="top-left">{t('positions.topLeft')}</option>
+                  <option value="top-right">{t('positions.topRight')}</option>
+                  <option value="bottom-left">{t('positions.bottomLeft')}</option>
+                  <option value="bottom-right">{t('positions.bottomRight')}</option>
+                  <option value="floating">{t('positions.floating')}</option>
+                </select>
               </div>
             </div>
           </div>

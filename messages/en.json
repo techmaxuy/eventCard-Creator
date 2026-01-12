@@ -718,11 +718,36 @@
     "errorLoading": "Error loading assets",
     "errorLoadingEventTypes": "Error loading event types",
     
+    "decorationContent": "Decoration Content",
+    "decorationImage": "Decoration Image",
+    "decorationType": "Decoration Type",
+    "decorationTypes": {
+      "balloon": "Balloons",
+      "cake": "Cake",
+      "candles": "Candles",
+      "confetti": "Confetti",
+      "banner": "Banner",
+      "stars": "Stars",
+      "gift": "Gift",
+      "party": "Party"
+    },
+    "decorationPosition": "Decoration Position",
+    "positions": {
+      "topLeft": "Top Left",
+      "topRight": "Top Right",
+      "bottomLeft": "Bottom Left",
+      "bottomRight": "Bottom Right",
+      "floating": "Floating"
+    },
+    "uploadDecoration": "Click to upload decoration",
+    "decorationRequired": "You must upload a decoration",
+
     "errors": {
       "InvalidFields": "Invalid fields",
       "ImageUrlRequired": "Image URL is required",
       "AudioUrlRequired": "Audio URL is required",
       "PhrasesRequired": "Phrases in both languages are required",
+      "DecorationUrlRequired": "Decoration URL is required",
       "EventTypeNotFound": "Event type not found",
       "AssetNotFound": "Asset not found",
       "CreateFailed": "Failed to create asset",
@@ -743,5 +768,20 @@
     "clearSelection": "Remove font",
     "noFonts": "No fonts available for this category",
     "selectedFont": "Selected font"
+  },
+  "DecorationSelector": {
+    "title": "Decorations",
+    "description": "Select decorations for your event. You can choose multiple and position them wherever you want.",
+    "noDecorationsAvailable": "No decorations available",
+    "clearAll": "Remove all",
+    "selectedCount": "{count, plural, =1 {1 decoration selected} other {# decorations selected}}",
+    "position": "Position"
+  },
+  "AssetSelector": {
+    "noAssetsAvailable": "No assets available",
+    "assetSelected": "Asset selected",
+    "clear": "Remove",
+    "playing": "Playing...",
+    "preview": "Preview"
   }
 }
