@@ -23,6 +23,7 @@ interface EventTypeFormProps {
     hasDressCode: boolean
     hasGiftRegistry: boolean
     hasMenu: boolean
+    hideGuestCount: boolean
     defaultTheme: string
     isActive: boolean
   }
@@ -48,6 +49,7 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
   const [hasDressCode, setHasDressCode] = useState(eventType?.hasDressCode ?? false)
   const [hasGiftRegistry, setHasGiftRegistry] = useState(eventType?.hasGiftRegistry ?? false)
   const [hasMenu, setHasMenu] = useState(eventType?.hasMenu ?? false)
+  const [hideGuestCount, setHideGuestCount] = useState(eventType?.hideGuestCount ?? false)
   const [defaultTheme, setDefaultTheme] = useState(eventType?.defaultTheme || 'classic')
   const [isActive, setIsActive] = useState(eventType?.isActive ?? true)
   
@@ -88,6 +90,7 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
         hasDressCode,
         hasGiftRegistry,
         hasMenu,
+        hideGuestCount,
         defaultTheme,
         isActive,
       }
@@ -363,6 +366,32 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
               <span className="text-sm font-medium text-gray-900 dark:text-white">
                 {t('fields.menu')}
               </span>
+            </label>
+          </div>
+        </div>
+
+        {/* Display Options */}
+        <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            {t('displayOptions')}
+          </h3>
+          <div className="space-y-3">
+            {/* Hide Guest Count */}
+            <label className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-800">
+              <input
+                type="checkbox"
+                checked={hideGuestCount}
+                onChange={(e) => setHideGuestCount(e.target.checked)}
+                className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+              />
+              <div className="flex-1">
+                <span className="text-sm font-medium text-gray-900 dark:text-white block">
+                  {t('hideGuestCount')}
+                </span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {t('hideGuestCountHelp')}
+                </span>
+              </div>
             </label>
           </div>
         </div>

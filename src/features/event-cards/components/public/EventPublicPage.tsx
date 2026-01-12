@@ -18,6 +18,7 @@ interface EventType {
   icon: string | null
   color: string
   slug?: string
+  hideGuestCount?: boolean
 }
 
 interface Event {
@@ -127,32 +128,34 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
             </motion.div>
           )}
 
-          {/* Guest Count Card */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-6"
-          >
-            <div className="flex items-center justify-center gap-4">
-              <motion.div
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                className="w-16 h-16 rounded-lg flex items-center justify-center"
-                style={{ backgroundColor: `${event.primaryColor}20` }}
-              >
-                <Users className="w-8 h-8" style={{ color: event.primaryColor }} />
-              </motion.div>
-              <div className="text-center">
-                <p className="text-4xl font-bold text-gray-900 dark:text-white">
-                  {event._count.guests}
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {t('guestsConfirmed')}
-                </p>
+          {/* Guest Count Card - Solo si no está oculto */}
+          {!event.eventType.hideGuestCount && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-6"
+            >
+              <div className="flex items-center justify-center gap-4">
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  className="w-16 h-16 rounded-lg flex items-center justify-center"
+                  style={{ backgroundColor: `${event.primaryColor}20` }}
+                >
+                  <Users className="w-8 h-8" style={{ color: event.primaryColor }} />
+                </motion.div>
+                <div className="text-center">
+                  <p className="text-4xl font-bold text-gray-900 dark:text-white">
+                    {event._count.guests}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {t('guestsConfirmed')}
+                  </p>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
 
           {/* Event Details */}
           <motion.div

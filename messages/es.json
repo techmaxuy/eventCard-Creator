@@ -359,9 +359,13 @@
       "fun": "Divertido"
     },
     
+    "displayOptions": "Opciones de Visualización",
+    "hideGuestCount": "Ocultar contador de invitados",
+    "hideGuestCountHelp": "No mostrar la cantidad de invitados confirmados en la página pública",
+
     "activeStatus": "Tipo Activo",
     "activeStatusHelp": "Los tipos inactivos no estarán disponibles para los usuarios",
-    
+
     "errors": {
       "Unauthorized": "No autorizado",
       "InvalidFields": "Campos inválidos",

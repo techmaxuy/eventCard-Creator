@@ -351,9 +351,13 @@
       "fun": "Fun"
     },
     
+    "displayOptions": "Display Options",
+    "hideGuestCount": "Hide guest counter",
+    "hideGuestCountHelp": "Don't show the number of confirmed guests on the public page",
+
     "activeStatus": "Active Type",
     "activeStatusHelp": "Inactive types won't be available for users",
-    
+
     "errors": {
       "Unauthorized": "Unauthorized",
       "InvalidFields": "Invalid fields",
