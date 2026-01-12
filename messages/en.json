@@ -290,7 +290,14 @@
       "DeleteFailed": "Failed to delete file",
       "NoLogo": "No logo to delete",
       "NoFavicon": "No favicon to delete"
-    }
+    },
+    "backgroundImages":"Background Images",
+    "backgroundImageMobile":"Mobile",
+    "removeBackgroundMobile":"Remove",
+    "uploadBackgroundMobile":"Upload",
+    "backgroundImageDesktop":"Desktop",
+    "removeBackgroundDesktop":"Remove",
+    "uploadBackgroundDesktop":"Upload"
   },
   "EventTypes": {
     "title": "Event Types",
