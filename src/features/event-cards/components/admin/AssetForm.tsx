@@ -18,7 +18,7 @@ interface EventType {
 
 interface Asset {
   id: string
-  type: 'IMAGE' | 'AUDIO' | 'PHRASE'
+  type: 'IMAGE' | 'AUDIO' | 'PHRASE' | 'DECORATION'
   eventTypeId: string | null
   name: string
   description: string | null
@@ -27,6 +27,9 @@ interface Asset {
   audioUrl: string | null
   phraseEs: string | null
   phraseEn: string | null
+  decorationUrl: string | null
+  decorationType: string | null
+  decorationPosition: string | null
   order: number
 }
 
@@ -43,7 +46,7 @@ export function AssetForm({ asset, eventTypes, locale }: AssetFormProps) {
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
 
   // Form state
-  const [type, setType] = useState<'IMAGE' | 'AUDIO' | 'PHRASE'>(asset?.type || 'IMAGE')
+  const [type, setType] = useState<'IMAGE' | 'AUDIO' | 'PHRASE' | 'DECORATION'>(asset?.type || 'IMAGE')
   const [eventTypeId, setEventTypeId] = useState(asset?.eventTypeId || '')
   const [name, setName] = useState(asset?.name || '')
   const [description, setDescription] = useState(asset?.description || '')

@@ -109,7 +109,8 @@ model EventType {
   // Configuración visual
   defaultTheme      String   @default("classic")
   allowedThemes     Json?    // Array de temas disponibles
-  
+  hideGuestCount    Boolean  @default(false) // Ocultar contador de invitados en página pública
+
   // Estado
   isActive          Boolean  @default(true)
   
@@ -161,9 +162,13 @@ model Event {
   music             String?     // URL de música de fondo
 
   // NUEVO: Assets seleccionados
-  welcomePhrase   String?      
-  musicUrl        String? 
-  
+  welcomePhrase   String?
+  musicUrl        String?
+
+  // NUEVO: Personalización visual avanzada
+  fontFamily      String?      // Fuente personalizada para título (ej: "Pacifico", "Fredoka One")
+  decorations     Json?        // Array de decoraciones: [{assetId, position}]
+
   // Configuración
   isPublished       Boolean     @default(false)
   allowComments     Boolean     @default(false)
@@ -225,6 +230,7 @@ enum AssetType {
   IMAGE
   AUDIO
   PHRASE
+  DECORATION  // Decoraciones: globos, tortas, velas, confetti, etc.
 }
 
 model Asset {
@@ -243,14 +249,19 @@ model Asset {
   // Para frases
   phraseEs      String?   // Frase en español
   phraseEn      String?   // Frase en inglés
-  
+
+  // Para decoraciones
+  decorationUrl      String?  // URL del PNG/SVG transparente
+  decorationType     String?  // 'balloon', 'cake', 'candles', 'confetti', 'banner', 'stars'
+  decorationPosition String?  // 'top-left', 'top-right', 'bottom-left', 'bottom-right', 'floating'
+
   // Metadata
   name          String
   description   String?
   tags          Json?     // Array de tags para búsqueda
   isActive      Boolean   @default(true)
   order         Int       @default(0) // Para ordenar
-  
+
   eventType     EventType? @relation(fields: [eventTypeId], references: [id], onDelete: SetNull)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt

@@ -20,7 +20,7 @@ import { deleteAsset, toggleAssetActive } from '@/features/event-cards/actions/a
 
 interface Asset {
   id: string
-  type: 'IMAGE' | 'AUDIO' | 'PHRASE'
+  type: 'IMAGE' | 'AUDIO' | 'PHRASE' | 'DECORATION'
   name: string
   description: string | null
   imageUrl: string | null
@@ -28,6 +28,9 @@ interface Asset {
   audioUrl: string | null
   phraseEs: string | null
   phraseEn: string | null
+  decorationUrl: string | null
+  decorationType: string | null
+  decorationPosition: string | null
   isActive: boolean
   eventType: {
     name: string
@@ -48,7 +51,7 @@ export function AssetsList({ assets: initialAssets, locale }: AssetsListProps) {
   const [assets, setAssets] = useState(initialAssets)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [togglingId, setTogglingId] = useState<string | null>(null)
-  const [filterType, setFilterType] = useState<'ALL' | 'IMAGE' | 'AUDIO' | 'PHRASE'>('ALL')
+  const [filterType, setFilterType] = useState<'ALL' | 'IMAGE' | 'AUDIO' | 'PHRASE' | 'DECORATION'>('ALL')
 
   const filteredAssets = filterType === 'ALL' 
     ? assets 
@@ -92,6 +95,8 @@ export function AssetsList({ assets: initialAssets, locale }: AssetsListProps) {
         return <Music className="w-5 h-5" />
       case 'PHRASE':
         return <MessageSquare className="w-5 h-5" />
+      case 'DECORATION':
+        return <span className="text-xl">🎈</span>
       default:
         return null
     }
@@ -102,6 +107,7 @@ export function AssetsList({ assets: initialAssets, locale }: AssetsListProps) {
       IMAGE: 'bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200',
       AUDIO: 'bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-200',
       PHRASE: 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200',
+      DECORATION: 'bg-pink-100 dark:bg-pink-900/20 text-pink-800 dark:text-pink-200',
     }
     return badges[type as keyof typeof badges] || ''
   }
@@ -123,6 +129,7 @@ export function AssetsList({ assets: initialAssets, locale }: AssetsListProps) {
             <option value="IMAGE">{t('images')}</option>
             <option value="AUDIO">{t('audios')}</option>
             <option value="PHRASE">{t('phrases')}</option>
+            <option value="DECORATION">{t('decorations')}</option>
           </select>
         </div>
         <Link
@@ -135,7 +142,7 @@ export function AssetsList({ assets: initialAssets, locale }: AssetsListProps) {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-5 gap-4">
         <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-4">
           <p className="text-sm text-gray-600 dark:text-gray-400">{t('total')}</p>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">{assets.length}</p>
@@ -156,6 +163,12 @@ export function AssetsList({ assets: initialAssets, locale }: AssetsListProps) {
           <p className="text-sm text-gray-600 dark:text-gray-400">{t('phrases')}</p>
           <p className="text-2xl font-bold text-green-600 dark:text-green-400">
             {assets.filter(a => a.type === 'PHRASE').length}
+          </p>
+        </div>
+        <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400">{t('decorations')}</p>
+          <p className="text-2xl font-bold text-pink-600 dark:text-pink-400">
+            {assets.filter(a => a.type === 'DECORATION').length}
           </p>
         </div>
       </div>

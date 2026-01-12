@@ -75,7 +75,7 @@ interface EventEditorProps {
 
 interface Asset {
   id: string
-  type: 'IMAGE' | 'AUDIO' | 'PHRASE'
+  type: 'IMAGE' | 'AUDIO' | 'PHRASE' | 'DECORATION'
   name: string
   description: string | null
   imageUrl: string | null
@@ -83,6 +83,9 @@ interface Asset {
   audioUrl: string | null
   phraseEs: string | null
   phraseEn: string | null
+  decorationUrl: string | null
+  decorationType: string | null
+  decorationPosition: string | null
 }
 
 interface EventEditorProps {

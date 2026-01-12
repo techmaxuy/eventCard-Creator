@@ -7,7 +7,7 @@ import Image from 'next/image'
 
 interface Asset {
   id: string
-  type: 'IMAGE' | 'AUDIO' | 'PHRASE'
+  type: 'IMAGE' | 'AUDIO' | 'PHRASE' | 'DECORATION'
   name: string
   description: string | null
   imageUrl: string | null
@@ -15,10 +15,13 @@ interface Asset {
   audioUrl: string | null
   phraseEs: string | null
   phraseEn: string | null
+  decorationUrl: string | null
+  decorationType: string | null
+  decorationPosition: string | null
 }
 
 interface AssetSelectorProps {
-  type: 'IMAGE' | 'AUDIO' | 'PHRASE'
+  type: 'IMAGE' | 'AUDIO' | 'PHRASE' | 'DECORATION'
   assets: Asset[]
   selectedId?: string
   onSelect: (asset: Asset | null) => void

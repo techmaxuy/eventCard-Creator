@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 
 const CreateAssetSchema = z.object({
-  type: z.enum(['IMAGE', 'AUDIO', 'PHRASE']),
+  type: z.enum(['IMAGE', 'AUDIO', 'PHRASE', 'DECORATION']),
   eventTypeId: z.string().optional(),
   name: z.string().min(1, 'Name is required'),
   description: z.string().optional(),
@@ -18,6 +18,9 @@ const CreateAssetSchema = z.object({
   audioDuration: z.number().optional(),
   phraseEs: z.string().optional(),
   phraseEn: z.string().optional(),
+  decorationUrl: z.string().optional(),
+  decorationType: z.string().optional(),
+  decorationPosition: z.string().optional(),
   order: z.number().default(0),
 })
 
@@ -25,7 +28,7 @@ const CreateAssetSchema = z.object({
  * Obtener assets (filtrado por tipo y eventType)
  */
 export async function getAssets(filters?: {
-  type?: 'IMAGE' | 'AUDIO' | 'PHRASE'
+  type?: 'IMAGE' | 'AUDIO' | 'PHRASE' | 'DECORATION'
   eventTypeId?: string
   includeInactive?: boolean
 }) {
