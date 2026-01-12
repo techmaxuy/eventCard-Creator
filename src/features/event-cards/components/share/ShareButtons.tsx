@@ -24,8 +24,9 @@ export function ShareButtons({
   const [copied, setCopied] = useState(false)
   const [showQR, setShowQR] = useState(false)
 
- const baseUrl = process.env.NEXT_PUBLIC_APP_URL || ''
-const fullUrl = baseUrl ? `${baseUrl}${eventUrl}` : eventUrl
+  const isAbsoluteUrl = eventUrl.startsWith('http://') || eventUrl.startsWith('https://')
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || ''
+  const fullUrl = isAbsoluteUrl ? eventUrl : (baseUrl ? `${baseUrl}/${locale}/e/${eventUrl}` : eventUrl)
 
   const shareText = eventDescription 
     ? `${eventTitle} - ${eventDescription}`
