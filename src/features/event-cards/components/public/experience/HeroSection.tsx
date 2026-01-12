@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
 import { EventTheme } from '@/features/event-cards/config/event-themes'
+import { getFontById } from '@/features/event-cards/config/fonts'
 import { ChevronDown } from 'lucide-react'
 import { useRef } from 'react'
 
@@ -14,6 +15,7 @@ interface HeroSectionProps {
   coverImage?: string | null
   theme: EventTheme
   primaryColor: string
+  fontFamily?: string | null
 }
 
 export function HeroSection({
@@ -24,6 +26,7 @@ export function HeroSection({
   coverImage,
   theme,
   primaryColor,
+  fontFamily,
 }: HeroSectionProps) {
 
 
@@ -129,7 +132,12 @@ export function HeroSection({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.6, delay: 0.3 }}
           className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl"
-          style={{ textShadow: '0 4px 20px rgba(0,0,0,0.3)' }}
+          style={{
+            textShadow: '0 4px 20px rgba(0,0,0,0.3)',
+            fontFamily: fontFamily && getFontById(fontFamily)
+              ? `'${getFontById(fontFamily)!.name}', cursive`
+              : undefined
+          }}
         >
           {title}
         </motion.h1>
@@ -141,6 +149,11 @@ export function HeroSection({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.6, delay: 0.5 }}
             className="text-2xl md:text-4xl italic font-semibold mb-4 text-white/95 max-w-3xl drop-shadow-lg"
+            style={{
+              fontFamily: fontFamily && getFontById(fontFamily)
+                ? `'${getFontById(fontFamily)!.name}', cursive`
+                : undefined
+            }}
           >
             "{welcomePhrase}"
           </motion.p>

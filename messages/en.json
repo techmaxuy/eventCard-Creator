@@ -652,9 +652,11 @@
     "images": "Images",
     "audios": "Audios",
     "phrases": "Phrases",
+    "decorations": "Decorations",
     "image": "Image",
     "audio": "Audio",
     "phrase": "Phrase",
+    "decoration": "Decoration",
     
     "total": "Total",
     "noAssets": "No assets created yet",
@@ -725,5 +727,17 @@
       "ToggleFailed": "Failed to toggle status",
       "UploadFailed": "Failed to upload file"
     }
+  },
+  "FontSelector": {
+    "title": "Custom Typography",
+    "description": "Select a fun font for your event title",
+    "allFonts": "All",
+    "playful": "Playful",
+    "elegant": "Elegant",
+    "modern": "Modern",
+    "handwritten": "Handwritten",
+    "clearSelection": "Remove font",
+    "noFonts": "No fonts available for this category",
+    "selectedFont": "Selected font"
   }
 }

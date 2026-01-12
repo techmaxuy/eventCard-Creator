@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { ShareButtons } from '@/features/event-cards/components/share/ShareButtons'
 import { AssetSelector } from './AssetSelector'
+import { FontSelector } from './FontSelector'
 
 import { 
   Save, 
@@ -27,6 +28,7 @@ import Link from 'next/link'
 
 interface EventType {
   id: string
+  slug: string
   name: string
   nameEn: string
   hasDate: boolean
@@ -56,8 +58,9 @@ interface Event {
   primaryColor: string
   coverImage: string | null
   gallery: any
-  welcomePhrase: string | null    // ← AGREGAR
-  musicUrl: string | null 
+  welcomePhrase: string | null
+  musicUrl: string | null
+  fontFamily: string | null
   isPublished: boolean
   eventType: EventType
   user?: {  // ← AGREGAR
@@ -127,6 +130,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   const [showPhraseAssets, setShowPhraseAssets] = useState(false)
   const [welcomePhrase, setWelcomePhrase] = useState(event.welcomePhrase || '')
   const [musicUrl, setMusicUrl] = useState(event.musicUrl || '')
+  const [fontFamily, setFontFamily] = useState(event.fontFamily || '')
 
   const handleSave = async () => {
     setMessage(null)
@@ -145,8 +149,9 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
         menu,
         primaryColor,
         coverImage: event.coverImage || undefined,
-        welcomePhrase: welcomePhrase || undefined,  
-       musicUrl: musicUrl || undefined
+        welcomePhrase: welcomePhrase || undefined,
+        musicUrl: musicUrl || undefined,
+        fontFamily: fontFamily || undefined
       })
 
       if (result.error) {
@@ -431,6 +436,16 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Font Selector - Solo para eventos juguetones como cumpleaños */}
+          <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6">
+            <FontSelector
+              eventTypeSlug={event.eventType.slug}
+              selectedFontId={fontFamily}
+              onSelect={(fontId) => setFontFamily(fontId || '')}
+              eventTitle={title}
+            />
           </div>
 
           {/* Date & Time */}

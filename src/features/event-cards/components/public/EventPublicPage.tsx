@@ -8,6 +8,7 @@ import { ShareButtons } from '@/features/event-cards/components/share/ShareButto
 import { HeroSection } from './experience/HeroSection'
 import { AnimatedDetails } from './experience/AnimatedDetails'
 import { ParticleBackground } from './experience/ParticleBackground'
+import { GoogleFontLoader } from './GoogleFontLoader'
 import { getEventTheme } from '@/features/event-cards/config/event-themes'
 import { motion } from 'framer-motion'
 
@@ -38,6 +39,7 @@ interface Event {
   requirePhone: boolean
   welcomePhrase: string | null
   musicUrl: string | null
+  fontFamily: string | null
   eventType: EventType
   _count: {
     guests: number
@@ -71,6 +73,8 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
 
   return (
     <div className="min-h-screen  relative">
+      {/* Cargar fuente de Google Fonts si está seleccionada */}
+      <GoogleFontLoader fontId={event.fontFamily} />
 
     {/* Fondo global con imagen y partículas */}
         <div 
@@ -101,6 +105,7 @@ export function EventPublicPage({ event, locale, fullEventUrl }: EventPublicPage
         eventTypeIcon={event.eventType.icon}
         theme={theme}
         primaryColor={event.primaryColor}
+        fontFamily={event.fontFamily}
       />
 
       {/* Main Content */}

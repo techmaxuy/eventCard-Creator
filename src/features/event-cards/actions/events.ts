@@ -186,9 +186,10 @@ const UpdateEventSchema = z.object({
   theme: z.string().optional(),
   primaryColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
   isPublished: z.boolean().optional(),
-  coverImage: z.string().url().optional().or(z.literal('')),  // ← CAMBIAR
+  coverImage: z.string().url().optional().or(z.literal('')),
   welcomePhrase: z.string().optional(),
   musicUrl: z.string().url().optional().or(z.literal('')),
+  fontFamily: z.string().optional(),
 })
 
 /**

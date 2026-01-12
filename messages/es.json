@@ -662,9 +662,11 @@
     "images": "Imágenes",
     "audios": "Audios",
     "phrases": "Frases",
+    "decorations": "Decoraciones",
     "image": "Imagen",
     "audio": "Audio",
     "phrase": "Frase",
+    "decoration": "Decoración",
     
     "total": "Total",
     "noAssets": "No hay assets creados aún",
@@ -735,5 +737,17 @@
       "ToggleFailed": "Error al cambiar el estado",
       "UploadFailed": "Error al subir el archivo"
     }
+  },
+  "FontSelector": {
+    "title": "Tipografía Personalizada",
+    "description": "Selecciona una fuente divertida para el título de tu evento",
+    "allFonts": "Todas",
+    "playful": "Divertidas",
+    "elegant": "Elegantes",
+    "modern": "Modernas",
+    "handwritten": "Manuscritas",
+    "clearSelection": "Quitar fuente",
+    "noFonts": "No hay fuentes disponibles para esta categoría",
+    "selectedFont": "Fuente seleccionada"
   }
 }
