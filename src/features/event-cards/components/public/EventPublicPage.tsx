@@ -152,9 +152,9 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-8 text-center"
+              className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-8 text-center"
             >
-              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed" style={cssFontFamily ? { fontFamily: cssFontFamily } : {}}>
                 {event.description}
               </p>
             </motion.div>
@@ -189,7 +189,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
             </motion.div>
           )}
 
-          {/* Event Details */}
+           
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}

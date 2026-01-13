@@ -4,7 +4,6 @@ import { useState, useTransition, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Check, X, HelpCircle, Loader2, Mail, Phone, User, Users, MessageSquare } from 'lucide-react'
 import { confirmGuest } from '@/features/event-cards/actions/guests'
-import { getFontById } from '@/features/event-cards/config/fonts'
 
 interface GuestConfirmationProps {
   eventId: string
@@ -18,9 +17,8 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
   const t = useTranslations('EventPublic')
   const [isPending, startTransition] = useTransition()
 
-  // Obtener fuente personalizada si existe
-  const customFont = fontFamily && getFontById(fontFamily)
-  const fontStyle = customFont ? { fontFamily: `'${customFont.name}', cursive` } : {}
+  // Aplicar fuente personalizada si existe (ya viene convertida desde el padre)
+  const fontStyle = fontFamily ? { fontFamily } : {}
 
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')

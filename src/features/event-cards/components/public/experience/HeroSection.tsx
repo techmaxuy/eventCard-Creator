@@ -3,7 +3,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
 import { EventTheme } from '@/features/event-cards/config/event-themes'
-import { getFontById } from '@/features/event-cards/config/fonts'
 import { ChevronDown } from 'lucide-react'
 import { useRef } from 'react'
 
@@ -134,9 +133,7 @@ export function HeroSection({
           className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl"
           style={{
             textShadow: '0 4px 20px rgba(0,0,0,0.3)',
-            fontFamily: fontFamily && getFontById(fontFamily)
-              ? `'${getFontById(fontFamily)!.name}', cursive`
-              : undefined
+            fontFamily: fontFamily || undefined
           }}
         >
           {title}
@@ -150,9 +147,7 @@ export function HeroSection({
             transition={{ duration: 1.6, delay: 0.5 }}
             className="text-2xl md:text-4xl italic font-semibold mb-4 text-white/95 max-w-3xl drop-shadow-lg"
             style={{
-              fontFamily: fontFamily && getFontById(fontFamily)
-                ? `'${getFontById(fontFamily)!.name}', cursive`
-                : undefined
+              fontFamily: fontFamily || undefined
             }}
           >
             "{welcomePhrase}"
