@@ -38,6 +38,7 @@ interface EventType {
   hasDressCode: boolean
   hasGiftRegistry: boolean
   hasMenu: boolean
+  allowDecorations: boolean
   color: string
   icon: string | null
 }
@@ -455,14 +456,16 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
           </div>
 
           {/* Decoration Selector */}
-          <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6">
-            <DecorationSelector
-              assets={availableAssets}
-              selectedDecorations={selectedDecorations}
-              onUpdate={setSelectedDecorations}
-              locale={locale}
-            />
-          </div>
+          {event.eventType.allowDecorations && (
+            <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6">
+              <DecorationSelector
+                assets={availableAssets}
+                selectedDecorations={selectedDecorations}
+                onUpdate={setSelectedDecorations}
+                locale={locale}
+              />
+            </div>
+          )}
 
           {/* Date & Time */}
           {(event.eventType.hasDate || event.eventType.hasTime) && (
