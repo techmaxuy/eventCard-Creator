@@ -299,10 +299,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
 
       {/* Music Player */}
       {event.musicUrl && (
-        <MusicPlayer
-          musicUrl={event.musicUrl}
-          eventTitle={event.title}
-        />
+        <MusicPlayer musicUrl={event.musicUrl} />
       )}
     </div>
 

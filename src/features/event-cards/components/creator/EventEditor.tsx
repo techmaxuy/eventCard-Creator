@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { ShareButtons } from '@/features/event-cards/components/share/ShareButtons'
@@ -137,6 +137,16 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   const [selectedDecorations, setSelectedDecorations] = useState<Array<{ assetId: string, position: string }>>(
     event.decorations ? (Array.isArray(event.decorations) ? event.decorations : []) : []
   )
+
+  // Inicializar el asset de música seleccionado cuando el evento ya tiene música
+  useEffect(() => {
+    if (event.musicUrl && availableAssets.length > 0) {
+      const musicAsset = availableAssets.find(a => a.type === 'AUDIO' && a.audioUrl === event.musicUrl)
+      if (musicAsset) {
+        setSelectedMusicAsset(musicAsset)
+      }
+    }
+  }, [event.musicUrl, availableAssets])
 
   const handleSave = async () => {
     setMessage(null)
