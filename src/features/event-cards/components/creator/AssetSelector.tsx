@@ -66,7 +66,7 @@ export function AssetSelector({ type, assets, selectedId, onSelect, locale }: As
 
     // Limpiar timeout anterior si existe
     if (audioTimeoutRef.current) {
-      console.log('[AssetSelector] ⏱️ Clearing previous timeout')
+      console.log('[AssetSelector] ⏱️ Clearing previous timeout:', audioTimeoutRef.current)
       clearTimeout(audioTimeoutRef.current)
       audioTimeoutRef.current = null
     }
@@ -90,6 +90,11 @@ export function AssetSelector({ type, assets, selectedId, onSelect, locale }: As
           }
         })
         existingAudio.currentTime = 0
+
+        // Capturar audio en closure antes de setState
+        const audioToStop = existingAudio
+        const assetIdToCheck = asset.id
+
         existingAudio.play()
         setPlayingAudioId(asset.id)
 
@@ -97,9 +102,9 @@ export function AssetSelector({ type, assets, selectedId, onSelect, locale }: As
         console.log('[AssetSelector] ⏱️ Setting 10-second timeout')
         const timeoutId = setTimeout(() => {
           console.log('[AssetSelector] ⏰ 10-second timeout fired! Stopping audio')
-          existingAudio.pause()
-          existingAudio.currentTime = 0
-          setPlayingAudioId(null)
+          audioToStop.pause()
+          audioToStop.currentTime = 0
+          setPlayingAudioId(prev => prev === assetIdToCheck ? null : prev)
           audioTimeoutRef.current = null
         }, 10000)
         audioTimeoutRef.current = timeoutId
@@ -109,6 +114,11 @@ export function AssetSelector({ type, assets, selectedId, onSelect, locale }: As
       console.log('[AssetSelector] 🆕 Creating new audio element for:', asset.audioUrl)
       // Crear nuevo elemento de audio
       const audio = new Audio(asset.audioUrl)
+
+      // Capturar en closure
+      const audioToStop = audio
+      const assetIdToCheck = asset.id
+
       audio.addEventListener('ended', () => {
         console.log('[AssetSelector] 🏁 Audio ended naturally')
         setPlayingAudioId(null)
@@ -134,9 +144,9 @@ export function AssetSelector({ type, assets, selectedId, onSelect, locale }: As
       console.log('[AssetSelector] ⏱️ Setting 10-second timeout for new audio')
       const timeoutId = setTimeout(() => {
         console.log('[AssetSelector] ⏰ 10-second timeout fired for new audio! Stopping')
-        audio.pause()
-        audio.currentTime = 0
-        setPlayingAudioId(null)
+        audioToStop.pause()
+        audioToStop.currentTime = 0
+        setPlayingAudioId(prev => prev === assetIdToCheck ? null : prev)
         audioTimeoutRef.current = null
       }, 10000)
       audioTimeoutRef.current = timeoutId
