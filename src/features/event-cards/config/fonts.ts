@@ -205,3 +205,15 @@ export function getGoogleFontUrl(fontId: string): string {
 export function getGoogleFontsUrls(fontIds: string[]): string[] {
   return fontIds.map(getGoogleFontUrl).filter(Boolean)
 }
+
+/**
+ * Obtener el nombre CSS correcto de la fuente para usar en fontFamily
+ * Convierte el ID de la fuente al nombre real que CSS reconoce
+ */
+export function getFontFamilyName(fontId: string): string {
+  const font = getFontById(fontId)
+  if (!font) return ''
+
+  // Convertir "Fredoka+One" a "Fredoka One"
+  return font.googleFontName.replace(/\+/g, ' ')
+}

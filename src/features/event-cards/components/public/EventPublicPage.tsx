@@ -11,6 +11,7 @@ import { ParticleBackground } from './experience/ParticleBackground'
 import { GoogleFontLoader } from './GoogleFontLoader'
 import { DecorativeElements } from './DecorativeElements'
 import { getEventTheme } from '@/features/event-cards/config/event-themes'
+import { getFontFamilyName } from '@/features/event-cards/config/fonts'
 import { motion } from 'framer-motion'
 
 interface EventType {
@@ -84,6 +85,10 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
   console.log('[EventPublicPage] Font Family:', event.fontFamily)
   console.log('[EventPublicPage] Full event object keys:', Object.keys(event))
 
+  // Convertir el font ID al nombre CSS correcto
+  const cssFontFamily = event.fontFamily ? getFontFamilyName(event.fontFamily) : null
+  console.log('[EventPublicPage] CSS Font Family Name:', cssFontFamily)
+
   const eventTypeName = locale === 'es' ? event.eventType.name : event.eventType.nameEn
 
   return (
@@ -133,7 +138,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
         eventTypeIcon={event.eventType.icon}
         theme={theme}
         primaryColor={event.primaryColor}
-        fontFamily={event.fontFamily}
+        fontFamily={cssFontFamily}
       />
 
       {/* Main Content */}
@@ -198,7 +203,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
               className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center"
-              style={event.fontFamily ? { fontFamily: event.fontFamily } : {}}
+              style={cssFontFamily ? { fontFamily: cssFontFamily } : {}}
             >
               {t('eventDetails')}
             </motion.h2>
@@ -214,7 +219,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               menu={event.menu}
               accentColor={event.primaryColor}
               locale={locale}
-              fontFamily={event.fontFamily}
+              fontFamily={cssFontFamily}
             />
           </motion.div>
 
@@ -266,7 +271,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               eventSlug={event.slug}
               requirePhone={event.requirePhone}
               locale={locale}
-              fontFamily={event.fontFamily}
+              fontFamily={cssFontFamily}
             />
           </motion.div>
 
@@ -284,7 +289,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               eventDescription={event.description || undefined}
               primaryColor={event.primaryColor}
               locale={locale}
-              fontFamily={event.fontFamily}
+              fontFamily={cssFontFamily}
             />
           </motion.div>
 
