@@ -108,12 +108,16 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
  </div>
 
       {/* Decorative Elements */}
-      {event.decorations && Array.isArray(event.decorations) && event.decorations.length > 0 && (
-        <DecorativeElements
-          decorations={event.decorations}
-          assets={decorationAssets}
-        />
-      )}
+      {(() => {
+        console.log('[EventPublicPage] Event decorations:', event.decorations)
+        console.log('[EventPublicPage] Decoration assets:', decorationAssets)
+        return event.decorations && Array.isArray(event.decorations) && event.decorations.length > 0 && (
+          <DecorativeElements
+            decorations={event.decorations}
+            assets={decorationAssets}
+          />
+        )
+      })()}
 
   {/* Contenido */}
       <div className="relative z-10">

@@ -96,7 +96,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
 
   if (submitted) {
     return (
-      <div className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md rounded-xl shadow-lg border border-white/30 dark:border-zinc-800/50 p-8 text-center">
+      <div className="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md rounded-xl shadow-lg border border-white/30 dark:border-zinc-800/50 p-8 text-center">
         <div className={`w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center ${
           status === 'CONFIRMED' 
             ? 'bg-green-100 dark:bg-green-900/20' 
@@ -127,7 +127,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
   }
 
   return (
-    <div className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md rounded-xl shadow-lg border border-white/30 dark:border-zinc-800/50 p-8">
+    <div className="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md rounded-xl shadow-lg border border-white/30 dark:border-zinc-800/50 p-8">
       <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2" style={fontStyle}>
         {t('confirmAttendance')}
       </h3>

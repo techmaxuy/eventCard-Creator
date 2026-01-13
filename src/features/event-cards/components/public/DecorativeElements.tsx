@@ -26,9 +26,12 @@ export function DecorativeElements({ decorations, assets }: DecorativeElementsPr
 
   useEffect(() => {
     setMounted(true)
-  }, [])
+    console.log('[DecorativeElements] Decorations:', decorations)
+    console.log('[DecorativeElements] Assets:', assets)
+  }, [decorations, assets])
 
   if (!mounted || decorations.length === 0) {
+    console.log('[DecorativeElements] Not showing - mounted:', mounted, 'decorations:', decorations.length)
     return null
   }
 

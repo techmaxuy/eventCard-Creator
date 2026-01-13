@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { getPublicEvent } from '@/features/event-cards/actions/guests'
 import { EventPublicPage } from '@/features/event-cards/components/public/EventPublicPage'
 import { headers } from 'next/headers'
+import { getAssets } from '@/features/event-cards/actions/assets'
 
 interface PublicEventPageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -10,13 +11,20 @@ interface PublicEventPageProps {
 
 export default async function PublicEventPage({ params }: PublicEventPageProps) {
   const { locale,slug } = await params
-  
-    
+
+
   const result = await getPublicEvent(slug)
 
   if (result.error || !result.event) {
     notFound()
   }
+
+  // Cargar assets de decoración para el tipo de evento
+  const assetsResult = await getAssets({
+    type: 'DECORATION',
+    eventTypeId: result.event.eventTypeId,
+    includeInactive: false
+  })
 
    // Construir URL completa desde headers del servidor
   const headersList = await headers()
@@ -24,7 +32,12 @@ export default async function PublicEventPage({ params }: PublicEventPageProps) 
   const protocol = headersList.get('x-forwarded-proto') || 'http'
   const fullEventUrl = `${protocol}://${host}/${locale}/e/${slug}`
 
-  return <EventPublicPage event={result.event as any} locale={locale} fullEventUrl={fullEventUrl} />
+  return <EventPublicPage
+    event={result.event as any}
+    locale={locale}
+    fullEventUrl={fullEventUrl}
+    decorationAssets={assetsResult.assets || []}
+  />
 }
 
 // Metadata dinámica para SEO
