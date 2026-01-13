@@ -9,7 +9,7 @@ interface MusicPlayerProps {
 }
 
 export function MusicPlayer({ musicUrl }: MusicPlayerProps) {
-  const [isMuted, setIsMuted] = useState(false)
+  const [isMuted, setIsMuted] = useState(true) // Iniciar en muted
   const [isVisible, setIsVisible] = useState(true)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
@@ -19,40 +19,24 @@ export function MusicPlayer({ musicUrl }: MusicPlayerProps) {
     // Crear el elemento de audio
     const audio = new Audio(musicUrl)
     audio.loop = true
-    audio.volume = 0.5 // Aumentar volumen por defecto
+    audio.volume = 0 // Comenzar silenciado para autoplay
     audioRef.current = audio
 
-    console.log('[MusicPlayer] Audio element created, volume:', audio.volume)
+    console.log('[MusicPlayer] Audio element created, starting muted for autoplay')
 
-    // Intentar play inmediato primero
-    const immediatePlay = audio.play()
+    // Intentar reproducir silenciado (funciona mejor con políticas de autoplay)
+    const startPlay = () => {
+      const playPromise = audio.play()
 
-    if (immediatePlay !== undefined) {
-      immediatePlay
-        .then(() => {
-          console.log('[MusicPlayer] ✅ Immediate autoplay successful')
-        })
-        .catch((error) => {
-          console.log('[MusicPlayer] ⚠️ Immediate autoplay prevented:', error.message)
-
-          // Si falla, intentar con delay
-          const timer = setTimeout(() => {
-            console.log('[MusicPlayer] 🔄 Retrying autoplay after delay...')
-            const playPromise = audio.play()
-
-            if (playPromise !== undefined) {
-              playPromise
-                .then(() => {
-                  console.log('[MusicPlayer] ✅ Delayed autoplay successful')
-                })
-                .catch((error) => {
-                  console.log('[MusicPlayer] ❌ Delayed autoplay also prevented:', error.message)
-                })
-            }
-          }, 500)
-
-          return () => clearTimeout(timer)
-        })
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log('[MusicPlayer] ✅ Autoplay successful (muted)')
+          })
+          .catch((error) => {
+            console.log('[MusicPlayer] ⚠️ Autoplay prevented:', error.message)
+          })
+      }
     }
 
     // Event listeners para debugging
@@ -73,6 +57,9 @@ export function MusicPlayer({ musicUrl }: MusicPlayerProps) {
       console.error('[MusicPlayer] Error code:', audio.error?.code, 'Message:', audio.error?.message)
     })
 
+    // Pequeño delay para que el DOM esté listo
+    const timer = setTimeout(startPlay, 100)
+
     // Auto-ocultar después de 5 segundos
     const hideTimer = setTimeout(() => {
       setIsVisible(false)
@@ -80,6 +67,7 @@ export function MusicPlayer({ musicUrl }: MusicPlayerProps) {
 
     // Cleanup al desmontar
     return () => {
+      clearTimeout(timer)
       clearTimeout(hideTimer)
       audio.pause()
       audio.src = ''
@@ -92,24 +80,26 @@ export function MusicPlayer({ musicUrl }: MusicPlayerProps) {
       return
     }
 
-    console.log('[MusicPlayer] 🔊 Toggle mute clicked, current muted:', isMuted)
+    console.log('[MusicPlayer] 🔊 Toggle mute clicked, current muted:', isMuted, 'paused:', audioRef.current.paused)
 
     if (isMuted) {
+      // Activar sonido
       audioRef.current.volume = 0.5
       setIsMuted(false)
-      console.log('[MusicPlayer] Volume set to 0.5 (unmuted)')
+      console.log('[MusicPlayer] ✅ Volume set to 0.5 (unmuted)')
 
-      // Intentar reproducir si está pausado
+      // Si está pausado, reproducir
       if (audioRef.current.paused) {
-        console.log('[MusicPlayer] Audio was paused, attempting to play...')
+        console.log('[MusicPlayer] 🔄 Audio was paused, starting playback...')
         audioRef.current.play().catch(error => {
-          console.error('[MusicPlayer] ❌ Play failed on unmute:', error.message)
+          console.error('[MusicPlayer] ❌ Play failed:', error.message)
         })
       }
     } else {
+      // Silenciar (pero seguir reproduciendo)
       audioRef.current.volume = 0
       setIsMuted(true)
-      console.log('[MusicPlayer] Volume set to 0 (muted)')
+      console.log('[MusicPlayer] 🔇 Volume set to 0 (muted but still playing)')
     }
 
     // Mostrar brevemente cuando se interactúa
