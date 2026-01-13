@@ -14,26 +14,64 @@ export function MusicPlayer({ musicUrl }: MusicPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
+    console.log('[MusicPlayer] 🎵 Initializing with URL:', musicUrl)
+
     // Crear el elemento de audio
     const audio = new Audio(musicUrl)
     audio.loop = true
-    audio.volume = 0.3 // Volumen más bajo por defecto
+    audio.volume = 0.5 // Aumentar volumen por defecto
     audioRef.current = audio
 
-    // Pequeño delay para mejorar las probabilidades de autoplay
-    const timer = setTimeout(() => {
-      const playPromise = audio.play()
+    console.log('[MusicPlayer] Audio element created, volume:', audio.volume)
 
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            console.log('[MusicPlayer] ✅ Autoplay successful')
-          })
-          .catch((error) => {
-            console.log('[MusicPlayer] ⚠️ Autoplay prevented:', error.message)
-          })
-      }
-    }, 500)
+    // Intentar play inmediato primero
+    const immediatePlay = audio.play()
+
+    if (immediatePlay !== undefined) {
+      immediatePlay
+        .then(() => {
+          console.log('[MusicPlayer] ✅ Immediate autoplay successful')
+        })
+        .catch((error) => {
+          console.log('[MusicPlayer] ⚠️ Immediate autoplay prevented:', error.message)
+
+          // Si falla, intentar con delay
+          const timer = setTimeout(() => {
+            console.log('[MusicPlayer] 🔄 Retrying autoplay after delay...')
+            const playPromise = audio.play()
+
+            if (playPromise !== undefined) {
+              playPromise
+                .then(() => {
+                  console.log('[MusicPlayer] ✅ Delayed autoplay successful')
+                })
+                .catch((error) => {
+                  console.log('[MusicPlayer] ❌ Delayed autoplay also prevented:', error.message)
+                })
+            }
+          }, 500)
+
+          return () => clearTimeout(timer)
+        })
+    }
+
+    // Event listeners para debugging
+    audio.addEventListener('loadstart', () => {
+      console.log('[MusicPlayer] 📥 Loading audio...')
+    })
+
+    audio.addEventListener('canplay', () => {
+      console.log('[MusicPlayer] ✅ Audio can play, ready state:', audio.readyState)
+    })
+
+    audio.addEventListener('playing', () => {
+      console.log('[MusicPlayer] ▶️ Audio is actually playing!')
+    })
+
+    audio.addEventListener('error', (e) => {
+      console.error('[MusicPlayer] ❌ Audio error:', e)
+      console.error('[MusicPlayer] Error code:', audio.error?.code, 'Message:', audio.error?.message)
+    })
 
     // Auto-ocultar después de 5 segundos
     const hideTimer = setTimeout(() => {
@@ -42,7 +80,6 @@ export function MusicPlayer({ musicUrl }: MusicPlayerProps) {
 
     // Cleanup al desmontar
     return () => {
-      clearTimeout(timer)
       clearTimeout(hideTimer)
       audio.pause()
       audio.src = ''
@@ -50,14 +87,29 @@ export function MusicPlayer({ musicUrl }: MusicPlayerProps) {
   }, [musicUrl])
 
   const handleToggleMute = () => {
-    if (!audioRef.current) return
+    if (!audioRef.current) {
+      console.log('[MusicPlayer] ⚠️ Audio ref is null, cannot toggle mute')
+      return
+    }
+
+    console.log('[MusicPlayer] 🔊 Toggle mute clicked, current muted:', isMuted)
 
     if (isMuted) {
-      audioRef.current.volume = 0.3
+      audioRef.current.volume = 0.5
       setIsMuted(false)
+      console.log('[MusicPlayer] Volume set to 0.5 (unmuted)')
+
+      // Intentar reproducir si está pausado
+      if (audioRef.current.paused) {
+        console.log('[MusicPlayer] Audio was paused, attempting to play...')
+        audioRef.current.play().catch(error => {
+          console.error('[MusicPlayer] ❌ Play failed on unmute:', error.message)
+        })
+      }
     } else {
       audioRef.current.volume = 0
       setIsMuted(true)
+      console.log('[MusicPlayer] Volume set to 0 (muted)')
     }
 
     // Mostrar brevemente cuando se interactúa

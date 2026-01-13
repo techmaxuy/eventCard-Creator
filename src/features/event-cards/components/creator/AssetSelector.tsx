@@ -62,20 +62,26 @@ export function AssetSelector({ type, assets, selectedId, onSelect, locale }: As
   const handleAudioToggle = (asset: Asset) => {
     if (!asset.audioUrl) return
 
+    console.log('[AssetSelector] 🎵 Audio toggle for asset:', asset.id, 'Current playing:', playingAudioId)
+
     // Limpiar timeout anterior si existe
     if (audioTimeoutRef.current) {
+      console.log('[AssetSelector] ⏱️ Clearing previous timeout')
       clearTimeout(audioTimeoutRef.current)
       audioTimeoutRef.current = null
     }
 
     const existingAudio = audioElements.get(asset.id)
+    console.log('[AssetSelector] Existing audio element:', existingAudio ? 'found' : 'not found')
 
     if (existingAudio) {
       if (playingAudioId === asset.id) {
+        console.log('[AssetSelector] ⏸️ Pausing currently playing audio')
         existingAudio.pause()
         existingAudio.currentTime = 0
         setPlayingAudioId(null)
       } else {
+        console.log('[AssetSelector] ▶️ Playing existing audio')
         // Pausar cualquier otro audio
         audioElements.forEach((audio, id) => {
           if (id !== asset.id) {
@@ -88,17 +94,23 @@ export function AssetSelector({ type, assets, selectedId, onSelect, locale }: As
         setPlayingAudioId(asset.id)
 
         // Detener automáticamente después de 10 segundos
-        audioTimeoutRef.current = setTimeout(() => {
+        console.log('[AssetSelector] ⏱️ Setting 10-second timeout')
+        const timeoutId = setTimeout(() => {
+          console.log('[AssetSelector] ⏰ 10-second timeout fired! Stopping audio')
           existingAudio.pause()
           existingAudio.currentTime = 0
           setPlayingAudioId(null)
           audioTimeoutRef.current = null
         }, 10000)
+        audioTimeoutRef.current = timeoutId
+        console.log('[AssetSelector] Timeout ID stored:', timeoutId)
       }
     } else {
+      console.log('[AssetSelector] 🆕 Creating new audio element for:', asset.audioUrl)
       // Crear nuevo elemento de audio
       const audio = new Audio(asset.audioUrl)
       audio.addEventListener('ended', () => {
+        console.log('[AssetSelector] 🏁 Audio ended naturally')
         setPlayingAudioId(null)
         audio.currentTime = 0
         if (audioTimeoutRef.current) {
@@ -113,17 +125,22 @@ export function AssetSelector({ type, assets, selectedId, onSelect, locale }: As
         a.currentTime = 0
       })
 
+      console.log('[AssetSelector] ▶️ Playing new audio')
       audio.play()
       setAudioElements(new Map(audioElements).set(asset.id, audio))
       setPlayingAudioId(asset.id)
 
       // Detener automáticamente después de 10 segundos
-      audioTimeoutRef.current = setTimeout(() => {
+      console.log('[AssetSelector] ⏱️ Setting 10-second timeout for new audio')
+      const timeoutId = setTimeout(() => {
+        console.log('[AssetSelector] ⏰ 10-second timeout fired for new audio! Stopping')
         audio.pause()
         audio.currentTime = 0
         setPlayingAudioId(null)
         audioTimeoutRef.current = null
       }, 10000)
+      audioTimeoutRef.current = timeoutId
+      console.log('[AssetSelector] Timeout ID stored:', timeoutId)
     }
   }
 
