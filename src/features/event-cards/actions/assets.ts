@@ -126,6 +126,10 @@ export async function createAsset(locale: string, values: z.infer<typeof CreateA
       return { error: 'PhrasesRequired' }
     }
 
+    if (data.type === 'DECORATION' && !data.decorationUrl) {
+      return { error: 'DecorationUrlRequired' }
+    }
+
     // Si se especifica eventTypeId, verificar que exista
     if (data.eventTypeId) {
       const eventType = await prisma.eventType.findUnique({
@@ -150,6 +154,9 @@ export async function createAsset(locale: string, values: z.infer<typeof CreateA
         audioDuration: data.audioDuration,
         phraseEs: data.phraseEs,
         phraseEn: data.phraseEn,
+        decorationUrl: data.decorationUrl,
+        decorationType: data.decorationType,
+        decorationPosition: data.decorationPosition,
         order: data.order,
       }
     })
