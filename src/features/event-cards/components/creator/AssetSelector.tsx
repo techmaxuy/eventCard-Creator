@@ -34,10 +34,12 @@ export function AssetSelector({ type, assets, selectedId, onSelect, locale }: As
   const [audioElements, setAudioElements] = useState<Map<string, HTMLAudioElement>>(new Map())
   const audioTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Limpiar timeout al desmontar
+  // Limpiar timeout al desmontar (solo al desmontar el componente, no en cada cambio)
   useEffect(() => {
     return () => {
+      console.log('[AssetSelector] Component unmounting, cleaning up')
       if (audioTimeoutRef.current) {
+        console.log('[AssetSelector] Clearing timeout on unmount:', audioTimeoutRef.current)
         clearTimeout(audioTimeoutRef.current)
       }
       // Pausar todos los audios al desmontar
@@ -46,7 +48,8 @@ export function AssetSelector({ type, assets, selectedId, onSelect, locale }: As
         audio.currentTime = 0
       })
     }
-  }, [audioElements])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
     const filteredAssets = assets.filter(a => {
     if (a.type !== type) return false

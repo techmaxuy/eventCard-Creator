@@ -11,6 +11,7 @@ interface MusicPlayerProps {
 export function MusicPlayer({ musicUrl }: MusicPlayerProps) {
   const [isMuted, setIsMuted] = useState(true) // Iniciar en muted
   const [isVisible, setIsVisible] = useState(true)
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
@@ -32,9 +33,12 @@ export function MusicPlayer({ musicUrl }: MusicPlayerProps) {
         playPromise
           .then(() => {
             console.log('[MusicPlayer] ✅ Autoplay successful (muted)')
+            setAutoplayBlocked(false)
           })
           .catch((error) => {
             console.log('[MusicPlayer] ⚠️ Autoplay prevented:', error.message)
+            setAutoplayBlocked(true)
+            setIsVisible(true) // Mantener visible si autoplay bloqueado
           })
       }
     }
@@ -82,18 +86,23 @@ export function MusicPlayer({ musicUrl }: MusicPlayerProps) {
 
     console.log('[MusicPlayer] 🔊 Toggle mute clicked, current muted:', isMuted, 'paused:', audioRef.current.paused)
 
-    if (isMuted) {
+    if (isMuted || autoplayBlocked) {
       // Activar sonido
       audioRef.current.volume = 0.5
       setIsMuted(false)
+      setAutoplayBlocked(false)
       console.log('[MusicPlayer] ✅ Volume set to 0.5 (unmuted)')
 
       // Si está pausado, reproducir
       if (audioRef.current.paused) {
         console.log('[MusicPlayer] 🔄 Audio was paused, starting playback...')
-        audioRef.current.play().catch(error => {
-          console.error('[MusicPlayer] ❌ Play failed:', error.message)
-        })
+        audioRef.current.play()
+          .then(() => {
+            console.log('[MusicPlayer] ✅ Playback started successfully')
+          })
+          .catch(error => {
+            console.error('[MusicPlayer] ❌ Play failed:', error.message)
+          })
       }
     } else {
       // Silenciar (pero seguir reproduciendo)
@@ -111,16 +120,19 @@ export function MusicPlayer({ musicUrl }: MusicPlayerProps) {
     <motion.button
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{
-        opacity: isVisible ? 1 : 0.3,
-        scale: 1,
+        opacity: autoplayBlocked ? 1 : (isVisible ? 1 : 0.3),
+        scale: autoplayBlocked ? [1, 1.1, 1] : 1,
         y: isVisible ? 0 : 10
       }}
-      transition={{ duration: 0.3 }}
+      transition={{
+        duration: autoplayBlocked ? 0.8 : 0.3,
+        repeat: autoplayBlocked ? Infinity : 0
+      }}
       onClick={handleToggleMute}
       onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setTimeout(() => setIsVisible(false), 2000)}
-      className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border-2 border-white/20"
-      title={isMuted ? 'Activar sonido' : 'Silenciar música'}
+      onMouseLeave={() => !autoplayBlocked && setTimeout(() => setIsVisible(false), 2000)}
+      className={`fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border-2 ${autoplayBlocked ? 'border-yellow-400 shadow-yellow-400/50' : 'border-white/20'}`}
+      title={autoplayBlocked ? 'Haz clic para iniciar la música' : (isMuted ? 'Activar sonido' : 'Silenciar música')}
     >
       {isMuted ? (
         <VolumeX className="w-6 h-6" />
