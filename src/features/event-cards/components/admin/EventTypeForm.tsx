@@ -24,6 +24,7 @@ interface EventTypeFormProps {
     hasGiftRegistry: boolean
     hasMenu: boolean
     hideGuestCount: boolean
+    allowDecorations: boolean
     defaultTheme: string
     isActive: boolean
   }
@@ -50,6 +51,7 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
   const [hasGiftRegistry, setHasGiftRegistry] = useState(eventType?.hasGiftRegistry ?? false)
   const [hasMenu, setHasMenu] = useState(eventType?.hasMenu ?? false)
   const [hideGuestCount, setHideGuestCount] = useState(eventType?.hideGuestCount ?? false)
+  const [allowDecorations, setAllowDecorations] = useState(eventType?.allowDecorations ?? true)
   const [defaultTheme, setDefaultTheme] = useState(eventType?.defaultTheme || 'classic')
   const [isActive, setIsActive] = useState(eventType?.isActive ?? true)
   
@@ -91,6 +93,7 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
         hasGiftRegistry,
         hasMenu,
         hideGuestCount,
+        allowDecorations,
         defaultTheme,
         isActive,
       }
@@ -390,6 +393,24 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
                 </span>
                 <span className="text-xs text-gray-500 dark:text-gray-400">
                   {t('hideGuestCountHelp')}
+                </span>
+              </div>
+            </label>
+
+            {/* Allow Decorations */}
+            <label className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-800">
+              <input
+                type="checkbox"
+                checked={allowDecorations}
+                onChange={(e) => setAllowDecorations(e.target.checked)}
+                className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+              />
+              <div className="flex-1">
+                <span className="text-sm font-medium text-gray-900 dark:text-white block">
+                  {t('allowDecorations')}
+                </span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {t('allowDecorationsHelp')}
                 </span>
               </div>
             </label>

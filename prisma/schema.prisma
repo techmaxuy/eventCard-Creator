@@ -110,6 +110,7 @@ model EventType {
   defaultTheme      String   @default("classic")
   allowedThemes     Json?    // Array de temas disponibles
   hideGuestCount    Boolean  @default(false) // Ocultar contador de invitados en página pública
+  allowDecorations  Boolean  @default(true)  // Permitir decoraciones en este tipo de evento
 
   // Estado
   isActive          Boolean  @default(true)

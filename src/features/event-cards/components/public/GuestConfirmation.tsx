@@ -96,7 +96,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
 
   if (submitted) {
     return (
-      <div className="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md rounded-xl shadow-lg border border-white/30 dark:border-zinc-800/50 p-8 text-center">
+      <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-lg border border-white/30 dark:border-zinc-800/50 p-8 text-center">
         <div className={`w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center ${
           status === 'CONFIRMED' 
             ? 'bg-green-100 dark:bg-green-900/20' 
@@ -113,11 +113,12 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
           {status === 'DECLINED' && t('thankYouDeclined')}
           {status === 'MAYBE' && t('thankYouMaybe')}
         </h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className="text-gray-600 dark:text-gray-400 mb-6" style={fontStyle}>
           {t('confirmationReceived')}
         </p>
         <button
           onClick={handleModifyResponse}
+          style={fontStyle}
           className="text-blue-600 dark:text-blue-400 hover:underline"
         >
           {t('modifyResponse')}
@@ -127,11 +128,11 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
   }
 
   return (
-    <div className="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md rounded-xl shadow-lg border border-white/30 dark:border-zinc-800/50 p-8">
+    <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-lg border border-white/30 dark:border-zinc-800/50 p-8">
       <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2" style={fontStyle}>
         {t('confirmAttendance')}
       </h3>
-      <p className="text-gray-600 dark:text-gray-400 mb-6">
+      <p className="text-gray-600 dark:text-gray-400 mb-6" style={fontStyle}>
         {t('confirmAttendanceDescription')}
       </p>
 
@@ -144,7 +145,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Status Selection */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3" style={fontStyle}>
             {t('yourResponse')} *
           </label>
           <div className="grid grid-cols-3 gap-3">
@@ -160,7 +161,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
               <Check className={`w-6 h-6 mx-auto mb-1 ${
                 status === 'CONFIRMED' ? 'text-green-600' : 'text-gray-400'
               }`} />
-              <span className={`text-sm font-medium ${
+              <span style={fontStyle} className={`text-sm font-medium ${
                 status === 'CONFIRMED' 
                   ? 'text-green-600 dark:text-green-400' 
                   : 'text-gray-600 dark:text-gray-400'
@@ -181,7 +182,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
               <HelpCircle className={`w-6 h-6 mx-auto mb-1 ${
                 status === 'MAYBE' ? 'text-yellow-600' : 'text-gray-400'
               }`} />
-              <span className={`text-sm font-medium ${
+              <span style={fontStyle} className={`text-sm font-medium ${
                 status === 'MAYBE' 
                   ? 'text-yellow-600 dark:text-yellow-400' 
                   : 'text-gray-600 dark:text-gray-400'
@@ -202,7 +203,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
               <X className={`w-6 h-6 mx-auto mb-1 ${
                 status === 'DECLINED' ? 'text-red-600' : 'text-gray-400'
               }`} />
-              <span className={`text-sm font-medium ${
+              <span style={fontStyle} className={`text-sm font-medium ${
                 status === 'DECLINED' 
                   ? 'text-red-600 dark:text-red-400' 
                   : 'text-gray-600 dark:text-gray-400'
@@ -215,7 +216,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
 
         {/* Name */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" style={fontStyle}>
             {t('yourName')} *
           </label>
           <div className="relative">
@@ -225,6 +226,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              style={fontStyle}
               className="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder={t('namePlaceholder')}
             />
@@ -233,7 +235,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
 
         {/* Phone */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" style={fontStyle}>
             {t('yourPhone')} {requirePhone && '*'}
           </label>
           <div className="relative">
@@ -243,6 +245,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required={requirePhone}
+              style={fontStyle}
               className="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="+598 99 123 456"
             />
@@ -251,7 +254,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
 
         {/* Email (Optional) */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" style={fontStyle}>
             {t('yourEmail')} ({t('optional')})
           </label>
           <div className="relative">
@@ -260,6 +263,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              style={fontStyle}
               className="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="tu@email.com"
             />
@@ -269,7 +273,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
         {/* Number of Guests */}
         {status === 'CONFIRMED' && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" style={fontStyle}>
               {t('numberOfGuests')} *
             </label>
             <div className="relative">
@@ -281,7 +285,8 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
                 min={1}
                 max={10}
                 required
-                className="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                style={fontStyle}
+              className="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -292,7 +297,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
 
         {/* Message */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" style={fontStyle}>
             {t('message')} ({t('optional')})
           </label>
           <div className="relative">
@@ -302,6 +307,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
               onChange={(e) => setMessage(e.target.value)}
               rows={3}
               maxLength={500}
+              style={fontStyle}
               className="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               placeholder={t('messagePlaceholder')}
             />
@@ -315,6 +321,7 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
         <button
           type="submit"
           disabled={isPending}
+          style={fontStyle}
           className="w-full px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isPending ? (
