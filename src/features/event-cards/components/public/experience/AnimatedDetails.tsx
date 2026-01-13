@@ -10,20 +10,23 @@ interface DetailItemProps {
   value: string | ReactNode
   accentColor: string
   index: number
+  fontFamily?: string | null
 }
 
-function DetailItem({ icon, label, value, accentColor, index }: DetailItemProps) {
+function DetailItem({ icon, label, value, accentColor, index, fontFamily }: DetailItemProps) {
+  const fontStyle = fontFamily ? { fontFamily } : {}
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -50 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: '-100px' }}
-      transition={{ 
-        duration: 0.5, 
+      transition={{
+        duration: 0.5,
         delay: index * 0.1,
         ease: 'easeOut'
       }}
-      className="flex items-start gap-4 p-4 bg-white dark:bg-zinc-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 group"
+      className="flex items-start gap-4 p-4 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-md hover:shadow-xl transition-all duration-300 group border border-white/30 dark:border-zinc-800/50"
     >
       <motion.div
         whileHover={{ scale: 1.1, rotate: 5 }}
@@ -35,10 +38,10 @@ function DetailItem({ icon, label, value, accentColor, index }: DetailItemProps)
         </div>
       </motion.div>
       <div className="flex-1">
-        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
+        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1" style={fontStyle}>
           {label}
         </p>
-        <div className="text-lg font-semibold text-gray-900 dark:text-white">
+        <div className="text-lg font-semibold text-gray-900 dark:text-white" style={fontStyle}>
           {value}
         </div>
       </div>
@@ -57,6 +60,7 @@ interface AnimatedDetailsProps {
   menu?: string | null
   accentColor: string
   locale: string
+  fontFamily?: string | null
 }
 
 export function AnimatedDetails({
@@ -70,6 +74,7 @@ export function AnimatedDetails({
   menu,
   accentColor,
   locale,
+  fontFamily,
 }: AnimatedDetailsProps) {
   
   const details = []
@@ -90,6 +95,7 @@ export function AnimatedDetails({
         })}
         accentColor={accentColor}
         index={index++}
+        fontFamily={fontFamily}
       />
     )
   }
@@ -104,6 +110,7 @@ export function AnimatedDetails({
         value={eventTime}
         accentColor={accentColor}
         index={index++}
+        fontFamily={fontFamily}
       />
     )
   }
@@ -138,6 +145,7 @@ export function AnimatedDetails({
         }
         accentColor={accentColor}
         index={index++}
+        fontFamily={fontFamily}
       />
     )
   }
@@ -152,6 +160,7 @@ export function AnimatedDetails({
         value={dressCode}
         accentColor={accentColor}
         index={index++}
+        fontFamily={fontFamily}
       />
     )
   }
@@ -176,6 +185,7 @@ export function AnimatedDetails({
         }
         accentColor={accentColor}
         index={index++}
+        fontFamily={fontFamily}
       />
     )
   }
@@ -194,6 +204,7 @@ export function AnimatedDetails({
         }
         accentColor={accentColor}
         index={index++}
+        fontFamily={fontFamily}
       />
     )
   }

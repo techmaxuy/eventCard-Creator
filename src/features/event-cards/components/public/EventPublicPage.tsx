@@ -186,7 +186,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-8"
+            className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-8"
           >
             <motion.h2
               initial={{ opacity: 0, x: -20 }}
@@ -194,6 +194,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
               className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center"
+              style={event.fontFamily ? { fontFamily: event.fontFamily } : {}}
             >
               {t('eventDetails')}
             </motion.h2>
@@ -209,6 +210,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               menu={event.menu}
               accentColor={event.primaryColor}
               locale={locale}
+              fontFamily={event.fontFamily}
             />
           </motion.div>
 
@@ -219,7 +221,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-8"
+              className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-8"
             >
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
                 {t('gallery')}
@@ -270,7 +272,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-6"
+            className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-6"
           >
             <ShareButtons
               eventTitle={event.title}
@@ -278,6 +280,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               eventDescription={event.description || undefined}
               primaryColor={event.primaryColor}
               locale={locale}
+              fontFamily={event.fontFamily}
             />
           </motion.div>
 

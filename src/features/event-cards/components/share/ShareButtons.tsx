@@ -11,18 +11,21 @@ interface ShareButtonsProps {
   eventDescription?: string
   primaryColor: string
   locale: string
+  fontFamily?: string | null
 }
 
-export function ShareButtons({ 
-  eventTitle, 
-  eventUrl, 
+export function ShareButtons({
+  eventTitle,
+  eventUrl,
   eventDescription,
   primaryColor,
-  locale 
+  locale,
+  fontFamily
 }: ShareButtonsProps) {
   const t = useTranslations('Share')
   const [copied, setCopied] = useState(false)
   const [showQR, setShowQR] = useState(false)
+  const fontStyle = fontFamily ? { fontFamily } : {}
 
   const isAbsoluteUrl = eventUrl.startsWith('http://') || eventUrl.startsWith('https://')
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || ''
@@ -104,7 +107,7 @@ export function ShareButtons({
       {/* Share Title */}
       <div className="flex items-center gap-2">
         <Share2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-        <h3 className="font-semibold text-gray-900 dark:text-white">
+        <h3 className="font-semibold text-gray-900 dark:text-white" style={fontStyle}>
           {t('shareEvent')}
         </h3>
       </div>
@@ -121,10 +124,10 @@ export function ShareButtons({
             <Copy className="w-5 h-5 text-gray-600 dark:text-gray-400" />
           )}
           <div className="text-left">
-            <p className="font-medium text-gray-900 dark:text-white">
+            <p className="font-medium text-gray-900 dark:text-white" style={fontStyle}>
               {copied ? t('linkCopied') : t('copyLink')}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[200px]">
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[200px]" style={fontStyle}>
               {baseUrl}{eventUrl}
             </p>
           </div>
@@ -186,11 +189,11 @@ export function ShareButtons({
         >
           <div className="flex items-center gap-3">
             <QrCode className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-            <span className="font-medium text-gray-900 dark:text-white">
+            <span className="font-medium text-gray-900 dark:text-white" style={fontStyle}>
               {showQR ? t('hideQR') : t('showQR')}
             </span>
           </div>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
+          <span className="text-sm text-gray-500 dark:text-gray-400" style={fontStyle}>
             {showQR ? '▼' : '▶'}
           </span>
         </button>
@@ -207,13 +210,14 @@ export function ShareButtons({
                 fgColor={primaryColor}
                 bgColor="#ffffff"
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center" style={fontStyle}>
                 {t('qrDescription')}
               </p>
             </div>
 
             <button
               onClick={downloadQR}
+              style={fontStyle}
               className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center justify-center gap-2"
             >
               <Download className="w-4 h-4" />
