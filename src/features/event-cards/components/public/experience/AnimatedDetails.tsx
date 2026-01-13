@@ -124,19 +124,19 @@ export function AnimatedDetails({
         label="Ubicación"
         value={
           <div>
-            <p>{location}</p>
+            <p style={fontFamily ? { fontFamily } : {}}>{location}</p>
             {locationAddress && (
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1" style={fontFamily ? { fontFamily } : {}}>
                 {locationAddress}
               </p>
             )}
             {locationUrl && (
-              
+
                 <a href={locationUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block mt-2 text-sm font-medium hover:underline"
-                style={{ color: accentColor }}
+                style={{ color: accentColor, ...(fontFamily ? { fontFamily } : {}) }}
               >
                 Ver mapa →
               </a>
@@ -173,12 +173,12 @@ export function AnimatedDetails({
         icon={<Gift className="w-6 h-6" />}
         label="Mesa de Regalos"
         value={
-          
+
             <a href={giftRegistry}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline"
-            style={{ color: accentColor }}
+            style={{ color: accentColor, ...(fontFamily ? { fontFamily } : {}) }}
           >
             Ver lista de regalos →
           </a>
@@ -198,7 +198,7 @@ export function AnimatedDetails({
         icon={<Utensils className="w-6 h-6" />}
         label="Menú"
         value={
-          <p className="whitespace-pre-line text-sm">
+          <p className="whitespace-pre-line text-sm" style={fontFamily ? { fontFamily } : {}}>
             {menu}
           </p>
         }
