@@ -10,6 +10,7 @@ import { AnimatedDetails } from './experience/AnimatedDetails'
 import { ParticleBackground } from './experience/ParticleBackground'
 import { GoogleFontLoader } from './GoogleFontLoader'
 import { DecorativeElements } from './DecorativeElements'
+import { MusicPlayer } from './MusicPlayer'
 import { getEventTheme } from '@/features/event-cards/config/event-themes'
 import { getFontFamilyName } from '@/features/event-cards/config/fonts'
 import { motion } from 'framer-motion'
@@ -295,7 +296,15 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
 
         </div>
       </div>
+
+      {/* Music Player */}
+      {event.musicUrl && (
+        <MusicPlayer
+          musicUrl={event.musicUrl}
+          eventTitle={event.title}
+        />
+      )}
     </div>
-   
+
   )
 }
