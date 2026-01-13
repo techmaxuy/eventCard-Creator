@@ -13,7 +13,6 @@ export function MusicPlayer({ musicUrl, eventTitle }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
-  const [hasInteracted, setHasInteracted] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
@@ -23,6 +22,22 @@ export function MusicPlayer({ musicUrl, eventTitle }: MusicPlayerProps) {
     audio.volume = 0.5
     audioRef.current = audio
 
+    // Intentar reproducir automáticamente al cargar
+    const playPromise = audio.play()
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          console.log('[MusicPlayer] ✅ Autoplay successful')
+          setIsPlaying(true)
+        })
+        .catch((error) => {
+          console.log('[MusicPlayer] ⚠️ Autoplay prevented by browser:', error.message)
+          setIsPlaying(false)
+          // Mostrar un mensaje sutil al usuario
+        })
+    }
+
     // Cleanup al desmontar
     return () => {
       audio.pause()
@@ -30,24 +45,8 @@ export function MusicPlayer({ musicUrl, eventTitle }: MusicPlayerProps) {
     }
   }, [musicUrl])
 
-  useEffect(() => {
-    if (!audioRef.current) return
-
-    // Intentar reproducir automáticamente después de la primera interacción
-    if (hasInteracted && isPlaying) {
-      audioRef.current.play().catch((error) => {
-        console.log('[MusicPlayer] Autoplay prevented:', error)
-        setIsPlaying(false)
-      })
-    }
-  }, [hasInteracted, isPlaying])
-
   const handleTogglePlay = () => {
     if (!audioRef.current) return
-
-    if (!hasInteracted) {
-      setHasInteracted(true)
-    }
 
     if (isPlaying) {
       audioRef.current.pause()

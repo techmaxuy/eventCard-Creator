@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Image as ImageIcon, Music, MessageSquare, X, Play, Pause, Check } from 'lucide-react'
 import Image from 'next/image'
@@ -32,6 +32,21 @@ export function AssetSelector({ type, assets, selectedId, onSelect, locale }: As
   const t = useTranslations('AssetSelector')
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null)
   const [audioElements, setAudioElements] = useState<Map<string, HTMLAudioElement>>(new Map())
+  const audioTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Limpiar timeout al desmontar
+  useEffect(() => {
+    return () => {
+      if (audioTimeoutRef.current) {
+        clearTimeout(audioTimeoutRef.current)
+      }
+      // Pausar todos los audios al desmontar
+      audioElements.forEach((audio) => {
+        audio.pause()
+        audio.currentTime = 0
+      })
+    }
+  }, [audioElements])
 
     const filteredAssets = assets.filter(a => {
     if (a.type !== type) return false
@@ -47,31 +62,68 @@ export function AssetSelector({ type, assets, selectedId, onSelect, locale }: As
   const handleAudioToggle = (asset: Asset) => {
     if (!asset.audioUrl) return
 
+    // Limpiar timeout anterior si existe
+    if (audioTimeoutRef.current) {
+      clearTimeout(audioTimeoutRef.current)
+      audioTimeoutRef.current = null
+    }
+
     const existingAudio = audioElements.get(asset.id)
 
     if (existingAudio) {
       if (playingAudioId === asset.id) {
         existingAudio.pause()
+        existingAudio.currentTime = 0
         setPlayingAudioId(null)
       } else {
         // Pausar cualquier otro audio
         audioElements.forEach((audio, id) => {
-          if (id !== asset.id) audio.pause()
+          if (id !== asset.id) {
+            audio.pause()
+            audio.currentTime = 0
+          }
         })
+        existingAudio.currentTime = 0
         existingAudio.play()
         setPlayingAudioId(asset.id)
+
+        // Detener automáticamente después de 10 segundos
+        audioTimeoutRef.current = setTimeout(() => {
+          existingAudio.pause()
+          existingAudio.currentTime = 0
+          setPlayingAudioId(null)
+          audioTimeoutRef.current = null
+        }, 10000)
       }
     } else {
       // Crear nuevo elemento de audio
       const audio = new Audio(asset.audioUrl)
-      audio.addEventListener('ended', () => setPlayingAudioId(null))
-      
+      audio.addEventListener('ended', () => {
+        setPlayingAudioId(null)
+        audio.currentTime = 0
+        if (audioTimeoutRef.current) {
+          clearTimeout(audioTimeoutRef.current)
+          audioTimeoutRef.current = null
+        }
+      })
+
       // Pausar otros audios
-      audioElements.forEach((a) => a.pause())
-      
+      audioElements.forEach((a) => {
+        a.pause()
+        a.currentTime = 0
+      })
+
       audio.play()
       setAudioElements(new Map(audioElements).set(asset.id, audio))
       setPlayingAudioId(asset.id)
+
+      // Detener automáticamente después de 10 segundos
+      audioTimeoutRef.current = setTimeout(() => {
+        audio.pause()
+        audio.currentTime = 0
+        setPlayingAudioId(null)
+        audioTimeoutRef.current = null
+      }, 10000)
     }
   }
 
