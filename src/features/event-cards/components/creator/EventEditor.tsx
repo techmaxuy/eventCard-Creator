@@ -157,7 +157,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
         welcomePhrase: welcomePhrase || undefined,
         musicUrl: musicUrl || undefined,
         fontFamily: fontFamily || undefined,
-        decorations: selectedDecorations.length > 0 ? selectedDecorations : undefined
+        decorations: selectedDecorations
       })
 
       if (result.error) {

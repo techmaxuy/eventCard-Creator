@@ -21,6 +21,7 @@ const EventTypeSchema = z.object({
   hasGiftRegistry: z.boolean(),
   hasMenu: z.boolean(),
   hideGuestCount: z.boolean(),
+  allowDecorations: z.boolean(),
   defaultTheme: z.string(),
   isActive: z.boolean(),
 })
