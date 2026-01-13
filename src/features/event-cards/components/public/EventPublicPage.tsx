@@ -80,6 +80,10 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
     colors: theme.colors
   })
 
+  // DEBUG: Ver el fontFamily
+  console.log('[EventPublicPage] Font Family:', event.fontFamily)
+  console.log('[EventPublicPage] Full event object keys:', Object.keys(event))
+
   const eventTypeName = locale === 'es' ? event.eventType.name : event.eventType.nameEn
 
   return (
