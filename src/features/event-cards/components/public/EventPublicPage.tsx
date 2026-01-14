@@ -157,7 +157,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               transition={{ duration: 0.6 }}
               className="max-w-2xl mx-auto text-center"
             >
-              <p className="text-2xl text-white dark:text-white leading-relaxed font-medium" style={cssFontFamily ? { fontFamily: cssFontFamily } : {}}>
+              <p className="text-3xl md:text-4xl text-white dark:text-white leading-relaxed font-medium" style={cssFontFamily ? { fontFamily: cssFontFamily } : {}}>
                 {event.description}
               </p>
             </motion.div>
@@ -219,19 +219,8 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-8"
+            className="space-y-8"
           >
-            <motion.h2
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center"
-              style={cssFontFamily ? { fontFamily: cssFontFamily } : {}}
-            >
-              {t('eventDetails')}
-            </motion.h2>
-
             <AnimatedDetails
               eventDate={event.eventDate}
               eventTime={event.eventTime}
@@ -244,6 +233,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               accentColor={event.primaryColor}
               locale={locale}
               fontFamily={cssFontFamily}
+              eventTypeSlug={event.eventType.slug || event.eventType.name.toLowerCase()}
             />
           </motion.div>
 

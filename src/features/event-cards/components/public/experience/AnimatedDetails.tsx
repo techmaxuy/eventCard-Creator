@@ -6,44 +6,36 @@ import { ReactNode } from 'react'
 
 interface DetailItemProps {
   icon: ReactNode
-  label: string
   value: string | ReactNode
   accentColor: string
   index: number
   fontFamily?: string | null
 }
 
-function DetailItem({ icon, label, value, accentColor, index, fontFamily }: DetailItemProps) {
+function DetailItem({ icon, value, accentColor, index, fontFamily }: DetailItemProps) {
   const fontStyle = fontFamily ? { fontFamily } : {}
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -50 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{
         duration: 0.5,
         delay: index * 0.1,
         ease: 'easeOut'
       }}
-      className="flex items-start gap-4 p-4 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-md hover:shadow-xl transition-all duration-300 group border border-white/30 dark:border-zinc-800/50"
+      className="flex items-center gap-4 text-center justify-center"
     >
       <motion.div
-        whileHover={{ scale: 1.1, rotate: 5 }}
-        className="w-14 h-14 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors"
-        style={{ backgroundColor: `${accentColor}20` }}
+        whileHover={{ scale: 1.2, rotate: 10 }}
+        className="flex items-center justify-center flex-shrink-0"
+        style={{ color: accentColor }}
       >
-        <div style={{ color: accentColor }}>
-          {icon}
-        </div>
+        {icon}
       </motion.div>
-      <div className="flex-1">
-        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1" style={fontStyle}>
-          {label}
-        </p>
-        <div className="text-lg font-semibold text-gray-900 dark:text-white" style={fontStyle}>
-          {value}
-        </div>
+      <div className="text-2xl md:text-3xl font-semibold text-white" style={fontStyle}>
+        {value}
       </div>
     </motion.div>
   )
@@ -61,6 +53,7 @@ interface AnimatedDetailsProps {
   accentColor: string
   locale: string
   fontFamily?: string | null
+  eventTypeSlug?: string
 }
 
 export function AnimatedDetails({
@@ -75,6 +68,7 @@ export function AnimatedDetails({
   accentColor,
   locale,
   fontFamily,
+  eventTypeSlug,
 }: AnimatedDetailsProps) {
   
   const details = []
@@ -86,7 +80,6 @@ export function AnimatedDetails({
       <DetailItem
         key="date"
         icon={<Calendar className="w-6 h-6" />}
-        label="Fecha"
         value={new Date(eventDate).toLocaleDateString(locale, {
           weekday: 'long',
           year: 'numeric',
@@ -106,7 +99,6 @@ export function AnimatedDetails({
       <DetailItem
         key="time"
         icon={<Clock className="w-6 h-6" />}
-        label="Hora"
         value={eventTime}
         accentColor={accentColor}
         index={index++}
@@ -121,7 +113,6 @@ export function AnimatedDetails({
       <DetailItem
         key="location"
         icon={<MapPin className="w-6 h-6" />}
-        label="Ubicación"
         value={
           <div>
             <p style={fontFamily ? { fontFamily } : {}}>{location}</p>
@@ -156,7 +147,6 @@ export function AnimatedDetails({
       <DetailItem
         key="dressCode"
         icon={<Shirt className="w-6 h-6" />}
-        label="Dress Code"
         value={dressCode}
         accentColor={accentColor}
         index={index++}
@@ -171,7 +161,6 @@ export function AnimatedDetails({
       <DetailItem
         key="giftRegistry"
         icon={<Gift className="w-6 h-6" />}
-        label="Mesa de Regalos"
         value={
 
             <a href={giftRegistry}
@@ -196,7 +185,6 @@ export function AnimatedDetails({
       <DetailItem
         key="menu"
         icon={<Utensils className="w-6 h-6" />}
-        label="Menú"
         value={
           <p className="whitespace-pre-line text-sm" style={fontFamily ? { fontFamily } : {}}>
             {menu}
@@ -213,15 +201,55 @@ export function AnimatedDetails({
     return null
   }
 
+  // Generate personalized intro message based on event type
+  const getIntroMessage = () => {
+    if (!eventDate && !location) return null
+
+    const dateStr = eventDate ? new Date(eventDate).toLocaleDateString(locale, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }) : ''
+
+    const timeStr = eventTime ? ` a las ${eventTime}` : ''
+    const locationStr = location ? ` en ${location}` : ''
+
+    // Check event type
+    if (eventTypeSlug === 'cumpleanos' || eventTypeSlug === 'birthday') {
+      return `Te espero el ${dateStr}${timeStr}${locationStr}`
+    } else if (eventTypeSlug === 'casamiento' || eventTypeSlug === 'wedding') {
+      return `Te esperamos el ${dateStr}${timeStr}${locationStr}`
+    }
+
+    return null
+  }
+
+  const introMessage = getIntroMessage()
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="space-y-4"
+      className="space-y-8"
     >
-      {details}
+      {introMessage && (
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-3xl md:text-4xl text-white text-center font-medium"
+          style={fontFamily ? { fontFamily } : {}}
+        >
+          {introMessage}
+        </motion.p>
+      )}
+      <div className="space-y-4">
+        {details}
+      </div>
     </motion.div>
   )
 }
