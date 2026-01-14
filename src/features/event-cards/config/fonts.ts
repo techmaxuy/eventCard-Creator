@@ -174,10 +174,55 @@ export function getFontsByCategory(category?: EventFont['category']): EventFont[
 
 /**
  * Obtener fuentes recomendadas para un tipo de evento
+ * Para casamientos/bodas: solo fuentes elegantes
+ * Para cumpleaños: solo fuentes juguesas (playful)
+ * Para otros: todas las fuentes apropiadas
  */
 export function getFontsForEventType(eventTypeSlug: string): EventFont[] {
+  // Normalizar el slug a minúsculas para comparación
+  const normalizedSlug = eventTypeSlug.toLowerCase()
+
+  // Para casamientos/bodas: solo fuentes elegantes
+  if (normalizedSlug.includes('wedding') ||
+      normalizedSlug.includes('casamiento') ||
+      normalizedSlug.includes('boda')) {
+    return EVENT_FONTS.filter(font => font.category === 'elegant')
+  }
+
+  // Para cumpleaños: solo fuentes juguesas
+  if (normalizedSlug.includes('birthday') ||
+      normalizedSlug.includes('cumpleaños') ||
+      normalizedSlug.includes('cumpleanos')) {
+    return EVENT_FONTS.filter(font => font.category === 'playful')
+  }
+
+  // Para baby shower: juguesas y manuscritas
+  if (normalizedSlug.includes('baby') || normalizedSlug.includes('shower')) {
+    return EVENT_FONTS.filter(font =>
+      font.category === 'playful' || font.category === 'handwritten'
+    )
+  }
+
+  // Para eventos corporativos/graduación: modernas y elegantes
+  if (normalizedSlug.includes('corporate') ||
+      normalizedSlug.includes('graduation') ||
+      normalizedSlug.includes('graduacion')) {
+    return EVENT_FONTS.filter(font =>
+      font.category === 'modern' || font.category === 'elegant'
+    )
+  }
+
+  // Para aniversarios: elegantes y manuscritas
+  if (normalizedSlug.includes('anniversary') ||
+      normalizedSlug.includes('aniversario')) {
+    return EVENT_FONTS.filter(font =>
+      font.category === 'elegant' || font.category === 'handwritten'
+    )
+  }
+
+  // Para cualquier otro evento: filtrar por eventTypes si están definidos
   return EVENT_FONTS.filter(
-    (font) => !font.eventTypes || font.eventTypes.some((type) => eventTypeSlug.includes(type))
+    (font) => !font.eventTypes || font.eventTypes.some((type) => normalizedSlug.includes(type))
   )
 }
 
