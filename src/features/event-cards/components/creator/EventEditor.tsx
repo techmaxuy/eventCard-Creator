@@ -62,6 +62,7 @@ interface Event {
   theme: string
   primaryColor: string
   coverImage: string | null
+  featuredImage: string | null
   gallery: any
   welcomePhrase: string | null
   musicUrl: string | null
