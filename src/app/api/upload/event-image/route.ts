@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData()
     const file = formData.get('file') as File
     const eventId = formData.get('eventId') as string
-    const imageType = formData.get('imageType') as string // 'cover' | 'gallery'
+    const imageType = formData.get('imageType') as string // 'cover' | 'featured' | 'gallery'
 
     if (!file || !eventId) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -39,8 +39,8 @@ export async function POST(request: NextRequest) {
     // Subir imagen a Azure
     const imageUrl = await uploadImage(file, {
       folder: `events/${eventId}`,
-      maxWidth: imageType === 'cover' ? 1920 : 1200,
-      maxHeight: imageType === 'cover' ? 1080 : 1200,
+      maxWidth: imageType === 'cover' ? 1920 : (imageType === 'featured' ? 1200 : 1200),
+      maxHeight: imageType === 'cover' ? 1080 : (imageType === 'featured' ? 1200 : 1200),
       quality: 85,
     })
 
@@ -55,6 +55,18 @@ export async function POST(request: NextRequest) {
       await prisma.event.update({
         where: { id: eventId },
         data: { coverImage: imageUrl }
+      })
+    } else if (imageType === 'featured') {
+      // Si es featured, actualizar evento y eliminar featured anterior
+      if (event.featuredImage && event.featuredImage.includes('blob.core.windows.net')) {
+        await deleteImage(event.featuredImage).catch(err => {
+          console.warn('[UploadEventImage] Failed to delete old featured:', err)
+        })
+      }
+
+      await prisma.event.update({
+        where: { id: eventId },
+        data: { featuredImage: imageUrl }
       })
     } else {
       // Si es galería, agregar al array
@@ -93,7 +105,7 @@ export async function DELETE(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const eventId = searchParams.get('eventId')
     const imageUrl = searchParams.get('imageUrl')
-    const imageType = searchParams.get('imageType') // 'cover' | 'gallery'
+    const imageType = searchParams.get('imageType') // 'cover' | 'featured' | 'gallery'
 
     if (!eventId || !imageUrl) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -121,6 +133,11 @@ export async function DELETE(request: NextRequest) {
       await prisma.event.update({
         where: { id: eventId },
         data: { coverImage: null }
+      })
+    } else if (imageType === 'featured') {
+      await prisma.event.update({
+        where: { id: eventId },
+        data: { featuredImage: null }
       })
     } else {
       const currentGallery = (event.gallery as string[]) || []

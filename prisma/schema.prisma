@@ -159,6 +159,7 @@ model Event {
   theme             String      @default("classic") // "classic", "modern", "elegant"
   primaryColor      String      @default("#3b82f6")
   coverImage        String?     // Imagen principal
+  featuredImage     String?     // Imagen destacada (foto de pareja, cumpleañero, etc.)
   gallery           Json?       // Array de URLs de imágenes
   music             String?     // URL de música de fondo
 

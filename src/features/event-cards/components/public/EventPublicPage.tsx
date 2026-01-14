@@ -45,6 +45,7 @@ interface Event {
   giftRegistry: string | null
   menu: string | null
   coverImage: string | null
+  featuredImage: string | null
   gallery: any
   primaryColor: string
   requirePhone: boolean
@@ -137,6 +138,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
         welcomePhrase={event.welcomePhrase}
         eventTypeName={eventTypeName}
         eventTypeIcon={event.eventType.icon}
+        featuredImage={event.featuredImage}
         theme={theme}
         primaryColor={event.primaryColor}
         fontFamily={cssFontFamily}
@@ -158,6 +160,27 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               <p className="text-2xl text-white dark:text-white leading-relaxed font-medium" style={cssFontFamily ? { fontFamily: cssFontFamily } : {}}>
                 {event.description}
               </p>
+            </motion.div>
+          )}
+
+          {/* Featured Image - Foto principal */}
+          {event.featuredImage && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="max-w-2xl mx-auto"
+            >
+              <div className="relative w-full aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-white/30">
+                <Image
+                  src={event.featuredImage}
+                  alt={event.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
             </motion.div>
           )}
 
@@ -298,17 +321,9 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
       </div>
 
       {/* Music Player */}
-      {(() => {
-        console.log('[EventPublicPage] Music Player Debug:', {
-          hasMusicUrl: !!event.musicUrl,
-          musicUrl: event.musicUrl,
-          eventType: event.eventType.slug || event.eventType.name,
-          willRender: !!event.musicUrl
-        })
-        return event.musicUrl && (
-          <MusicPlayer musicUrl={event.musicUrl} />
-        )
-      })()}
+      {event.musicUrl && (
+        <MusicPlayer musicUrl={event.musicUrl} />
+      )}
     </div>
 
   )

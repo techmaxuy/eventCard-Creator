@@ -485,7 +485,16 @@
     "coverUploaded": "¡Portada subida exitosamente!",
     "coverDeleted": "¡Portada eliminada exitosamente!",
     "coverImageHelp": "Recomendado: 1920x1080px, máximo 5MB",
-    
+
+    "featuredImage": "Foto Principal",
+    "featuredImageDescription": "Foto destacada que aparecerá en la invitación (por ejemplo: foto de la pareja para casamientos, del cumpleañero para cumpleaños)",
+    "uploadFeatured": "Subir Foto Principal",
+    "removeFeatured": "Eliminar Foto Principal",
+    "confirmDeleteFeatured": "¿Eliminar la foto principal?",
+    "featuredUploaded": "¡Foto principal subida exitosamente!",
+    "featuredDeleted": "¡Foto principal eliminada exitosamente!",
+    "featuredImageHelp": "Recomendado: imagen cuadrada, máximo 5MB",
+
     "eventInfo": "Información del Evento",
     "status": "Estado",
     "publicUrl": "URL Pública",

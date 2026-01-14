@@ -12,6 +12,7 @@ interface HeroSectionProps {
   eventTypeName: string
   eventTypeIcon: string | null
   coverImage?: string | null
+  featuredImage?: string | null
   theme: EventTheme
   primaryColor: string
   fontFamily?: string | null
@@ -23,6 +24,7 @@ export function HeroSection({
   eventTypeName,
   eventTypeIcon,
   coverImage,
+  featuredImage,
   theme,
   primaryColor,
   fontFamily,
@@ -102,7 +104,7 @@ export function HeroSection({
       {/* Content */}
       <div className="relative h-full flex flex-col items-center justify-center px-4 text-center z-10">
         
-        {/* Icon Animado */}
+        {/* Icon Animado o Featured Image */}
         <motion.div
           initial={{ scale: 0, rotate: -360 }}
           animate={{ scale: 1.5, rotate: 0 }}
@@ -114,14 +116,24 @@ export function HeroSection({
           }}
           className="mb-6"
         >
-          <div 
-            className="w-24 h-24 rounded-full flex items-center justify-center shadow-2xl"
-            style={{ 
+          <div
+            className="w-24 h-24 rounded-full flex items-center justify-center shadow-2xl overflow-hidden border-4 border-white/30"
+            style={{
               backgroundColor: coverImage ? 'rgba(255, 255, 255, 0.9)' : `${primaryColor}20`,
               backdropFilter: 'blur(10px)',
             }}
           >
-            <span className="text-6xl">{eventTypeIcon}</span>
+            {featuredImage ? (
+              <Image
+                src={featuredImage}
+                alt={title}
+                width={96}
+                height={96}
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              <span className="text-6xl">{eventTypeIcon}</span>
+            )}
           </div>
         </motion.div>
 

@@ -8,12 +8,12 @@ import { AssetSelector } from './AssetSelector'
 import { FontSelector } from './FontSelector'
 import { DecorationSelector } from './DecorationSelector'
 
-import { 
-  Save, 
-  Eye, 
-  Trash2, 
-  Loader2, 
-  Upload, 
+import {
+  Save,
+  Eye,
+  Trash2,
+  Loader2,
+  Upload,
   X,
   MapPin,
   Calendar,
@@ -21,7 +21,10 @@ import {
   Palette,
   Image as ImageIcon,
   Music,
-  Globe,MessageSquare, Sparkles
+  Globe,
+  MessageSquare,
+  Sparkles,
+  User
 } from 'lucide-react'
 import Image from 'next/image'
 import { updateEvent, deleteEvent, togglePublishEvent } from '@/features/event-cards/actions/events'
@@ -107,6 +110,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   const [isDeleting, setIsDeleting] = useState(false)
   const [isToggling, setIsToggling] = useState(false)
   const [uploadingCover, setUploadingCover] = useState(false)
+  const [uploadingFeatured, setUploadingFeatured] = useState(false)
   
   const [event, setEvent] = useState(initialEvent)
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
@@ -151,10 +155,6 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   const handleSave = async () => {
     setMessage(null)
 
-    // DEBUG: Ver qué musicUrl se está enviando
-    console.log('[EventEditor] 🎵 Saving event with musicUrl:', musicUrl)
-    console.log('[EventEditor] 🎵 Selected music asset:', selectedMusicAsset)
-
     startTransition(async () => {
       const result = await updateEvent(event.id, {
         title,
@@ -169,6 +169,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
         menu,
         primaryColor,
         coverImage: event.coverImage || undefined,
+        featuredImage: event.featuredImage || undefined,
         welcomePhrase: welcomePhrase || undefined,
         musicUrl: musicUrl || undefined,
         fontFamily: fontFamily || undefined,
@@ -304,6 +305,67 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
     }
 
     setUploadingCover(false)
+  }
+
+  const handleFeaturedUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploadingFeatured(true)
+    setMessage(null)
+
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('eventId', event.id)
+    formData.append('imageType', 'featured')
+
+    try {
+      const response = await fetch('/api/upload/event-image', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const result = await response.json()
+
+      if (!response.ok || result.error) {
+        setMessage({ type: 'error', text: result.error || t('errors.UploadFailed') })
+      } else {
+        setMessage({ type: 'success', text: t('featuredUploaded') })
+        setEvent({ ...event, featuredImage: result.imageUrl })
+
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: t('errors.UploadFailed') })
+    }
+
+    setUploadingFeatured(false)
+  }
+
+  const handleFeaturedDelete = async () => {
+    if (!event.featuredImage || !confirm(t('confirmDeleteFeatured'))) return
+
+    setUploadingFeatured(true)
+
+    try {
+      const response = await fetch(
+        `/api/upload/event-image?eventId=${event.id}&imageUrl=${encodeURIComponent(event.featuredImage)}&imageType=featured`,
+        { method: 'DELETE' }
+      )
+
+      const result = await response.json()
+
+      if (!response.ok || result.error) {
+        setMessage({ type: 'error', text: result.error || t('errors.DeleteFailed') })
+      } else {
+        setMessage({ type: 'success', text: t('featuredDeleted') })
+        setEvent({ ...event, featuredImage: null })
+
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: t('errors.DeleteFailed') })
+    }
+
+    setUploadingFeatured(false)
   }
 
   return (
@@ -740,6 +802,72 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
               </p>
             </div>
           )}
+
+          {/* Featured Image */}
+          <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+              <User className="w-5 h-5" />
+              {t('featuredImage')}
+            </h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              {t('featuredImageDescription')}
+            </p>
+
+            {event.featuredImage ? (
+              <div className="space-y-3">
+                <div className="relative w-full h-64 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
+                  <Image
+                    src={event.featuredImage}
+                    alt="Featured"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleFeaturedDelete}
+                  disabled={uploadingFeatured}
+                  className="w-full px-3 py-2 text-sm text-red-600 dark:text-red-400 border border-red-300 dark:border-red-700 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {uploadingFeatured ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <X className="w-4 h-4" />
+                  )}
+                  {t('removeFeatured')}
+                </button>
+              </div>
+            ) : (
+              <div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFeaturedUpload}
+                  disabled={uploadingFeatured}
+                  className="hidden"
+                  id="featured-upload"
+                />
+                <label
+                  htmlFor="featured-upload"
+                  className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 dark:hover:border-blue-500 transition-colors"
+                >
+                  {uploadingFeatured ? (
+                    <Loader2 className="w-12 h-12 text-gray-400 animate-spin" />
+                  ) : (
+                    <>
+                      <Upload className="w-12 h-12 text-gray-400 mb-2" />
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {t('uploadFeatured')}
+                      </span>
+                    </>
+                  )}
+                </label>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  {t('featuredImageHelp')}
+                </p>
+              </div>
+            )}
+          </div>
 
           {/* NUEVO: Background Music */}
           {availableAssets.filter(a => a.type === 'AUDIO').length > 0 && (
