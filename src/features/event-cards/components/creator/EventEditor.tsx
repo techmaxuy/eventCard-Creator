@@ -151,6 +151,10 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   const handleSave = async () => {
     setMessage(null)
 
+    // DEBUG: Ver qué musicUrl se está enviando
+    console.log('[EventEditor] 🎵 Saving event with musicUrl:', musicUrl)
+    console.log('[EventEditor] 🎵 Selected music asset:', selectedMusicAsset)
+
     startTransition(async () => {
       const result = await updateEvent(event.id, {
         title,

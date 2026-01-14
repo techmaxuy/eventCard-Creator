@@ -228,11 +228,17 @@ export async function updateEvent(id: string, values: z.infer<typeof UpdateEvent
 
     const data = validatedFields.data
 
+    // DEBUG: Ver qué musicUrl llega
+    console.log('[Events] 🎵 Update Event - musicUrl received:', data.musicUrl)
+
     // Convertir fecha ISO a DateTime si existe
     const updateData: any = { ...data }
     if (data.eventDate) {
       updateData.eventDate = new Date(data.eventDate)
     }
+
+    // DEBUG: Ver el updateData completo antes de guardar
+    console.log('[Events] 🎵 Update Event - updateData.musicUrl:', updateData.musicUrl)
 
     // Actualizar evento
     const updatedEvent = await prisma.event.update({
@@ -242,6 +248,9 @@ export async function updateEvent(id: string, values: z.infer<typeof UpdateEvent
         eventType: true
       }
     })
+
+    // DEBUG: Ver el evento guardado
+    console.log('[Events] 🎵 Update Event - saved event musicUrl:', updatedEvent.musicUrl)
 
     revalidatePath(`/events/${id}`)
     revalidatePath(`/events/${id}/edit`)
