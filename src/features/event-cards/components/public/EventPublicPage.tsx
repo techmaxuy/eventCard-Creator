@@ -153,9 +153,9 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-8 text-center"
+              className="max-w-2xl mx-auto text-center"
             >
-              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed" style={cssFontFamily ? { fontFamily: cssFontFamily } : {}}>
+              <p className="text-2xl text-white dark:text-white leading-relaxed font-medium" style={cssFontFamily ? { fontFamily: cssFontFamily } : {}}>
                 {event.description}
               </p>
             </motion.div>
@@ -298,9 +298,17 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
       </div>
 
       {/* Music Player */}
-      {event.musicUrl && (
-        <MusicPlayer musicUrl={event.musicUrl} />
-      )}
+      {(() => {
+        console.log('[EventPublicPage] Music Player Debug:', {
+          hasMusicUrl: !!event.musicUrl,
+          musicUrl: event.musicUrl,
+          eventType: event.eventType.slug || event.eventType.name,
+          willRender: !!event.musicUrl
+        })
+        return event.musicUrl && (
+          <MusicPlayer musicUrl={event.musicUrl} />
+        )
+      })()}
     </div>
 
   )
