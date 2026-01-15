@@ -8,17 +8,36 @@ import { revalidatePath } from 'next/cache'
 const CreateEventSchema = z.object({
   eventTypeId: z.string().min(1, 'Event type is required'),
   title: z.string().min(1, 'Title is required').max(100),
-  slug: z.string().min(1, 'Slug is required').regex(/^[a-z0-9-]+$/, 'Slug must be lowercase letters, numbers, and hyphens only'),
 })
 
 /**
- * Generar slug único
+ * Generate a short, random alphanumeric slug (URL-safe)
+ * Uses base62 encoding (a-z, A-Z, 0-9) for maximum readability
  */
-export async function generateUniqueSlug(baseSlug: string): Promise<string> {
-  let slug = baseSlug
-  let counter = 1
+function generateRandomSlug(length: number = 8): string {
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let result = ''
 
-  while (true) {
+  // Use crypto.randomBytes for better randomness
+  const randomBytes = crypto.getRandomValues(new Uint8Array(length))
+
+  for (let i = 0; i < length; i++) {
+    result += chars[randomBytes[i] % chars.length]
+  }
+
+  return result
+}
+
+/**
+ * Generar slug único encriptado y corto
+ */
+export async function generateUniqueSlug(): Promise<string> {
+  let attempts = 0
+  const maxAttempts = 10
+
+  while (attempts < maxAttempts) {
+    const slug = generateRandomSlug(8)
+
     const existing = await prisma.event.findUnique({
       where: { slug }
     })
@@ -27,9 +46,11 @@ export async function generateUniqueSlug(baseSlug: string): Promise<string> {
       return slug
     }
 
-    slug = `${baseSlug}-${counter}`
-    counter++
+    attempts++
   }
+
+  // Si después de 10 intentos no encontramos uno único, usar 10 caracteres
+  return generateRandomSlug(10)
 }
 
 /**
@@ -50,7 +71,7 @@ export async function createEvent(values: z.infer<typeof CreateEventSchema>) {
       return { error: 'InvalidFields' }
     }
 
-    const { eventTypeId, title, slug } = validatedFields.data
+    const { eventTypeId, title } = validatedFields.data
 
     // Verificar que el tipo de evento exista y esté activo
     const eventType = await prisma.eventType.findFirst({
@@ -64,8 +85,8 @@ export async function createEvent(values: z.infer<typeof CreateEventSchema>) {
       return { error: 'EventTypeNotFound' }
     }
 
-    // Generar slug único
-    const uniqueSlug = await generateUniqueSlug(slug)
+    // Generar slug único encriptado
+    const uniqueSlug = await generateUniqueSlug()
 
     // Crear evento
     const event = await prisma.event.create({

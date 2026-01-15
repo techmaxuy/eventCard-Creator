@@ -29,7 +29,14 @@ export function ShareButtons({
 
   const isAbsoluteUrl = eventUrl.startsWith('http://') || eventUrl.startsWith('https://')
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || ''
-  const fullUrl = isAbsoluteUrl ? eventUrl : (baseUrl ? `${baseUrl}/${locale}/e/${eventUrl}` : eventUrl)
+
+  // Si eventUrl ya es una ruta relativa completa (comienza con /), solo agregamos el baseUrl
+  const fullUrl = isAbsoluteUrl
+    ? eventUrl
+    : (baseUrl
+        ? `${baseUrl}${eventUrl}`
+        : (typeof window !== 'undefined' ? `${window.location.origin}${eventUrl}` : eventUrl)
+      )
 
   const shareText = eventDescription 
     ? `${eventTitle} - ${eventDescription}`
@@ -128,7 +135,7 @@ export function ShareButtons({
               {copied ? t('linkCopied') : t('copyLink')}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[200px]" style={fontStyle}>
-              {baseUrl}{eventUrl}
+              {fullUrl}
             </p>
           </div>
         </div>

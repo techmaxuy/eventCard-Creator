@@ -32,22 +32,7 @@ export function NewEventForm({ eventTypes, locale }: NewEventFormProps) {
   const [step, setStep] = useState(1)
   const [selectedTypeId, setSelectedTypeId] = useState<string | null>(null)
   const [title, setTitle] = useState('')
-  const [slug, setSlug] = useState('')
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
-
-  // Auto-generar slug desde título
-  const handleTitleChange = (value: string) => {
-    setTitle(value)
-    const autoSlug = value
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim()
-    setSlug(autoSlug)
-  }
 
   const handleNext = () => {
     if (!selectedTypeId) {
@@ -67,7 +52,7 @@ export function NewEventForm({ eventTypes, locale }: NewEventFormProps) {
     e.preventDefault()
     setMessage(null)
 
-    if (!selectedTypeId || !title || !slug) {
+    if (!selectedTypeId || !title) {
       setMessage({ type: 'error', text: t('fillAllFields') })
       return
     }
@@ -76,7 +61,6 @@ export function NewEventForm({ eventTypes, locale }: NewEventFormProps) {
       const result = await createEvent({
         eventTypeId: selectedTypeId,
         title,
-        slug,
       })
 
       if (result.error) {
@@ -204,7 +188,7 @@ export function NewEventForm({ eventTypes, locale }: NewEventFormProps) {
                 <input
                   type="text"
                   value={title}
-                  onChange={(e) => handleTitleChange(e.target.value)}
+                  onChange={(e) => setTitle(e.target.value)}
                   required
                   maxLength={100}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -212,29 +196,6 @@ export function NewEventForm({ eventTypes, locale }: NewEventFormProps) {
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {t('eventTitleHelp')}
-                </p>
-              </div>
-
-              {/* Event Slug */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  {t('eventSlug')} *
-                </label>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {typeof window !== 'undefined' ? window.location.origin : ''}/e/
-                  </span>
-                  <input
-                    type="text"
-                    value={slug}
-                    onChange={(e) => setSlug(e.target.value)}
-                    required
-                    className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="mi-evento-especial"
-                  />
-                </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  {t('eventSlugHelp')}
                 </p>
               </div>
             </div>
@@ -251,7 +212,7 @@ export function NewEventForm({ eventTypes, locale }: NewEventFormProps) {
               </button>
               <button
                 type="submit"
-                disabled={isPending || !title || !slug}
+                disabled={isPending || !title}
                 className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {isPending ? (

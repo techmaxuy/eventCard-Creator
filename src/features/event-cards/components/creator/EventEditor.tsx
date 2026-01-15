@@ -1006,13 +1006,13 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                 <span className="text-gray-500 dark:text-gray-400">{t('publicUrl')}:</span>
                 <div className="mt-1">
                   {event.isPublished ? (
-                    
+
                       <a href={`/${locale}/e/${event.slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 dark:text-blue-400 hover:underline text-xs break-all"
                     >
-                      {typeof window !== 'undefined' ? `${window.location.origin}/${locale}/e/${event.slug}` : `/${locale}/e/${event.slug}`}
+                      {typeof window !== 'undefined' ? `${window.location.origin}${locale ? `/${locale}` : ''}/e/${event.slug}` : `/${locale}/e/${event.slug}`}
                     </a>
                   ) : (
                     <span className="text-gray-400 text-xs">
