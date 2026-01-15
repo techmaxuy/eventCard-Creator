@@ -67,10 +67,19 @@ export default auth(async (req) => {
     if (isAuthRoute && isLoggedIn) {
         return NextResponse.redirect(new URL(`/${locale}`, nextUrl))
     }
-    
+
+    const response = intlMiddleware(req as any)
+
+    // Detectar país desde headers de Vercel y guardar en cookie
+    const country = req.headers.get('x-vercel-ip-country') || 'US'
+    response.cookies.set('user-country', country, {
+        httpOnly: true,
+        maxAge: 86400, // 1 día
+        sameSite: 'lax',
+    })
     
     // Aplicar middleware de internacionalización
-    return intlMiddleware(req as any)
+    return response
 })
 
 export const config = {
