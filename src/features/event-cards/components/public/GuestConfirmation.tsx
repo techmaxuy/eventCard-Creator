@@ -11,9 +11,10 @@ interface GuestConfirmationProps {
   requirePhone: boolean
   locale: string
   fontFamily?: string | null
+  onSuccess?: () => void
 }
 
-export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fontFamily }: GuestConfirmationProps) {
+export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fontFamily, onSuccess }: GuestConfirmationProps) {
   const t = useTranslations('EventPublic')
   const [isPending, startTransition] = useTransition()
 
@@ -78,6 +79,11 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
             name,
             confirmedAt: new Date().toISOString()
           }))
+        }
+
+        // Llamar callback de éxito si existe
+        if (onSuccess) {
+          onSuccess()
         }
       }
     })

@@ -3,14 +3,13 @@
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { Users } from 'lucide-react'
-import { GuestConfirmation } from './GuestConfirmation'
-import { ShareButtons } from '@/features/event-cards/components/share/ShareButtons'
 import { HeroSection } from './experience/HeroSection'
 import { AnimatedDetails } from './experience/AnimatedDetails'
 import { ParticleBackground } from './experience/ParticleBackground'
 import { GoogleFontLoader } from './GoogleFontLoader'
 import { DecorativeElements } from './DecorativeElements'
 import { MusicPlayer } from './MusicPlayer'
+import { FloatingActionButtons } from './FloatingActionButtons'
 import { getEventTheme } from '@/features/event-cards/config/event-themes'
 import { getFontFamilyName } from '@/features/event-cards/config/fonts'
 import { motion } from 'framer-motion'
@@ -272,43 +271,22 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
             </motion.div>
           )}
 
-          {/* Confirmation Form */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            id="confirmar"
-          >
-            <GuestConfirmation
-              eventId={event.id}
-              eventSlug={event.slug}
-              requirePhone={event.requirePhone}
-              locale={locale}
-              fontFamily={cssFontFamily}
-            />
-          </motion.div>
-
-          {/* Share Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-6"
-          >
-            <ShareButtons
-              eventTitle={event.title}
-              eventUrl={fullEventUrl}
-              eventDescription={event.description || undefined}
-              primaryColor={event.primaryColor}
-              locale={locale}
-              fontFamily={cssFontFamily}
-            />
-          </motion.div>
 
         </div>
       </div>
+
+      {/* Floating Action Buttons (RSVP + Share) */}
+      <FloatingActionButtons
+        eventId={event.id}
+        eventSlug={event.slug}
+        eventTitle={event.title}
+        eventDescription={event.description || undefined}
+        eventUrl={fullEventUrl}
+        requirePhone={event.requirePhone}
+        primaryColor={event.primaryColor}
+        locale={locale}
+        fontFamily={cssFontFamily}
+      />
 
       {/* Music Player */}
       {event.musicUrl && (
