@@ -1063,5 +1063,67 @@
     "errors": {
       "uploadFailed": "Error al subir el comprobante. Por favor intenta de nuevo."
     }
+  },
+  "EventWizard": {
+    "backToTypeSelection": "Volver a selección de tipo",
+    "createTitle": "Crear {eventType}",
+    "createDescription": "Completa los siguientes pasos para crear tu evento",
+
+    "stepNames": "Nombres",
+    "stepTitle": "Título",
+    "stepPhrase": "Frase",
+
+    "back": "Atrás",
+    "continue": "Continuar",
+    "creating": "Creando...",
+    "createAndContinue": "Crear y Continuar",
+
+    "namesHeading": "¿Para quién es este evento?",
+    "namesDescription": "Ingresa los nombres de los protagonistas",
+    "personName": "Nombre de la persona {number}",
+    "namePlaceholder": "Ingresa el nombre",
+    "birthdayPerson": "Cumpleañero/a",
+    "partner1": "Pareja 1",
+    "partner2": "Pareja 2",
+    "person": "Persona {number}",
+
+    "titleHeading": "Dale un título a tu evento",
+    "titleDescription": "El título aparecerá destacado en tu invitación de {eventType}",
+    "eventTitleLabel": "Título del Evento",
+    "eventTitlePlaceholder": "Ej: Celebramos 30 años de María",
+    "titleMaxLength": "máximo 60 caracteres",
+
+    "welcomePhraseHeading": "Agrega una frase de bienvenida",
+    "welcomePhraseDescription": "Esta frase aparecerá en tu invitación de {eventType}",
+    "welcomePhrase": "Frase de Bienvenida",
+    "welcomePhrasePlaceholder": "Ej: ¡Te esperamos para celebrar juntos!",
+    "welcomePhraseHelp": "Una frase emotiva que dará la bienvenida a tus invitados",
+    "optional": "opcional",
+    "skipPhraseNotice": "Puedes dejar este campo vacío si lo prefieres",
+
+    "aiTitleAssistant": "Asistente de IA para Títulos",
+    "aiTitleAssistantDescription": "Genera sugerencias creativas de títulos",
+    "aiPhraseAssistant": "Asistente de IA para Frases",
+    "aiPhraseAssistantDescription": "Genera frases de bienvenida emotivas",
+
+    "generateWithAI": "Generar con IA",
+    "generating": "Generando...",
+    "tokens": "tokens",
+    "tokensRemaining": "Tokens restantes",
+    "getMoreTokens": "Obtener más tokens",
+    "suggestions": "Sugerencias",
+
+    "aiLockedDescription": "Mejora tu plan para acceder a las funciones de IA",
+    "upgradeToPro": "Mejorar a Pro",
+    "insufficientTokensMessage": "Necesitas {cost} tokens para esta operación pero solo tienes {remaining}",
+
+    "errors": {
+      "Unauthorized": "No autorizado",
+      "NoAIAccess": "Tu plan no incluye acceso a IA",
+      "InsufficientTokens": "No tienes suficientes tokens",
+      "EventTypeNotFound": "Tipo de evento no encontrado",
+      "GenerationFailed": "Error al generar contenido. Intenta nuevamente.",
+      "CreateFailed": "Error al crear el evento. Intenta nuevamente."
+    }
   }
 }

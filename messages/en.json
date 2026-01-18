@@ -1044,5 +1044,67 @@
     "errors": {
       "uploadFailed": "Failed to upload receipt. Please try again."
     }
+  },
+  "EventWizard": {
+    "backToTypeSelection": "Back to type selection",
+    "createTitle": "Create {eventType}",
+    "createDescription": "Complete the following steps to create your event",
+
+    "stepNames": "Names",
+    "stepTitle": "Title",
+    "stepPhrase": "Phrase",
+
+    "back": "Back",
+    "continue": "Continue",
+    "creating": "Creating...",
+    "createAndContinue": "Create and Continue",
+
+    "namesHeading": "Who is this event for?",
+    "namesDescription": "Enter the names of the protagonists",
+    "personName": "Person {number}'s name",
+    "namePlaceholder": "Enter the name",
+    "birthdayPerson": "Birthday Person",
+    "partner1": "Partner 1",
+    "partner2": "Partner 2",
+    "person": "Person {number}",
+
+    "titleHeading": "Give your event a title",
+    "titleDescription": "The title will appear prominently on your {eventType} invitation",
+    "eventTitleLabel": "Event Title",
+    "eventTitlePlaceholder": "Ex: Celebrating Maria's 30th Birthday",
+    "titleMaxLength": "maximum 60 characters",
+
+    "welcomePhraseHeading": "Add a welcome phrase",
+    "welcomePhraseDescription": "This phrase will appear on your {eventType} invitation",
+    "welcomePhrase": "Welcome Phrase",
+    "welcomePhrasePlaceholder": "Ex: We look forward to celebrating with you!",
+    "welcomePhraseHelp": "An emotional phrase to welcome your guests",
+    "optional": "optional",
+    "skipPhraseNotice": "You can leave this field empty if you prefer",
+
+    "aiTitleAssistant": "AI Title Assistant",
+    "aiTitleAssistantDescription": "Generate creative title suggestions",
+    "aiPhraseAssistant": "AI Phrase Assistant",
+    "aiPhraseAssistantDescription": "Generate emotional welcome phrases",
+
+    "generateWithAI": "Generate with AI",
+    "generating": "Generating...",
+    "tokens": "tokens",
+    "tokensRemaining": "Tokens remaining",
+    "getMoreTokens": "Get more tokens",
+    "suggestions": "Suggestions",
+
+    "aiLockedDescription": "Upgrade your plan to access AI features",
+    "upgradeToPro": "Upgrade to Pro",
+    "insufficientTokensMessage": "You need {cost} tokens for this operation but only have {remaining}",
+
+    "errors": {
+      "Unauthorized": "Unauthorized",
+      "NoAIAccess": "Your plan does not include AI access",
+      "InsufficientTokens": "You don't have enough tokens",
+      "EventTypeNotFound": "Event type not found",
+      "GenerationFailed": "Failed to generate content. Please try again.",
+      "CreateFailed": "Failed to create event. Please try again."
+    }
   }
 }

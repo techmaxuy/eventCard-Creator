@@ -24,6 +24,18 @@ const EventTypeSchema = z.object({
   allowDecorations: z.boolean(),
   defaultTheme: z.string(),
   isActive: z.boolean(),
+  // AI Wizard Configuration
+  numberOfPeople: z.number().int().min(1).max(10).default(1),
+  askNames: z.boolean().default(true),
+  // AI Prompt Supplements (bilingual)
+  aiTitlePromptEs: z.string().optional(),
+  aiTitlePromptEn: z.string().optional(),
+  aiPhrasePromptEs: z.string().optional(),
+  aiPhrasePromptEn: z.string().optional(),
+  aiBackgroundPromptEs: z.string().optional(),
+  aiBackgroundPromptEn: z.string().optional(),
+  aiPhotoPromptEs: z.string().optional(),
+  aiPhotoPromptEn: z.string().optional(),
 })
 
 
@@ -254,6 +266,12 @@ export async function seedDefaultEventTypes() {
         hasMenu: true,
         defaultTheme: 'fun',
         isActive: true,
+        numberOfPeople: 1,
+        askNames: true,
+        aiTitlePromptEs: 'Genera un título festivo y alegre para una fiesta de cumpleaños.',
+        aiTitlePromptEn: 'Generate a festive and joyful title for a birthday party.',
+        aiPhrasePromptEs: 'Genera una frase de bienvenida cálida y emotiva para una celebración de cumpleaños.',
+        aiPhrasePromptEn: 'Generate a warm and emotional welcome phrase for a birthday celebration.',
       },
       {
         name: 'Casamiento',
@@ -271,6 +289,12 @@ export async function seedDefaultEventTypes() {
         hasMenu: true,
         defaultTheme: 'elegant',
         isActive: true,
+        numberOfPeople: 2,
+        askNames: true,
+        aiTitlePromptEs: 'Genera un título romántico y elegante para una invitación de boda.',
+        aiTitlePromptEn: 'Generate a romantic and elegant title for a wedding invitation.',
+        aiPhrasePromptEs: 'Genera una frase de bienvenida romántica y elegante para una ceremonia de boda.',
+        aiPhrasePromptEn: 'Generate a romantic and elegant welcome phrase for a wedding ceremony.',
       },
     ]
 

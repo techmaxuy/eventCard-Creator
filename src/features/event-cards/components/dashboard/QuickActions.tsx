@@ -16,6 +16,9 @@ interface QuickActionsProps {
 export function QuickActions({ locale, stats }: QuickActionsProps) {
   const t = useTranslations('QuickActions')
 
+  // Determine if user has no events - show heartbeat animation
+  const hasNoEvents = stats?.totalEvents === 0
+
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-lg border border-gray-200 dark:border-zinc-800 p-8">
 
@@ -24,7 +27,7 @@ export function QuickActions({ locale, stats }: QuickActionsProps) {
         {/* Create Event */}
         <Link
           href={`/${locale}/events/new`}
-          className="group relative p-6 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl shadow-lg transition-all transform hover:scale-105"
+          className={`group relative p-6 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl shadow-lg transition-all transform hover:scale-105 ${hasNoEvents ? 'animate-heartbeat' : ''}`}
         >
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center group-hover:bg-white/30 transition-colors">

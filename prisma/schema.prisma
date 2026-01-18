@@ -128,13 +128,27 @@ model EventType {
   hideGuestCount    Boolean  @default(false) // Ocultar contador de invitados en página pública
   allowDecorations  Boolean  @default(true)  // Permitir decoraciones en este tipo de evento
 
+  // AI Wizard Configuration
+  numberOfPeople    Int      @default(1)     // Number of people for this event (1=birthday, 2=wedding)
+  askNames          Boolean  @default(true)  // Whether to ask for names in wizard
+
+  // AI Prompt Supplements (admin-configured, added to user prompts)
+  aiTitlePromptEs   String?  @db.Text // Spanish context for title generation
+  aiTitlePromptEn   String?  @db.Text // English context for title generation
+  aiPhrasePromptEs  String?  @db.Text // Spanish context for phrase generation
+  aiPhrasePromptEn  String?  @db.Text // English context for phrase generation
+  aiBackgroundPromptEs String? @db.Text // Spanish context for background image
+  aiBackgroundPromptEn String? @db.Text // English context for background image
+  aiPhotoPromptEs   String?  @db.Text // Spanish context for additional photo
+  aiPhotoPromptEn   String?  @db.Text // English context for additional photo
+
   // Estado
   isActive          Boolean  @default(true)
-  
+
   // Relaciones
   events            Event[]
-  assets            Asset[] 
-  
+  assets            Asset[]
+
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
   
