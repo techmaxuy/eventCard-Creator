@@ -9,6 +9,7 @@ export type AIOperation =
   | 'phrase_generation'      // Generar frases de bienvenida
   | 'image_edit'             // Editar/mejorar imágenes
   | 'image_generation'       // Generar imágenes
+  | 'image_enhancement'      // Sugerencias de mejora de imágenes
   | 'description_generation' // Generar descripciones
   | 'suggestions'            // Sugerencias de IA
 
@@ -180,6 +181,8 @@ export async function getTokenCostForOperation(operation: AIOperation): Promise<
       return costs.imageEditCost
     case 'image_generation':
       return costs.imageGenerationCost
+    case 'image_enhancement':
+      return costs.imageEditCost // Uses same cost as image_edit
     case 'description_generation':
       return costs.descriptionGenerationCost
     case 'suggestions':

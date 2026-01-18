@@ -7,6 +7,7 @@ import { ShareButtons } from '@/features/event-cards/components/share/ShareButto
 import { AssetSelector } from './AssetSelector'
 import { FontSelector } from './FontSelector'
 import { DecorationSelector } from './DecorationSelector'
+import { EditorAIPanel } from './EditorAIPanel'
 
 import {
   Save,
@@ -478,6 +479,14 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+                <EditorAIPanel
+                  type="title"
+                  eventTypeId={event.eventType.id}
+                  eventTypeName={locale === 'es' ? event.eventType.name : event.eventType.nameEn}
+                  title={title}
+                  onSelectSuggestion={(suggestion) => setTitle(suggestion)}
+                  locale={locale}
+                />
               </div>
 
               {/* Description */}
@@ -496,6 +505,15 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {description.length}/1000
                 </p>
+                <EditorAIPanel
+                  type="description"
+                  eventTypeId={event.eventType.id}
+                  eventTypeName={locale === 'es' ? event.eventType.name : event.eventType.nameEn}
+                  title={title}
+                  currentValue={description}
+                  onSelectSuggestion={(suggestion) => setDescription(suggestion)}
+                  locale={locale}
+                />
               </div>
 
               {/* Primary Color */}

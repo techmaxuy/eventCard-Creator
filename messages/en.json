@@ -1053,6 +1053,8 @@
     "stepNames": "Names",
     "stepTitle": "Title",
     "stepPhrase": "Phrase",
+    "stepBackground": "Background",
+    "stepFeatured": "Photo",
 
     "back": "Back",
     "continue": "Continue",
@@ -1088,10 +1090,30 @@
     "optional": "optional",
     "skipPhraseNotice": "You can leave this field empty if you prefer",
 
+    "backgroundImageHeading": "Add a background image",
+    "backgroundImageDescription": "Upload a custom image for your {eventType} invitation background",
+    "uploadBackgroundImage": "Upload background image",
+    "backgroundImageFormats": "JPG, PNG or WebP (max 5MB)",
+    "skipBackgroundNotice": "You can skip this step and add the image later in the editor",
+
+    "featuredImageHeading": "Add a featured photo",
+    "featuredImageDescription": "Upload a photo that represents your {eventType}",
+    "uploadFeaturedImage": "Upload featured photo",
+    "featuredImageFormats": "JPG, PNG or WebP (max 5MB)",
+    "skipFeaturedNotice": "You can skip this step and add the photo later in the editor",
+
+    "aiImagePromptLabel": "What changes do you want for the image?",
+    "aiImagePromptPlaceholder": "Ex: Add more brightness, warmer colors, vintage effect...",
+    "aiImagePromptHelp": "Describe the changes you would like to apply to your image",
+
     "aiTitleAssistant": "AI Title Assistant",
     "aiTitleAssistantDescription": "Generate creative title suggestions",
     "aiPhraseAssistant": "AI Phrase Assistant",
     "aiPhraseAssistantDescription": "Generate emotional welcome phrases",
+    "aiBackgroundAssistant": "AI Background Image Assistant",
+    "aiBackgroundAssistantDescription": "Get suggestions to enhance your background image",
+    "aiFeaturedAssistant": "AI Featured Photo Assistant",
+    "aiFeaturedAssistantDescription": "Get suggestions to enhance your featured photo",
 
     "generateWithAI": "Generate with AI",
     "generating": "Generating...",
@@ -1111,7 +1133,8 @@
       "InsufficientTokens": "You don't have enough tokens",
       "EventTypeNotFound": "Event type not found",
       "GenerationFailed": "Failed to generate content. Please try again.",
-      "CreateFailed": "Failed to create event. Please try again."
+      "CreateFailed": "Failed to create event. Please try again.",
+      "ImageLoadFailed": "Failed to load image. Please try another one."
     }
   }
 }

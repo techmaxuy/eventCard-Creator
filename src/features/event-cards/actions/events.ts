@@ -9,6 +9,7 @@ import { checkEventCreationLimit, getEventSubscriptionInfo } from '../lib/subscr
 const CreateEventSchema = z.object({
   eventTypeId: z.string().min(1, 'Event type is required'),
   title: z.string().min(1, 'Title is required').max(100),
+  welcomePhrase: z.string().max(500).optional(),
 })
 
 /**
@@ -88,7 +89,7 @@ export async function createEvent(values: z.infer<typeof CreateEventSchema>) {
       return { error: 'InvalidFields' }
     }
 
-    const { eventTypeId, title } = validatedFields.data
+    const { eventTypeId, title, welcomePhrase } = validatedFields.data
 
     // Verificar que el tipo de evento exista y esté activo
     const eventType = await prisma.eventType.findFirst({
@@ -111,6 +112,7 @@ export async function createEvent(values: z.infer<typeof CreateEventSchema>) {
         userId: session.user.id,
         eventTypeId,
         title,
+        welcomePhrase: welcomePhrase || null,
         slug: uniqueSlug,
         isPublished: false,
       },

@@ -8,6 +8,8 @@ import Link from 'next/link'
 import { StepNames } from './StepNames'
 import { StepTitle } from './StepTitle'
 import { StepPhrase } from './StepPhrase'
+import { StepBackgroundImage } from './StepBackgroundImage'
+import { StepFeaturedImage } from './StepFeaturedImage'
 import { createEvent } from '@/features/event-cards/actions/events'
 import { getAIAccessStatus, getAITokenCostsForUser } from '@/features/event-cards/actions/event-ai'
 
@@ -34,7 +36,9 @@ export interface WizardState {
   title: string
   welcomePhrase: string
   coverImage: string
+  coverImageFile: File | null
   featuredImage: string
+  featuredImageFile: File | null
 }
 
 interface AIStatus {
@@ -55,10 +59,9 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
   const router = useRouter()
   const t = useTranslations('EventWizard')
 
-  // Current step (1 = names, 2 = title, 3 = phrase)
-  // Note: Steps 4 and 5 (images) will be added in the event editor for now
+  // Current step (1 = names, 2 = title, 3 = phrase, 4 = background, 5 = featured)
   const [currentStep, setCurrentStep] = useState(1)
-  const totalSteps = 3
+  const totalSteps = 5
 
   // Wizard state
   const [wizardState, setWizardState] = useState<WizardState>({
@@ -66,7 +69,9 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
     title: '',
     welcomePhrase: '',
     coverImage: '',
-    featuredImage: ''
+    coverImageFile: null,
+    featuredImage: '',
+    featuredImageFile: null
   })
 
   // AI status
@@ -113,6 +118,10 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
         return wizardState.title.trim().length > 0
       case 3: // Phrase
         return true // Phrase is optional
+      case 4: // Background Image
+        return true // Background image is optional
+      case 5: // Featured Image
+        return true // Featured image is optional
       default:
         return false
     }
@@ -137,7 +146,8 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
     try {
       const result = await createEvent({
         eventTypeId: eventType.id,
-        title: wizardState.title
+        title: wizardState.title,
+        welcomePhrase: wizardState.welcomePhrase || undefined
       })
 
       if (result.error) {
@@ -147,14 +157,46 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
       }
 
       if (result.event) {
-        // Redirect to editor with the welcome phrase pre-filled via URL params
-        const params = new URLSearchParams()
-        if (wizardState.welcomePhrase) {
-          params.set('welcomePhrase', wizardState.welcomePhrase)
+        const eventId = result.event.id
+
+        // Upload cover image if user provided one
+        if (wizardState.coverImageFile) {
+          const formData = new FormData()
+          formData.append('file', wizardState.coverImageFile)
+          formData.append('eventId', eventId)
+          formData.append('imageType', 'cover')
+
+          try {
+            await fetch('/api/upload/event-image', {
+              method: 'POST',
+              body: formData,
+            })
+          } catch (uploadErr) {
+            console.error('Error uploading cover image:', uploadErr)
+            // Continue anyway - user can upload in editor
+          }
         }
 
-        const redirectUrl = `/${locale}/events/${result.event.id}/edit${params.toString() ? `?${params.toString()}` : ''}`
-        router.push(redirectUrl)
+        // Upload featured image if user provided one
+        if (wizardState.featuredImageFile) {
+          const formData = new FormData()
+          formData.append('file', wizardState.featuredImageFile)
+          formData.append('eventId', eventId)
+          formData.append('imageType', 'featured')
+
+          try {
+            await fetch('/api/upload/event-image', {
+              method: 'POST',
+              body: formData,
+            })
+          } catch (uploadErr) {
+            console.error('Error uploading featured image:', uploadErr)
+            // Continue anyway - user can upload in editor
+          }
+        }
+
+        // Redirect to editor
+        router.push(`/${locale}/events/${eventId}/edit`)
       }
     } catch (err) {
       console.error('Error creating event:', err)
@@ -220,6 +262,8 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
                     {stepNum === 1 && t('stepNames')}
                     {stepNum === 2 && t('stepTitle')}
                     {stepNum === 3 && t('stepPhrase')}
+                    {stepNum === 4 && t('stepBackground')}
+                    {stepNum === 5 && t('stepFeatured')}
                   </span>
                 </div>
 
@@ -275,6 +319,36 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
             onPhraseChange={(welcomePhrase) => updateWizardState({ welcomePhrase })}
             aiStatus={aiStatus}
             tokenCost={tokenCosts?.phraseGeneration || 1}
+            onTokensUsed={refreshAIStatus}
+            locale={locale}
+          />
+        )}
+
+        {currentStep === 4 && (
+          <StepBackgroundImage
+            eventType={eventType}
+            names={wizardState.names}
+            title={wizardState.title}
+            coverImage={wizardState.coverImage}
+            coverImageFile={wizardState.coverImageFile}
+            onCoverImageChange={(url, file) => updateWizardState({ coverImage: url, coverImageFile: file })}
+            aiStatus={aiStatus}
+            tokenCost={tokenCosts?.imageEdit || 5}
+            onTokensUsed={refreshAIStatus}
+            locale={locale}
+          />
+        )}
+
+        {currentStep === 5 && (
+          <StepFeaturedImage
+            eventType={eventType}
+            names={wizardState.names}
+            title={wizardState.title}
+            featuredImage={wizardState.featuredImage}
+            featuredImageFile={wizardState.featuredImageFile}
+            onFeaturedImageChange={(url, file) => updateWizardState({ featuredImage: url, featuredImageFile: file })}
+            aiStatus={aiStatus}
+            tokenCost={tokenCosts?.imageEdit || 5}
             onTokensUsed={refreshAIStatus}
             locale={locale}
           />

@@ -1072,6 +1072,8 @@
     "stepNames": "Nombres",
     "stepTitle": "Título",
     "stepPhrase": "Frase",
+    "stepBackground": "Fondo",
+    "stepFeatured": "Foto",
 
     "back": "Atrás",
     "continue": "Continuar",
@@ -1107,10 +1109,30 @@
     "optional": "opcional",
     "skipPhraseNotice": "Puedes dejar este campo vacío si lo prefieres",
 
+    "backgroundImageHeading": "Agrega una imagen de fondo",
+    "backgroundImageDescription": "Sube una imagen personalizada para el fondo de tu invitación de {eventType}",
+    "uploadBackgroundImage": "Subir imagen de fondo",
+    "backgroundImageFormats": "JPG, PNG o WebP (máx. 5MB)",
+    "skipBackgroundNotice": "Puedes omitir este paso y agregar la imagen después en el editor",
+
+    "featuredImageHeading": "Agrega una foto principal",
+    "featuredImageDescription": "Sube una foto que represente tu {eventType}",
+    "uploadFeaturedImage": "Subir foto principal",
+    "featuredImageFormats": "JPG, PNG o WebP (máx. 5MB)",
+    "skipFeaturedNotice": "Puedes omitir este paso y agregar la foto después en el editor",
+
+    "aiImagePromptLabel": "¿Qué cambios quieres en la imagen?",
+    "aiImagePromptPlaceholder": "Ej: Agregar más brillo, colores más cálidos, efecto vintage...",
+    "aiImagePromptHelp": "Describe los cambios que te gustaría aplicar a tu imagen",
+
     "aiTitleAssistant": "Asistente de IA para Títulos",
     "aiTitleAssistantDescription": "Genera sugerencias creativas de títulos",
     "aiPhraseAssistant": "Asistente de IA para Frases",
     "aiPhraseAssistantDescription": "Genera frases de bienvenida emotivas",
+    "aiBackgroundAssistant": "Asistente de IA para Imagen de Fondo",
+    "aiBackgroundAssistantDescription": "Obtén sugerencias para mejorar tu imagen de fondo",
+    "aiFeaturedAssistant": "Asistente de IA para Foto Principal",
+    "aiFeaturedAssistantDescription": "Obtén sugerencias para mejorar tu foto principal",
 
     "generateWithAI": "Generar con IA",
     "generating": "Generando...",
@@ -1130,7 +1152,8 @@
       "InsufficientTokens": "No tienes suficientes tokens",
       "EventTypeNotFound": "Tipo de evento no encontrado",
       "GenerationFailed": "Error al generar contenido. Intenta nuevamente.",
-      "CreateFailed": "Error al crear el evento. Intenta nuevamente."
+      "CreateFailed": "Error al crear el evento. Intenta nuevamente.",
+      "ImageLoadFailed": "Error al cargar la imagen. Intenta con otra."
     }
   }
 }
