@@ -4,6 +4,7 @@ import { prisma } from '@/core/shared/lib/db'
 import { auth } from '@/../auth'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
+import { checkEventCreationLimit, getEventSubscriptionInfo } from '../lib/subscription-limits'
 
 const CreateEventSchema = z.object({
   eventTypeId: z.string().min(1, 'Event type is required'),
@@ -55,18 +56,34 @@ export async function generateUniqueSlug(): Promise<string> {
 
 /**
  * Crear evento básico (solo tipo y título)
+ * Verifica límites de suscripción antes de crear
  */
 export async function createEvent(values: z.infer<typeof CreateEventSchema>) {
   try {
     const session = await auth()
-    
+
     if (!session?.user?.id) {
       return { error: 'Unauthorized' }
     }
 
+    // ✅ NUEVO: Verificar límite de eventos según suscripción
+    const limitCheck = await checkEventCreationLimit(session.user.id)
+    if (!limitCheck.canCreate) {
+      console.log('[Events] ❌ Event limit reached:', limitCheck)
+      return {
+        error: 'EventLimitReached',
+        limitInfo: {
+          currentCount: limitCheck.currentCount,
+          maxEvents: limitCheck.maxEvents,
+          planName: limitCheck.planName,
+          isFreePlan: limitCheck.isFreePlan
+        }
+      }
+    }
+
     // Validar datos
     const validatedFields = CreateEventSchema.safeParse(values)
-    
+
     if (!validatedFields.success) {
       return { error: 'InvalidFields' }
     }
@@ -110,6 +127,30 @@ export async function createEvent(values: z.infer<typeof CreateEventSchema>) {
   } catch (error) {
     console.error('[Events] Error creating event:', error)
     return { error: 'CreateFailed' }
+  }
+}
+
+/**
+ * Obtener información de suscripción del usuario para eventos
+ */
+export async function getUserEventSubscriptionInfo() {
+  try {
+    const session = await auth()
+
+    if (!session?.user?.id) {
+      return { error: 'Unauthorized' }
+    }
+
+    const info = await getEventSubscriptionInfo(session.user.id)
+
+    if (!info) {
+      return { error: 'SubscriptionInfoNotFound' }
+    }
+
+    return { subscriptionInfo: info }
+  } catch (error) {
+    console.error('[Events] Error getting subscription info:', error)
+    return { error: 'Failed to get subscription info' }
   }
 }
 

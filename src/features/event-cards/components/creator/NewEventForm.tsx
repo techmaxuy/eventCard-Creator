@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Loader2, AlertTriangle, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { EventTypeSelector } from './EventTypeSelector'
 import { createEvent } from '@/features/event-cards/actions/events'
@@ -19,20 +19,39 @@ interface EventType {
   color: string
 }
 
+interface SubscriptionInfo {
+  planName: string
+  displayName: string
+  isFreePlan: boolean
+  maxEvents: number
+  currentEventCount: number
+  canCreateEvent: boolean
+  hasAIAccess: boolean
+  tokensRemaining: number
+  tokensUsed: number
+}
+
 interface NewEventFormProps {
   eventTypes: EventType[]
   locale: string
+  subscriptionInfo?: SubscriptionInfo | null
 }
 
-export function NewEventForm({ eventTypes, locale }: NewEventFormProps) {
+export function NewEventForm({ eventTypes, locale, subscriptionInfo }: NewEventFormProps) {
   const router = useRouter()
   const t = useTranslations('Events')
   const [isPending, startTransition] = useTransition()
-  
+
   const [step, setStep] = useState(1)
   const [selectedTypeId, setSelectedTypeId] = useState<string | null>(null)
   const [title, setTitle] = useState('')
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
+  const [limitInfo, setLimitInfo] = useState<{
+    currentCount: number
+    maxEvents: number
+    planName: string
+    isFreePlan: boolean
+  } | null>(null)
 
   const handleNext = () => {
     if (!selectedTypeId) {
@@ -64,6 +83,10 @@ export function NewEventForm({ eventTypes, locale }: NewEventFormProps) {
       })
 
       if (result.error) {
+        // Check if it's a limit error with additional info
+        if (result.error === 'EventLimitReached' && 'limitInfo' in result) {
+          setLimitInfo(result.limitInfo as any)
+        }
         setMessage({ type: 'error', text: t(`errors.${result.error}`) || result.error })
       } else if (result.event) {
         // Redirigir al editor del evento
@@ -71,6 +94,9 @@ export function NewEventForm({ eventTypes, locale }: NewEventFormProps) {
       }
     })
   }
+
+  // Check if user cannot create events based on subscription
+  const cannotCreateEvent = subscriptionInfo && !subscriptionInfo.canCreateEvent
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -133,8 +159,43 @@ export function NewEventForm({ eventTypes, locale }: NewEventFormProps) {
         </div>
       </div>
 
+      {/* Subscription Limit Warning */}
+      {(cannotCreateEvent || limitInfo) && (
+        <div className="mb-6 p-6 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0">
+              <AlertTriangle className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-amber-800 dark:text-amber-200">
+                {t('subscription.eventLimitReached')}
+              </h3>
+              <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+                {t('subscription.eventLimitReachedDescription', {
+                  planName: limitInfo?.planName || subscriptionInfo?.displayName || 'Free',
+                  maxEvents: limitInfo?.maxEvents || subscriptionInfo?.maxEvents || 1,
+                  currentCount: limitInfo?.currentCount || subscriptionInfo?.currentEventCount || 0
+                })}
+              </p>
+              <div className="mt-4 flex items-center gap-3">
+                <Link
+                  href={`/${locale}/subscription`}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg font-medium transition-colors"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  {t('subscription.upgradePlan')}
+                </Link>
+                <span className="text-sm text-amber-600 dark:text-amber-400">
+                  {t('subscription.upgradeToCreateMore')}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Message Banner */}
-      {message && (
+      {message && !limitInfo && (
         <div className={`mb-6 p-4 rounded-lg ${
           message.type === 'success'
             ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200'

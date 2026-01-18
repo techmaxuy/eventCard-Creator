@@ -516,7 +516,24 @@
       "UpdateFailed": "Error al actualizar el evento",
       "DeleteFailed": "Error al eliminar el evento",
       "ToggleFailed": "Error al cambiar estado de publicación",
-      "UploadFailed": "Error al subir la imagen"
+      "UploadFailed": "Error al subir la imagen",
+      "EventLimitReached": "Has alcanzado el límite de eventos de tu plan"
+    },
+
+    "subscription": {
+      "eventLimitReached": "Límite de eventos alcanzado",
+      "eventLimitReachedDescription": "Tu plan {planName} permite crear máximo {maxEvents} evento(s). Actualmente tienes {currentCount}.",
+      "upgradeToCreateMore": "Mejora tu plan para crear eventos ilimitados",
+      "upgradePlan": "Mejorar Plan",
+      "eventsRemaining": "{remaining} evento(s) restante(s)",
+      "unlimitedEvents": "Eventos ilimitados",
+      "aiNotAvailable": "Funciones de IA no disponibles",
+      "aiNotAvailableDescription": "Tu plan actual no incluye acceso a funciones de IA. Mejora tu plan para desbloquear esta funcionalidad.",
+      "insufficientTokens": "Tokens insuficientes",
+      "insufficientTokensDescription": "No tienes suficientes tokens para esta operación. Necesitas {required} tokens y tienes {available}.",
+      "tokensRemaining": "{tokens} tokens restantes",
+      "freePlanLimits": "Plan Gratuito",
+      "freePlanDescription": "Con el plan gratuito puedes crear 1 evento. Mejora tu plan para crear más eventos y acceder a funciones de IA."
     },
     "backToHome": "Volver al Inicio",
     "presetCoverImages": "Imágenes de Portada Prediseñadas",
@@ -859,6 +876,9 @@
     "tokens": "Tokens Mensuales",
     "price": "Precio",
     "additionalLimit": "Límite Adicional",
+    "maxEvents": "Máx. Eventos",
+    "maxEventsHelp": "-1 = ilimitados, 1 = plan gratuito",
+    "hasAIAccess": "Acceso a IA",
     "sortOrder": "Orden",
     "isActive": "Activo",
     "active": "Activo",

@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { NewEventForm } from '@/features/event-cards/components/creator/NewEventForm'
 import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
+import { getEventSubscriptionInfo } from '@/features/event-cards/lib/subscription-limits'
 
 interface NewEventPageProps {
   params: Promise<{ locale: string }>
@@ -13,7 +14,7 @@ interface NewEventPageProps {
 export default async function NewEventPage({ params }: NewEventPageProps) {
   const { locale } = await params
   const session = await auth()
-  
+
   // Proteger ruta
   if (!session?.user?.id) {
     redirect(`/${locale}/login`)
@@ -30,6 +31,9 @@ export default async function NewEventPage({ params }: NewEventPageProps) {
       name: 'asc'
     }
   })
+
+  // Obtener información de suscripción del usuario
+  const subscriptionInfo = await getEventSubscriptionInfo(session.user.id)
 
   if (eventTypes.length === 0) {
     return (
@@ -70,7 +74,11 @@ export default async function NewEventPage({ params }: NewEventPageProps) {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <NewEventForm eventTypes={eventTypes} locale={locale} />
+        <NewEventForm
+          eventTypes={eventTypes}
+          locale={locale}
+          subscriptionInfo={subscriptionInfo}
+        />
       </div>
     </div>
   )

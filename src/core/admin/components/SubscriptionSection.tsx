@@ -20,6 +20,8 @@ interface SubscriptionPlan {
   tokens: number
   price: number
   additionalLimit: number
+  maxEvents: number      // -1 = unlimited
+  hasAIAccess: boolean   // Whether plan has AI features
   isActive: boolean
   sortOrder: number
 }
@@ -42,6 +44,8 @@ export function SubscriptionSection() {
     tokens: 0,
     price: 0,
     additionalLimit: 0,
+    maxEvents: -1,      // -1 = unlimited by default
+    hasAIAccess: false, // No AI access by default
     isActive: true,
     sortOrder: 0,
   })
@@ -126,6 +130,8 @@ export function SubscriptionSection() {
       tokens: plan.tokens,
       price: plan.price,
       additionalLimit: plan.additionalLimit,
+      maxEvents: plan.maxEvents,
+      hasAIAccess: plan.hasAIAccess,
       isActive: plan.isActive,
       sortOrder: plan.sortOrder,
     })
@@ -146,6 +152,8 @@ export function SubscriptionSection() {
       tokens: 0,
       price: 0,
       additionalLimit: 0,
+      maxEvents: -1,
+      hasAIAccess: false,
       isActive: true,
       sortOrder: plans.length,
     })
@@ -280,6 +288,27 @@ export function SubscriptionSection() {
                 className="w-full px-3 py-2 border rounded-lg dark:bg-zinc-700 dark:border-zinc-600"
                 min={0}
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('maxEvents')}</label>
+              <input
+                type="number"
+                value={formData.maxEvents}
+                onChange={(e) => setFormData({ ...formData, maxEvents: parseInt(e.target.value) || -1 })}
+                className="w-full px-3 py-2 border rounded-lg dark:bg-zinc-700 dark:border-zinc-600"
+                min={-1}
+              />
+              <p className="text-xs text-gray-500 mt-1">{t('maxEventsHelp')}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="hasAIAccess"
+                checked={formData.hasAIAccess}
+                onChange={(e) => setFormData({ ...formData, hasAIAccess: e.target.checked })}
+                className="w-4 h-4"
+              />
+              <label htmlFor="hasAIAccess" className="text-sm font-medium">{t('hasAIAccess')}</label>
             </div>
             <div className="flex items-center gap-2">
               <input

@@ -306,12 +306,32 @@ model SubscriptionPlan {
   tokens          Int
   price           Float
   additionalLimit Int      @default(0)
+  maxEvents       Int      @default(-1)  // -1 = unlimited, 1 = free plan limit
+  hasAIAccess     Boolean  @default(false) // Whether this plan has AI features access
   isActive        Boolean  @default(true)
   sortOrder       Int      @default(0)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   subscriptions   UserSubscription[]
+}
+
+// Configuración de costos de IA para eventos
+model EventAISettings {
+  id                      String   @id @default(cuid())
+
+  // Costo en tokens por operación de IA
+  phraseGenerationCost    Int      @default(1)   // Costo para generar frases con IA
+  imageEditCost           Int      @default(5)   // Costo para edición/mejora de imágenes con IA
+  imageGenerationCost     Int      @default(10)  // Costo para generación de imágenes con IA
+  descriptionGenerationCost Int    @default(1)   // Costo para generar descripciones
+  suggestionsCost         Int      @default(1)   // Costo para sugerencias de IA
+
+  // Configuraciones adicionales
+  isAIEnabled             Boolean  @default(true) // Habilitar/deshabilitar IA globalmente
+
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 }
 
 model UserSubscription {

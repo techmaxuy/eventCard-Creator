@@ -12,6 +12,8 @@ const SubscriptionPlanSchema = z.object({
   tokens: z.number().int().min(0),
   price: z.number().min(0),
   additionalLimit: z.number().int().min(0).default(0),
+  maxEvents: z.number().int().default(-1), // -1 = unlimited, 1 = free plan limit
+  hasAIAccess: z.boolean().default(false), // Whether plan has AI features
   isActive: z.boolean().default(true),
   sortOrder: z.number().int().default(0),
 })
@@ -194,33 +196,41 @@ export async function seedDefaultPlans() {
         tokens: 0,
         price: 0,
         additionalLimit: 0,
+        maxEvents: 1,        // Free plan: solo 1 evento
+        hasAIAccess: false,  // Sin acceso a IA
         sortOrder: 0,
       },
       {
         name: 'standard',
         displayNameEn: 'Standard',
         displayNameEs: 'Estándar',
-        tokens: 5,
+        tokens: 10,
         price: 5,
         additionalLimit: 0,
+        maxEvents: -1,       // Eventos ilimitados
+        hasAIAccess: true,   // Con acceso a IA
         sortOrder: 1,
       },
       {
         name: 'pro',
         displayNameEn: 'Pro',
         displayNameEs: 'Pro',
-        tokens: 20,
+        tokens: 30,
         price: 8,
         additionalLimit: 0,
+        maxEvents: -1,       // Eventos ilimitados
+        hasAIAccess: true,   // Con acceso a IA
         sortOrder: 2,
       },
       {
         name: 'premium',
         displayNameEn: 'Premium',
         displayNameEs: 'Premium',
-        tokens: 50,
+        tokens: 100,
         price: 10,
         additionalLimit: 0,
+        maxEvents: -1,       // Eventos ilimitados
+        hasAIAccess: true,   // Con acceso a IA
         sortOrder: 3,
       },
     ]

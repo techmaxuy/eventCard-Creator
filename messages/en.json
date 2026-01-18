@@ -499,7 +499,24 @@
       "UpdateFailed": "Failed to update event",
       "DeleteFailed": "Failed to delete event",
       "ToggleFailed": "Failed to toggle publish status",
-      "UploadFailed": "Failed to upload image"
+      "UploadFailed": "Failed to upload image",
+      "EventLimitReached": "You have reached your plan's event limit"
+    },
+
+    "subscription": {
+      "eventLimitReached": "Event limit reached",
+      "eventLimitReachedDescription": "Your {planName} plan allows a maximum of {maxEvents} event(s). You currently have {currentCount}.",
+      "upgradeToCreateMore": "Upgrade your plan to create unlimited events",
+      "upgradePlan": "Upgrade Plan",
+      "eventsRemaining": "{remaining} event(s) remaining",
+      "unlimitedEvents": "Unlimited events",
+      "aiNotAvailable": "AI features not available",
+      "aiNotAvailableDescription": "Your current plan does not include AI features. Upgrade your plan to unlock this functionality.",
+      "insufficientTokens": "Insufficient tokens",
+      "insufficientTokensDescription": "You don't have enough tokens for this operation. You need {required} tokens and have {available}.",
+      "tokensRemaining": "{tokens} tokens remaining",
+      "freePlanLimits": "Free Plan",
+      "freePlanDescription": "With the free plan you can create 1 event. Upgrade your plan to create more events and access AI features."
     },
     "backToHome": "Back to Home",
     "presetCoverImages": "Preset Cover Images",
@@ -840,6 +857,9 @@
     "tokens": "Monthly Tokens",
     "price": "Price",
     "additionalLimit": "Additional Limit",
+    "maxEvents": "Max Events",
+    "maxEventsHelp": "-1 = unlimited, 1 = free plan",
+    "hasAIAccess": "AI Access",
     "sortOrder": "Sort Order",
     "isActive": "Active",
     "active": "Active",
