@@ -153,6 +153,7 @@ export function StepPhrase({
           locale={locale}
           suggestions={suggestions}
           onSelectSuggestion={handleSelectSuggestion}
+          isLoading={aiStatus === null}
         />
       </div>
 

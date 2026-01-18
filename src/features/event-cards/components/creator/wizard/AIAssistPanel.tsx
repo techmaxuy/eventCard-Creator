@@ -18,6 +18,7 @@ interface AIAssistPanelProps {
   suggestions?: string[]
   onSelectSuggestion?: (suggestion: string) => void
   disabled?: boolean
+  isLoading?: boolean
 }
 
 export function AIAssistPanel({
@@ -32,21 +33,36 @@ export function AIAssistPanel({
   locale,
   suggestions = [],
   onSelectSuggestion,
-  disabled = false
+  disabled = false,
+  isLoading = false
 }: AIAssistPanelProps) {
   const t = useTranslations('EventWizard')
   const [isExpanded, setIsExpanded] = useState(true)
 
   const canAfford = tokensRemaining >= tokenCost
-  const isDisabled = disabled || isGenerating || !hasAccess || !canAfford
+  const isDisabled = disabled || isGenerating || !hasAccess || !canAfford || isLoading
 
   const handleGenerate = async () => {
     if (isDisabled) return
     await onGenerate()
   }
 
-  // If user doesn't have AI access (free plan or no subscription)
-  if (!hasAccess || isFreePlan) {
+  // Show loading state while checking AI access
+  if (isLoading) {
+    return (
+      <div className="border border-purple-200 dark:border-purple-800 rounded-lg bg-purple-50/50 dark:bg-purple-900/20 p-4">
+        <div className="flex items-center gap-3">
+          <Loader2 className="w-5 h-5 text-purple-600 dark:text-purple-400 animate-spin" />
+          <span className="text-sm text-purple-700 dark:text-purple-300">
+            {t('loadingAI')}
+          </span>
+        </div>
+      </div>
+    )
+  }
+
+  // If user doesn't have AI access
+  if (!hasAccess) {
     return (
       <div className="border border-purple-200 dark:border-purple-800 rounded-lg bg-purple-50/50 dark:bg-purple-900/20 p-4">
         <div className="flex items-start gap-3">

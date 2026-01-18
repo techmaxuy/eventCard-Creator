@@ -1089,6 +1089,7 @@
 
     "generateWithAI": "Generate with AI",
     "generating": "Generating...",
+    "loadingAI": "Loading AI...",
     "tokens": "tokens",
     "tokensRemaining": "Tokens remaining",
     "getMoreTokens": "Get more tokens",

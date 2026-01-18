@@ -92,17 +92,17 @@ export function StepTitle({
           <Type className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          {t('chooseTitleHeading')}
+          {t('titleHeading')}
         </h2>
         <p className="text-gray-600 dark:text-gray-400">
-          {t('chooseTitleDescription', { eventType: eventTypeName })}
+          {t('titleDescription', { eventType: eventTypeName })}
         </p>
       </div>
 
       {/* Title input */}
       <div className="max-w-lg mx-auto">
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          {t('eventTitle')} *
+          {t('eventTitleLabel')} *
         </label>
         <input
           type="text"
@@ -114,7 +114,7 @@ export function StepTitle({
           placeholder={t('eventTitlePlaceholder')}
         />
         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-          {t('eventTitleHelp')}
+          {t('titleMaxLength')}
         </p>
       </div>
 
@@ -139,6 +139,7 @@ export function StepTitle({
           locale={locale}
           suggestions={suggestions}
           onSelectSuggestion={handleSelectSuggestion}
+          isLoading={aiStatus === null}
         />
       </div>
     </div>
