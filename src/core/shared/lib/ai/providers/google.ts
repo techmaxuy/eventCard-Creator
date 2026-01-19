@@ -34,10 +34,22 @@ export async function generateWithGoogle(options: GoogleRequestOptions): Promise
       ...(supportsSystemInstruction && systemPrompt ? { systemInstruction: systemPrompt } : {})
     })
 
-    const generationConfig = {
+    // For Gemini 2.5 models, we need to disable thinking to avoid token budget issues
+    // The thinking tokens count against maxOutputTokens causing premature truncation
+    const isModel25 = model.includes('2.5')
+
+    const generationConfig: Record<string, unknown> = {
       maxOutputTokens: maxTokens || 1000,
       temperature: 0.7,
       topP: 0.95,
+    }
+
+    // Disable thinking for 2.5 models to prevent token truncation issues
+    // See: https://discuss.ai.google.dev/t/max-output-tokens-isnt-respected-when-using-gemini-2-5-flash-model/106708
+    if (isModel25) {
+      generationConfig.thinkingConfig = {
+        thinkingBudget: 0  // Disable thinking to use all tokens for output
+      }
     }
 
     // For older models, concatenate systemPrompt manually
@@ -48,6 +60,7 @@ export async function generateWithGoogle(options: GoogleRequestOptions): Promise
     // DEBUG: Log request configuration
     console.log('\n========== AI PROVIDER REQUEST (Google) ==========')
     console.log('📤 Model ID sent:', modelId)
+    console.log('📤 Is Model 2.5:', isModel25)
     console.log('📤 Generation Config:', JSON.stringify(generationConfig, null, 2))
     console.log('📤 Prompt length:', finalPrompt.length, 'chars')
     console.log('==================================================\n')
