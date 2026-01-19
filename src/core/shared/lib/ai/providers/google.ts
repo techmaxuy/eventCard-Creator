@@ -19,17 +19,19 @@ export async function generateWithGoogle(options: GoogleRequestOptions): Promise
 
   try {
     const genAI = new GoogleGenerativeAI(apiKey)
-    
-    // SOLUCIÓN AL 404: Asegurar el formato 'models/nombre-del-modelo'
-    const modelId = model.startsWith('models/') ? model : `models/${model}`
-    
-    // Configuración avanzada para modelos 1.5
-    const isModel15 = model.includes('1.5')
-    
-    const generativeModel = genAI.getGenerativeModel({ 
+
+    // For Gemini 2.x models, don't use 'models/' prefix
+    const isModel2x = model.includes('2.0') || model.includes('2.5')
+    const modelId = isModel2x
+      ? model.replace('models/', '') // Remove prefix if present for 2.x
+      : (model.startsWith('models/') ? model : `models/${model}`)
+
+    // Models 1.5+ and 2.x support systemInstruction
+    const supportsSystemInstruction = model.includes('1.5') || isModel2x
+
+    const generativeModel = genAI.getGenerativeModel({
       model: modelId,
-      // Solo enviamos systemInstruction si es Gemini 1.5
-      ...(isModel15 && systemPrompt ? { systemInstruction: systemPrompt } : {})
+      ...(supportsSystemInstruction && systemPrompt ? { systemInstruction: systemPrompt } : {})
     })
 
     const generationConfig = {
@@ -38,10 +40,17 @@ export async function generateWithGoogle(options: GoogleRequestOptions): Promise
       topP: 0.95,
     }
 
-    // Si NO es 1.5, concatenamos el systemPrompt manualmente como respaldo
-    const finalPrompt = (!isModel15 && systemPrompt) 
-      ? `${systemPrompt}\n\n${prompt}` 
+    // For older models, concatenate systemPrompt manually
+    const finalPrompt = (!supportsSystemInstruction && systemPrompt)
+      ? `${systemPrompt}\n\n${prompt}`
       : prompt
+
+    // DEBUG: Log request configuration
+    console.log('\n========== AI PROVIDER REQUEST (Google) ==========')
+    console.log('📤 Model ID sent:', modelId)
+    console.log('📤 Generation Config:', JSON.stringify(generationConfig, null, 2))
+    console.log('📤 Prompt length:', finalPrompt.length, 'chars')
+    console.log('==================================================\n')
 
     const result = await generativeModel.generateContent({
       contents: [{ role: 'user', parts: [{ text: finalPrompt }] }],
