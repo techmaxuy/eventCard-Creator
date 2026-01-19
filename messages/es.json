@@ -1124,6 +1124,7 @@
     "eventTitleLabel": "Título del Evento",
     "eventTitlePlaceholder": "Ej: Celebramos 30 años de María",
     "titleMaxLength": "máximo 60 caracteres",
+    "titleAIContextHint": "escribe algo aquí y la IA generará títulos relacionados",
 
     "welcomePhraseHeading": "Agrega una frase de bienvenida",
     "welcomePhraseDescription": "Esta frase aparecerá en tu invitación de {eventType}",

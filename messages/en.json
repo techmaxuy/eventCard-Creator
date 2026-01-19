@@ -1107,6 +1107,7 @@
     "eventTitleLabel": "Event Title",
     "eventTitlePlaceholder": "Ex: Celebrating Maria's 30th Birthday",
     "titleMaxLength": "maximum 60 characters",
+    "titleAIContextHint": "type something here and AI will generate related titles",
 
     "welcomePhraseHeading": "Add a welcome phrase",
     "welcomePhraseDescription": "This phrase will appear on your {eventType} invitation",

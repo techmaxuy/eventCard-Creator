@@ -19,6 +19,7 @@ interface AIResult {
 export async function generateEventTitle(params: {
   eventTypeId: string
   names: string[]
+  userContext?: string  // Optional: text the user wrote as context for AI
   locale: string
 }): Promise<AIResult> {
   try {
@@ -57,15 +58,42 @@ export async function generateEventTitle(params: {
       ? params.names.join(' & ')
       : params.names[0] || ''
 
+    // Include user context if provided
+    const userContextText = params.userContext?.trim()
+    const contextClause = userContextText
+      ? (params.locale === 'es'
+          ? `. El usuario quiere algo relacionado con: "${userContextText}"`
+          : `. The user wants something related to: "${userContextText}"`)
+      : ''
+
     const basePrompt = params.locale === 'es'
-      ? `Genera 3 títulos creativos y cortos (máximo 60 caracteres cada uno) para una invitación de ${eventTypeName}${namesText ? ` para ${namesText}` : ''}. Solo devuelve los títulos, uno por línea, sin numeración ni explicaciones.`
-      : `Generate 3 creative and short titles (maximum 60 characters each) for a ${eventTypeName} invitation${namesText ? ` for ${namesText}` : ''}. Only return the titles, one per line, without numbering or explanations.`
+      ? `Genera 3 títulos creativos y cortos (máximo 60 caracteres cada uno) para una invitación de ${eventTypeName}${namesText ? ` para ${namesText}` : ''}${contextClause}. Solo devuelve los títulos, uno por línea, sin numeración ni explicaciones.`
+      : `Generate 3 creative and short titles (maximum 60 characters each) for a ${eventTypeName} invitation${namesText ? ` for ${namesText}` : ''}${contextClause}. Only return the titles, one per line, without numbering or explanations.`
 
     const fullPrompt = adminPrompt
       ? `${adminPrompt}\n\n${basePrompt}`
       : basePrompt
 
     const tokenCost = await getTokenCostForOperation(operation)
+
+    // DEBUG: Log AI request details
+    console.log('\n========== AI TITLE GENERATION REQUEST ==========')
+    console.log('📋 Input Parameters:')
+    console.log('   - eventTypeId:', params.eventTypeId)
+    console.log('   - eventTypeName:', eventTypeName)
+    console.log('   - names:', params.names)
+    console.log('   - namesText:', namesText)
+    console.log('   - userContext:', params.userContext || '(none)')
+    console.log('   - locale:', params.locale)
+    console.log('📝 Admin Prompt:', adminPrompt || '(none)')
+    console.log('📝 Context Clause:', contextClause || '(none)')
+    console.log('📝 Base Prompt:', basePrompt)
+    console.log('📝 FULL PROMPT SENT TO AI:')
+    console.log('---')
+    console.log(fullPrompt)
+    console.log('---')
+    console.log('💰 Token Cost:', tokenCost)
+    console.log('=================================================\n')
 
     // Generate with AI
     const result = await generateAIResponse({
@@ -150,6 +178,24 @@ export async function generateEventPhrase(params: {
       : basePrompt
 
     const tokenCost = await getTokenCostForOperation(operation)
+
+    // DEBUG: Log AI request details
+    console.log('\n========== AI PHRASE GENERATION REQUEST ==========')
+    console.log('📋 Input Parameters:')
+    console.log('   - eventTypeId:', params.eventTypeId)
+    console.log('   - eventTypeName:', eventTypeName)
+    console.log('   - names:', params.names)
+    console.log('   - namesText:', namesText)
+    console.log('   - title:', params.title || '(none)')
+    console.log('   - locale:', params.locale)
+    console.log('📝 Admin Prompt:', adminPrompt || '(none)')
+    console.log('📝 Base Prompt:', basePrompt)
+    console.log('📝 FULL PROMPT SENT TO AI:')
+    console.log('---')
+    console.log(fullPrompt)
+    console.log('---')
+    console.log('💰 Token Cost:', tokenCost)
+    console.log('==================================================\n')
 
     // Generate with AI
     const result = await generateAIResponse({
@@ -276,6 +322,27 @@ export async function generateImagePrompt(params: {
       : basePrompt
 
     const tokenCost = await getTokenCostForOperation(operation)
+
+    // DEBUG: Log AI request details
+    console.log('\n========== AI IMAGE PROMPT GENERATION REQUEST ==========')
+    console.log('📋 Input Parameters:')
+    console.log('   - eventTypeId:', params.eventTypeId)
+    console.log('   - eventTypeName:', eventTypeName)
+    console.log('   - names:', params.names)
+    console.log('   - namesText:', namesText)
+    console.log('   - title:', params.title || '(none)')
+    console.log('   - imageType:', params.imageType)
+    console.log('   - imageTypeLabel:', imageTypeLabel)
+    console.log('   - userPrompt:', params.userPrompt || '(none)')
+    console.log('   - locale:', params.locale)
+    console.log('📝 Admin Prompt:', adminPrompt || '(none)')
+    console.log('📝 Base Prompt:', basePrompt)
+    console.log('📝 FULL PROMPT SENT TO AI:')
+    console.log('---')
+    console.log(fullPrompt)
+    console.log('---')
+    console.log('💰 Token Cost:', tokenCost)
+    console.log('=========================================================\n')
 
     // Generate with AI
     const result = await generateAIResponse({

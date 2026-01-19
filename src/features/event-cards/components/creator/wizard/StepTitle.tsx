@@ -55,6 +55,7 @@ export function StepTitle({
       const result = await generateEventTitle({
         eventTypeId: eventType.id,
         names: names.filter(n => n.trim()),
+        userContext: title.trim() || undefined, // Use current title text as context if user wrote something
         locale
       })
 
@@ -114,7 +115,7 @@ export function StepTitle({
           placeholder={t('eventTitlePlaceholder')}
         />
         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-          {t('titleMaxLength')}
+          {t('titleMaxLength')} - {t('titleAIContextHint')}
         </p>
       </div>
 
