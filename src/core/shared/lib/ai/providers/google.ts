@@ -51,9 +51,23 @@ export async function generateWithGoogle(options: GoogleRequestOptions): Promise
     const response = await result.response
     const text = response.text()
 
-    return { 
-      content: text, 
-      tokensUsed: response.usageMetadata?.totalTokenCount || 0 
+    // DEBUG: Log AI response details
+    console.log('\n========== AI PROVIDER RESPONSE (Google) ==========')
+    console.log('📤 Model Used:', modelId)
+    console.log('📤 Max Output Tokens:', maxTokens || 1000)
+    console.log('📥 Response Text:')
+    console.log('---')
+    console.log(text)
+    console.log('---')
+    console.log('📊 Tokens Used:', response.usageMetadata?.totalTokenCount || 0)
+    console.log('📊 Prompt Tokens:', response.usageMetadata?.promptTokenCount || 'N/A')
+    console.log('📊 Candidates Tokens:', response.usageMetadata?.candidatesTokenCount || 'N/A')
+    console.log('📊 Finish Reason:', response.candidates?.[0]?.finishReason || 'N/A')
+    console.log('===================================================\n')
+
+    return {
+      content: text,
+      tokensUsed: response.usageMetadata?.totalTokenCount || 0
     }
   } catch (error: any) {
     console.error('[Google] ❌ Error detallado:', error)

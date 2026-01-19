@@ -99,9 +99,21 @@ export async function generateEventTitle(params: {
     const result = await generateAIResponse({
       userId: session.user.id,
       prompt: fullPrompt,
-      maxTokens: 200,
+      maxTokens: 500, // Increased from 200 to ensure 3 complete titles
       tokensToConsume: tokenCost,
     })
+
+    // DEBUG: Log AI response
+    console.log('\n========== AI TITLE GENERATION RESPONSE ==========')
+    console.log('📥 Result received:')
+    console.log('   - success:', !result.error)
+    console.log('   - error:', result.error || '(none)')
+    console.log('   - content length:', result.content?.length || 0)
+    console.log('📥 Content received:')
+    console.log('---')
+    console.log(result.content || '(empty)')
+    console.log('---')
+    console.log('==================================================\n')
 
     if (result.error) {
       return { error: result.error }
