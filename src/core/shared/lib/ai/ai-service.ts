@@ -159,9 +159,7 @@ export async function getAvailableModels(provider: AIProvider): Promise<string[]
 
     case 'GOOGLE':
       return [
-        'gemini-3-flash-preview', // Intenta este primero
-    'gemini-1.5-pro-latest',
-    'gemini-pro',
+        'gemini-2.5-flash',        // Stable, fast and capable
       ]
 
     default:
