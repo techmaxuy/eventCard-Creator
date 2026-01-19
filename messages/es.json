@@ -545,9 +545,33 @@
     "selectWelcomePhrase": "Seleccionar frase de bienvenida",
     "welcomePhraseHelp": "Esta frase aparecerá destacada en la página del evento",
     "presetCoverImagesHelp": "Selecciona una imagen prediseñada y luego presiona 'Guardar Cambios'",
-    "coverImageUpdated": "Imagen de portada actualizada"
+    "coverImageUpdated": "Imagen de portada actualizada",
 
-
+    "loadingAI": "Cargando IA...",
+    "aiTitleAssistant": "Asistente de IA para Título",
+    "aiTitleAssistantDesc": "Genera sugerencias creativas de títulos para tu evento",
+    "aiDescriptionAssistant": "Asistente de IA para Descripción",
+    "aiDescriptionAssistantDesc": "Genera descripciones emotivas para tu invitación",
+    "aiBackgroundAssistant": "Asistente de IA para Imagen de Fondo",
+    "aiBackgroundAssistantDesc": "Obtén sugerencias para mejorar tu imagen de fondo",
+    "aiFeaturedAssistant": "Asistente de IA para Foto Principal",
+    "aiFeaturedAssistantDesc": "Obtén sugerencias para mejorar tu foto principal",
+    "aiAssistant": "Asistente de IA",
+    "aiLockedDescription": "Mejora tu plan para acceder a las funciones de IA",
+    "upgradeToPro": "Mejorar a Pro",
+    "tokensRemaining": "tokens restantes",
+    "generateWithAI": "Generar con IA",
+    "generating": "Generando...",
+    "tokens": "tokens",
+    "suggestions": "Sugerencias",
+    "aiImagePromptPlaceholder": "Ej: Agregar más brillo, colores más cálidos...",
+    "aiErrors": {
+      "Unauthorized": "No autorizado",
+      "NoAIAccess": "Tu plan no incluye acceso a IA",
+      "InsufficientTokens": "No tienes suficientes tokens",
+      "EventTypeNotFound": "Tipo de evento no encontrado",
+      "GenerationFailed": "Error al generar contenido. Intenta nuevamente."
+    }
   },
   "EventPublic": {
     "hostedBy": "Organizado por",

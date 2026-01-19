@@ -528,7 +528,33 @@
     "selectWelcomePhrase": "Select welcome phrase",
     "welcomePhraseHelp": "This phrase will be featured on the event page",
     "presetCoverImagesHelp": "Select a preset image and then press 'Save Changes'",
-    "coverImageUpdated": "Cover image updated"
+    "coverImageUpdated": "Cover image updated",
+
+    "loadingAI": "Loading AI...",
+    "aiTitleAssistant": "AI Title Assistant",
+    "aiTitleAssistantDesc": "Generate creative title suggestions for your event",
+    "aiDescriptionAssistant": "AI Description Assistant",
+    "aiDescriptionAssistantDesc": "Generate emotional descriptions for your invitation",
+    "aiBackgroundAssistant": "AI Background Image Assistant",
+    "aiBackgroundAssistantDesc": "Get suggestions to enhance your background image",
+    "aiFeaturedAssistant": "AI Featured Photo Assistant",
+    "aiFeaturedAssistantDesc": "Get suggestions to enhance your featured photo",
+    "aiAssistant": "AI Assistant",
+    "aiLockedDescription": "Upgrade your plan to access AI features",
+    "upgradeToPro": "Upgrade to Pro",
+    "tokensRemaining": "tokens remaining",
+    "generateWithAI": "Generate with AI",
+    "generating": "Generating...",
+    "tokens": "tokens",
+    "suggestions": "Suggestions",
+    "aiImagePromptPlaceholder": "Ex: Add more brightness, warmer colors...",
+    "aiErrors": {
+      "Unauthorized": "Unauthorized",
+      "NoAIAccess": "Your plan does not include AI access",
+      "InsufficientTokens": "You don't have enough tokens",
+      "EventTypeNotFound": "Event type not found",
+      "GenerationFailed": "Failed to generate content. Please try again."
+    }
   },
   "EventPublic": {
     "hostedBy": "Hosted by",

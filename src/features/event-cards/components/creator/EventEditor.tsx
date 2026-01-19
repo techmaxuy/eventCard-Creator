@@ -144,6 +144,10 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
     event.decorations ? (Array.isArray(event.decorations) ? event.decorations : []) : []
   )
 
+  // Track if images are custom uploads (not from assets) for AI enhancement
+  const [isCustomCoverImage, setIsCustomCoverImage] = useState(false)
+  const [isCustomFeaturedImage, setIsCustomFeaturedImage] = useState(false)
+
   // Inicializar el asset de música seleccionado cuando el evento ya tiene música
   useEffect(() => {
     if (event.musicUrl && availableAssets.length > 0) {
@@ -273,7 +277,8 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
       } else {
         setMessage({ type: 'success', text: t('coverUploaded') })
         setEvent({ ...event, coverImage: result.imageUrl })
-        
+        setIsCustomCoverImage(true) // Mark as custom upload for AI
+        setSelectedCoverAsset(null)
       }
     } catch (error) {
       setMessage({ type: 'error', text: t('errors.UploadFailed') })
@@ -300,7 +305,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
       } else {
         setMessage({ type: 'success', text: t('coverDeleted') })
         setEvent({ ...event, coverImage: null })
-       
+        setIsCustomCoverImage(false)
       }
     } catch (error) {
       setMessage({ type: 'error', text: t('errors.DeleteFailed') })
@@ -334,7 +339,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
       } else {
         setMessage({ type: 'success', text: t('featuredUploaded') })
         setEvent({ ...event, featuredImage: result.imageUrl })
-
+        setIsCustomFeaturedImage(true) // Mark as custom upload for AI
       }
     } catch (error) {
       setMessage({ type: 'error', text: t('errors.UploadFailed') })
@@ -361,7 +366,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
       } else {
         setMessage({ type: 'success', text: t('featuredDeleted') })
         setEvent({ ...event, featuredImage: null })
-
+        setIsCustomFeaturedImage(false)
       }
     } catch (error) {
       setMessage({ type: 'error', text: t('errors.DeleteFailed') })
@@ -773,6 +778,22 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                 </p>
               </div>
             )}
+
+            {/* AI Enhancement for custom cover images */}
+            {event.coverImage && isCustomCoverImage && (
+              <EditorAIPanel
+                type="background"
+                eventTypeId={event.eventType.id}
+                eventTypeName={locale === 'es' ? event.eventType.name : event.eventType.nameEn}
+                title={title}
+                hasCustomImage={true}
+                onSelectSuggestion={(suggestion) => {
+                  // The suggestion is an enhancement prompt - user can use it as guidance
+                  setMessage({ type: 'success', text: suggestion })
+                }}
+                locale={locale}
+              />
+            )}
           </div>
 
          {/* NUEVO: Preset Cover Images */}
@@ -885,6 +906,22 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                   {t('featuredImageHelp')}
                 </p>
               </div>
+            )}
+
+            {/* AI Enhancement for custom featured images */}
+            {event.featuredImage && isCustomFeaturedImage && (
+              <EditorAIPanel
+                type="featured"
+                eventTypeId={event.eventType.id}
+                eventTypeName={locale === 'es' ? event.eventType.name : event.eventType.nameEn}
+                title={title}
+                hasCustomImage={true}
+                onSelectSuggestion={(suggestion) => {
+                  // The suggestion is an enhancement prompt - user can use it as guidance
+                  setMessage({ type: 'success', text: suggestion })
+                }}
+                locale={locale}
+              />
             )}
           </div>
 
