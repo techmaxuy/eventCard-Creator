@@ -12,6 +12,7 @@ const AIConfigSchema = z.object({
   provider: z.enum(['OPENAI', 'ANTHROPIC', 'GOOGLE']),
   apiKey: z.string().min(10, 'API key is required'),
   defaultModel: z.string().min(1, 'Model is required'),
+  imageModel: z.string().optional().transform(val => val === '' ? null : val),
   isActive: z.boolean().default(true),
 })
 
@@ -38,6 +39,7 @@ export async function getAIConfigs() {
         name: true,
         provider: true,
         defaultModel: true,
+        imageModel: true,
         isActive: true,
         createdAt: true,
         updatedAt: true,

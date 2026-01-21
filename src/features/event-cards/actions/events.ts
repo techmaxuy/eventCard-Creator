@@ -113,6 +113,7 @@ export async function createEvent(values: z.infer<typeof CreateEventSchema>) {
         eventTypeId,
         title,
         welcomePhrase: welcomePhrase || null,
+        description: welcomePhrase || null, // Also set description for the editor
         slug: uniqueSlug,
         isPublished: false,
       },

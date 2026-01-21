@@ -306,7 +306,8 @@ model AIConfig {
   name          String
   provider      AIProvider
   apiKey        String
-  defaultModel  String
+  defaultModel  String     // Model for text generation (titles, phrases, etc.)
+  imageModel    String?    // Model for image generation/enhancement (optional, uses defaultModel if null)
   isActive      Boolean    @default(true)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt

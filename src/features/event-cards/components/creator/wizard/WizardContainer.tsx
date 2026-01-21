@@ -37,8 +37,10 @@ export interface WizardState {
   welcomePhrase: string
   coverImage: string
   coverImageFile: File | null
+  coverImageAssetId?: string
   featuredImage: string
   featuredImageFile: File | null
+  featuredImageAssetId?: string
 }
 
 interface AIStatus {
@@ -70,8 +72,10 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
     welcomePhrase: '',
     coverImage: '',
     coverImageFile: null,
+    coverImageAssetId: undefined,
     featuredImage: '',
-    featuredImageFile: null
+    featuredImageFile: null,
+    featuredImageAssetId: undefined
   })
 
   // AI status
@@ -331,7 +335,12 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
             title={wizardState.title}
             coverImage={wizardState.coverImage}
             coverImageFile={wizardState.coverImageFile}
-            onCoverImageChange={(url, file) => updateWizardState({ coverImage: url, coverImageFile: file })}
+            selectedAssetId={wizardState.coverImageAssetId}
+            onCoverImageChange={(url, file, assetId) => updateWizardState({
+              coverImage: url,
+              coverImageFile: file,
+              coverImageAssetId: assetId
+            })}
             aiStatus={aiStatus}
             tokenCost={tokenCosts?.imageEdit || 5}
             onTokensUsed={refreshAIStatus}
@@ -346,7 +355,12 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
             title={wizardState.title}
             featuredImage={wizardState.featuredImage}
             featuredImageFile={wizardState.featuredImageFile}
-            onFeaturedImageChange={(url, file) => updateWizardState({ featuredImage: url, featuredImageFile: file })}
+            selectedAssetId={wizardState.featuredImageAssetId}
+            onFeaturedImageChange={(url, file, assetId) => updateWizardState({
+              featuredImage: url,
+              featuredImageFile: file,
+              featuredImageAssetId: assetId
+            })}
             aiStatus={aiStatus}
             tokenCost={tokenCosts?.imageEdit || 5}
             onTokensUsed={refreshAIStatus}

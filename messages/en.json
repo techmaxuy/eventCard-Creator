@@ -357,6 +357,30 @@
     "allowDecorations": "Allow decorations",
     "allowDecorationsHelp": "Allow users to add visual decorations to this event type",
 
+    "aiWizardConfig": "AI Assistant Configuration",
+    "aiWizardConfigHelp": "Configure how the AI assistant works for this event type",
+    "numberOfPeople": "Number of People",
+    "numberOfPeopleHelp": "Number of protagonists for this event (1 for birthday, 2 for wedding, etc.)",
+    "askNames": "Ask for Names",
+    "askNamesHelp": "Ask for the protagonists' names when creating the event",
+
+    "aiPromptSupplements": "AI Prompt Supplements",
+    "aiPromptSupplementsHelp": "Additional instructions sent to the AI to improve suggestions based on event type",
+    "aiTitlePrompt": "Title Prompt",
+    "aiTitlePromptPlaceholderEs": "Ex: Generate festive and joyful titles to celebrate...",
+    "aiTitlePromptPlaceholderEn": "Ex: Generate festive and joyful titles to celebrate...",
+    "aiPhrasePrompt": "Welcome Phrase Prompt",
+    "aiPhrasePromptPlaceholderEs": "Ex: Generate emotional and elegant phrases to welcome...",
+    "aiPhrasePromptPlaceholderEn": "Ex: Generate emotional and elegant phrases to welcome...",
+    "aiBackgroundPrompt": "Background Image Prompt",
+    "aiBackgroundPromptPlaceholderEs": "Ex: Suggest festive visual effects for the background image...",
+    "aiBackgroundPromptPlaceholderEn": "Ex: Suggest festive visual effects for the background image...",
+    "aiPhotoPrompt": "Main Photo Prompt",
+    "aiPhotoPromptPlaceholderEs": "Ex: Suggest enhancements to highlight the protagonists...",
+    "aiPhotoPromptPlaceholderEn": "Ex: Suggest enhancements to highlight the protagonists in the photo...",
+    "spanish": "Spanish",
+    "english": "English",
+
     "activeStatus": "Active Type",
     "activeStatusHelp": "Inactive types won't be available for users",
 
@@ -841,7 +865,12 @@
     "apiKey": "API Key",
     "apiKeyPlaceholder": "Enter your API key",
     "apiKeyPlaceholderEdit": "Leave empty to keep current key",
-    "defaultModel": "Default Model",
+    "defaultModel": "Text Model",
+    "defaultModelHelp": "Model used to generate titles, phrases and text suggestions",
+    "textModel": "Text Model",
+    "imageModel": "Image Model",
+    "imageModelHelp": "Model used for image generation/enhancement (optional)",
+    "sameAsDefault": "Same as text",
     "selectModel": "Select a model",
     "isActive": "Active",
     "active": "Active",
@@ -1118,16 +1147,22 @@
     "skipPhraseNotice": "You can leave this field empty if you prefer",
 
     "backgroundImageHeading": "Add a background image",
-    "backgroundImageDescription": "Upload a custom image for your {eventType} invitation background",
+    "backgroundImageDescription": "Choose an image from the gallery or upload a custom one for your {eventType} invitation",
     "uploadBackgroundImage": "Upload background image",
     "backgroundImageFormats": "JPG, PNG or WebP (max 5MB)",
     "skipBackgroundNotice": "You can skip this step and add the image later in the editor",
+    "galleryTab": "Gallery",
+    "uploadTab": "Upload",
+    "fromGallery": "From gallery",
+    "noBackgroundAssets": "No background images available",
+    "uploadYourOwn": "Upload your own image",
 
     "featuredImageHeading": "Add a featured photo",
-    "featuredImageDescription": "Upload a photo that represents your {eventType}",
+    "featuredImageDescription": "Choose an image from the gallery or upload a photo that represents your {eventType}",
     "uploadFeaturedImage": "Upload featured photo",
     "featuredImageFormats": "JPG, PNG or WebP (max 5MB)",
     "skipFeaturedNotice": "You can skip this step and add the photo later in the editor",
+    "noFeaturedAssets": "No photos available",
 
     "aiImagePromptLabel": "What changes do you want for the image?",
     "aiImagePromptPlaceholder": "Ex: Add more brightness, warmer colors, vintage effect...",
@@ -1161,7 +1196,8 @@
       "EventTypeNotFound": "Event type not found",
       "GenerationFailed": "Failed to generate content. Please try again.",
       "CreateFailed": "Failed to create event. Please try again.",
-      "ImageLoadFailed": "Failed to load image. Please try another one."
+      "ImageLoadFailed": "Failed to load image. Please try another one.",
+      "ImageGenerationNotConfigured": "AI image generation is not yet configured. Use the prompt suggestions to manually enhance your images."
     }
   }
 }

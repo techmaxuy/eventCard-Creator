@@ -119,7 +119,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
 
   // Form state
   const [title, setTitle] = useState(event.title)
-  const [description, setDescription] = useState(event.description || '')
+  const [description, setDescription] = useState(event.description || event.welcomePhrase || '')
   const [eventDate, setEventDate] = useState(
     event.eventDate ? new Date(event.eventDate).toISOString().split('T')[0] : ''
   )

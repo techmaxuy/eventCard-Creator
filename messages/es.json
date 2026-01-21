@@ -365,6 +365,30 @@
     "allowDecorations": "Permitir decoraciones",
     "allowDecorationsHelp": "Permitir que los usuarios agreguen decoraciones visuales a este tipo de evento",
 
+    "aiWizardConfig": "Configuración del Asistente IA",
+    "aiWizardConfigHelp": "Configura cómo funciona el asistente de IA para este tipo de evento",
+    "numberOfPeople": "Número de Personas",
+    "numberOfPeopleHelp": "Cantidad de protagonistas del evento (1 para cumpleaños, 2 para bodas, etc.)",
+    "askNames": "Preguntar Nombres",
+    "askNamesHelp": "Preguntar los nombres de los protagonistas al crear el evento",
+
+    "aiPromptSupplements": "Suplementos de Prompts IA",
+    "aiPromptSupplementsHelp": "Instrucciones adicionales que se envían a la IA para mejorar las sugerencias según el tipo de evento",
+    "aiTitlePrompt": "Prompt para Títulos",
+    "aiTitlePromptPlaceholderEs": "Ej: Genera títulos festivos y alegres para celebrar...",
+    "aiTitlePromptPlaceholderEn": "Ej: Generate festive and joyful titles to celebrate...",
+    "aiPhrasePrompt": "Prompt para Frases de Bienvenida",
+    "aiPhrasePromptPlaceholderEs": "Ej: Genera frases emotivas y elegantes para dar la bienvenida...",
+    "aiPhrasePromptPlaceholderEn": "Ej: Generate emotional and elegant phrases to welcome...",
+    "aiBackgroundPrompt": "Prompt para Imagen de Fondo",
+    "aiBackgroundPromptPlaceholderEs": "Ej: Sugiere efectos visuales festivos para la imagen de fondo...",
+    "aiBackgroundPromptPlaceholderEn": "Ej: Suggest festive visual effects for the background image...",
+    "aiPhotoPrompt": "Prompt para Foto Principal",
+    "aiPhotoPromptPlaceholderEs": "Ej: Sugiere mejoras para resaltar a los protagonistas en la foto...",
+    "aiPhotoPromptPlaceholderEn": "Ej: Suggest enhancements to highlight the protagonists in the photo...",
+    "spanish": "Español",
+    "english": "Inglés",
+
     "activeStatus": "Tipo Activo",
     "activeStatusHelp": "Los tipos inactivos no estarán disponibles para los usuarios",
 
@@ -858,7 +882,12 @@
     "apiKey": "Clave API",
     "apiKeyPlaceholder": "Ingresa tu clave API",
     "apiKeyPlaceholderEdit": "Deja vacío para mantener la clave actual",
-    "defaultModel": "Modelo Predeterminado",
+    "defaultModel": "Modelo de Texto",
+    "defaultModelHelp": "Modelo usado para generar títulos, frases y sugerencias de texto",
+    "textModel": "Modelo de Texto",
+    "imageModel": "Modelo de Imágenes",
+    "imageModelHelp": "Modelo usado para generación/mejora de imágenes (opcional)",
+    "sameAsDefault": "Mismo que texto",
     "selectModel": "Selecciona un modelo",
     "isActive": "Activo",
     "active": "Activo",
@@ -1135,16 +1164,22 @@
     "skipPhraseNotice": "Puedes dejar este campo vacío si lo prefieres",
 
     "backgroundImageHeading": "Agrega una imagen de fondo",
-    "backgroundImageDescription": "Sube una imagen personalizada para el fondo de tu invitación de {eventType}",
+    "backgroundImageDescription": "Elige una imagen de la galería o sube una personalizada para tu invitación de {eventType}",
     "uploadBackgroundImage": "Subir imagen de fondo",
     "backgroundImageFormats": "JPG, PNG o WebP (máx. 5MB)",
     "skipBackgroundNotice": "Puedes omitir este paso y agregar la imagen después en el editor",
+    "galleryTab": "Galería",
+    "uploadTab": "Subir",
+    "fromGallery": "De galería",
+    "noBackgroundAssets": "No hay imágenes de fondo disponibles",
+    "uploadYourOwn": "Sube tu propia imagen",
 
     "featuredImageHeading": "Agrega una foto principal",
-    "featuredImageDescription": "Sube una foto que represente tu {eventType}",
+    "featuredImageDescription": "Elige una imagen de la galería o sube una foto que represente tu {eventType}",
     "uploadFeaturedImage": "Subir foto principal",
     "featuredImageFormats": "JPG, PNG o WebP (máx. 5MB)",
     "skipFeaturedNotice": "Puedes omitir este paso y agregar la foto después en el editor",
+    "noFeaturedAssets": "No hay fotos disponibles",
 
     "aiImagePromptLabel": "¿Qué cambios quieres en la imagen?",
     "aiImagePromptPlaceholder": "Ej: Agregar más brillo, colores más cálidos, efecto vintage...",
@@ -1178,7 +1213,8 @@
       "EventTypeNotFound": "Tipo de evento no encontrado",
       "GenerationFailed": "Error al generar contenido. Intenta nuevamente.",
       "CreateFailed": "Error al crear el evento. Intenta nuevamente.",
-      "ImageLoadFailed": "Error al cargar la imagen. Intenta con otra."
+      "ImageLoadFailed": "Error al cargar la imagen. Intenta con otra.",
+      "ImageGenerationNotConfigured": "La generación de imágenes con IA aún no está configurada. Usa las sugerencias de prompts para mejorar tus imágenes manualmente."
     }
   }
 }

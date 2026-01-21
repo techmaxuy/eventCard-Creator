@@ -2,12 +2,14 @@
 
 import { prisma } from '@/core/shared/lib/db'
 import { auth } from '@/../auth'
-import { generateAIResponse } from '@/core/shared/lib/ai'
+import { generateAIResponse, generateAIImage } from '@/core/shared/lib/ai'
 import { checkAIAccess, getTokenCostForOperation, type AIOperation } from '../lib/subscription-limits'
 
 interface AIResult {
   success?: boolean
   content?: string
+  imageUrl?: string  // For image generation responses
+  images?: string[]  // For multiple generated images
   error?: string
   tokensUsed?: number
   tokensRemaining?: number
@@ -356,12 +358,13 @@ export async function generateImagePrompt(params: {
     console.log('💰 Token Cost:', tokenCost)
     console.log('=========================================================\n')
 
-    // Generate with AI
+    // Generate with AI - use image model for image-related operations
     const result = await generateAIResponse({
       userId: session.user.id,
       prompt: fullPrompt,
       maxTokens: 300,
       tokensToConsume: tokenCost,
+      useImageModel: true,  // Use image model if configured
     })
 
     if (result.error) {
@@ -381,6 +384,111 @@ export async function generateImagePrompt(params: {
     }
   } catch (error) {
     console.error('[EventAI] Error generating image prompt:', error)
+    return { error: 'GenerationFailed' }
+  }
+}
+
+/**
+ * Generate/enhance image using AI
+ * Uses gemini-2.5-flash-image model for image generation
+ */
+export async function generateEventImage(params: {
+  eventTypeId: string
+  names: string[]
+  title: string
+  imageType: 'background' | 'featured'
+  prompt: string
+  sourceImageBase64?: string  // For image-to-image operations (base64)
+  sourceMimeType?: string     // e.g., 'image/jpeg'
+  locale: string
+}): Promise<AIResult> {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return { error: 'Unauthorized' }
+    }
+
+    // Check AI access
+    const accessCheck = await checkAIAccess(session.user.id)
+    if (!accessCheck.hasAccess) {
+      return { error: 'NoAIAccess' }
+    }
+
+    // Get token cost for image generation
+    const tokenCost = await getTokenCostForOperation('imageGeneration')
+    if (accessCheck.tokensRemaining < tokenCost) {
+      return { error: 'InsufficientTokens' }
+    }
+
+    // Get event type for context
+    const eventType = await prisma.eventType.findUnique({
+      where: { id: params.eventTypeId },
+      select: { name: true, nameEn: true }
+    })
+
+    const eventTypeName = params.locale === 'es' ? eventType?.name : eventType?.nameEn
+    const namesText = params.names.filter(n => n.trim()).join(' y ')
+    const imageTypeLabel = params.imageType === 'background'
+      ? (params.locale === 'es' ? 'imagen de fondo' : 'background image')
+      : (params.locale === 'es' ? 'foto principal' : 'featured photo')
+
+    // Build a detailed prompt for image generation
+    const fullPrompt = params.locale === 'es'
+      ? `Genera una ${imageTypeLabel} elegante y profesional para una invitación de ${eventTypeName}${namesText ? ` para ${namesText}` : ''}${params.title ? `. Título: "${params.title}"` : ''}. ${params.prompt}. La imagen debe ser de alta calidad, visualmente atractiva y apropiada para una invitación formal.`
+      : `Generate an elegant and professional ${imageTypeLabel} for a ${eventTypeName} invitation${namesText ? ` for ${namesText}` : ''}${params.title ? `. Title: "${params.title}"` : ''}. ${params.prompt}. The image should be high quality, visually appealing and appropriate for a formal invitation.`
+
+    console.log('\n========== AI IMAGE GENERATION REQUEST ==========')
+    console.log('📋 Input Parameters:')
+    console.log('   - eventTypeId:', params.eventTypeId)
+    console.log('   - eventTypeName:', eventTypeName)
+    console.log('   - names:', params.names)
+    console.log('   - title:', params.title || '(none)')
+    console.log('   - imageType:', params.imageType)
+    console.log('   - userPrompt:', params.prompt)
+    console.log('   - hasSourceImage:', !!params.sourceImageBase64)
+    console.log('   - locale:', params.locale)
+    console.log('📝 FULL PROMPT:')
+    console.log('---')
+    console.log(fullPrompt)
+    console.log('---')
+    console.log('💰 Token Cost:', tokenCost)
+    console.log('=================================================\n')
+
+    // Generate image using AI service
+    const result = await generateAIImage({
+      userId: session.user.id,
+      prompt: fullPrompt,
+      sourceImageBase64: params.sourceImageBase64,
+      sourceMimeType: params.sourceMimeType,
+      tokensToConsume: tokenCost,
+    })
+
+    if (result.error) {
+      console.log('[EventAI] Image generation error:', result.error)
+      return { error: result.error, content: result.content }
+    }
+
+    // Get updated tokens
+    const subscription = await prisma.userSubscription.findUnique({
+      where: { userId: session.user.id }
+    })
+
+    console.log('\n========== AI IMAGE GENERATION RESPONSE ==========')
+    console.log('📥 Success:', result.success)
+    console.log('📥 Has Image URL:', !!result.imageUrl)
+    console.log('📥 Image MIME Type:', result.imageMimeType || 'N/A')
+    console.log('📥 Tokens Used:', result.tokensUsed || 0)
+    console.log('==================================================\n')
+
+    return {
+      success: true,
+      content: result.content,
+      imageUrl: result.imageUrl,
+      tokensUsed: tokenCost,
+      tokensRemaining: subscription?.tokensRemaining || 0
+    }
+  } catch (error) {
+    console.error('[EventAI] Error generating image:', error)
     return { error: 'GenerationFailed' }
   }
 }

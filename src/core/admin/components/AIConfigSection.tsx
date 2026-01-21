@@ -20,6 +20,7 @@ interface AIConfig {
   name: string
   provider: AIProvider
   defaultModel: string
+  imageModel: string | null
   isActive: boolean
   createdAt: Date
 }
@@ -49,6 +50,7 @@ export function AIConfigSection() {
     provider: 'OPENAI' as AIProvider,
     apiKey: '',
     defaultModel: '',
+    imageModel: '',
     isActive: true,
   })
 
@@ -150,6 +152,7 @@ export function AIConfigSection() {
       provider: config.provider,
       apiKey: '',
       defaultModel: config.defaultModel,
+      imageModel: config.imageModel || '',
       isActive: config.isActive,
     })
     setIsCreating(false)
@@ -167,6 +170,7 @@ export function AIConfigSection() {
       provider: 'OPENAI',
       apiKey: '',
       defaultModel: '',
+      imageModel: '',
       isActive: true,
     })
     setShowApiKey(false)
@@ -278,6 +282,23 @@ export function AIConfigSection() {
                   </option>
                 ))}
               </select>
+              <p className="text-xs text-gray-500 mt-1">{t('defaultModelHelp')}</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('imageModel')}</label>
+              <select
+                value={formData.imageModel}
+                onChange={(e) => setFormData({ ...formData, imageModel: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg dark:bg-zinc-700 dark:border-zinc-600"
+              >
+                <option value="">{t('sameAsDefault')}</option>
+                {availableModels.map((model) => (
+                  <option key={model} value={model}>
+                    {model}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-gray-500 mt-1">{t('imageModelHelp')}</p>
             </div>
             <div className="flex items-center gap-2">
               <input
@@ -325,7 +346,8 @@ export function AIConfigSection() {
               <tr className="border-b dark:border-zinc-700">
                 <th className="text-left py-3 px-2">{t('providerName')}</th>
                 <th className="text-left py-3 px-2">{t('provider')}</th>
-                <th className="text-left py-3 px-2">{t('defaultModel')}</th>
+                <th className="text-left py-3 px-2">{t('textModel')}</th>
+                <th className="text-left py-3 px-2">{t('imageModel')}</th>
                 <th className="text-center py-3 px-2">{t('status')}</th>
                 <th className="text-right py-3 px-2">{t('actions')}</th>
               </tr>
@@ -340,6 +362,9 @@ export function AIConfigSection() {
                     </span>
                   </td>
                   <td className="py-3 px-2 text-gray-600 dark:text-gray-400">{config.defaultModel}</td>
+                  <td className="py-3 px-2 text-gray-600 dark:text-gray-400">
+                    {config.imageModel || <span className="text-gray-400 italic">{t('sameAsDefault')}</span>}
+                  </td>
                   <td className="py-3 px-2 text-center">
                     <span
                       className={`px-2 py-1 rounded-full text-xs ${
