@@ -143,15 +143,58 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
     }
   }
 
+  // Helper function to convert data URL to File
+  const dataURLtoFile = (dataUrl: string, filename: string): File | null => {
+    try {
+      const arr = dataUrl.split(',')
+      const mimeMatch = arr[0].match(/:(.*?);/)
+      if (!mimeMatch) return null
+      const mime = mimeMatch[1]
+      const bstr = atob(arr[1])
+      let n = bstr.length
+      const u8arr = new Uint8Array(n)
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+      }
+      return new File([u8arr], filename, { type: mime })
+    } catch {
+      return null
+    }
+  }
+
+  // Check if URL is a data URL (AI generated image)
+  const isDataUrl = (url: string): boolean => {
+    return url.startsWith('data:')
+  }
+
+  // Check if URL is from an asset (external URL, not a blob or data URL)
+  const isAssetUrl = (url: string): boolean => {
+    return url.startsWith('http') && !url.includes('blob:')
+  }
+
   const handleComplete = async () => {
     setError(null)
     setIsCreating(true)
 
     try {
+      // Determine cover image URL from asset (if selected from gallery)
+      let coverImageUrl: string | undefined
+      if (wizardState.coverImageAssetId && wizardState.coverImage && isAssetUrl(wizardState.coverImage)) {
+        coverImageUrl = wizardState.coverImage
+      }
+
+      // Determine featured image URL from asset (if selected from gallery)
+      let featuredImageUrl: string | undefined
+      if (wizardState.featuredImageAssetId && wizardState.featuredImage && isAssetUrl(wizardState.featuredImage)) {
+        featuredImageUrl = wizardState.featuredImage
+      }
+
       const result = await createEvent({
         eventTypeId: eventType.id,
         title: wizardState.title,
-        welcomePhrase: wizardState.welcomePhrase || undefined
+        welcomePhrase: wizardState.welcomePhrase || undefined,
+        coverImage: coverImageUrl,
+        featuredImage: featuredImageUrl,
       })
 
       if (result.error) {
@@ -163,8 +206,9 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
       if (result.event) {
         const eventId = result.event.id
 
-        // Upload cover image if user provided one
+        // Upload cover image if user provided a file OR an AI-generated image
         if (wizardState.coverImageFile) {
+          // User uploaded a file
           const formData = new FormData()
           formData.append('file', wizardState.coverImageFile)
           formData.append('eventId', eventId)
@@ -177,12 +221,30 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
             })
           } catch (uploadErr) {
             console.error('Error uploading cover image:', uploadErr)
-            // Continue anyway - user can upload in editor
+          }
+        } else if (wizardState.coverImage && isDataUrl(wizardState.coverImage)) {
+          // AI-generated image (data URL) - convert to file and upload
+          const file = dataURLtoFile(wizardState.coverImage, 'ai-generated-cover.png')
+          if (file) {
+            const formData = new FormData()
+            formData.append('file', file)
+            formData.append('eventId', eventId)
+            formData.append('imageType', 'cover')
+
+            try {
+              await fetch('/api/upload/event-image', {
+                method: 'POST',
+                body: formData,
+              })
+            } catch (uploadErr) {
+              console.error('Error uploading AI cover image:', uploadErr)
+            }
           }
         }
 
-        // Upload featured image if user provided one
+        // Upload featured image if user provided a file OR an AI-generated image
         if (wizardState.featuredImageFile) {
+          // User uploaded a file
           const formData = new FormData()
           formData.append('file', wizardState.featuredImageFile)
           formData.append('eventId', eventId)
@@ -195,7 +257,24 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
             })
           } catch (uploadErr) {
             console.error('Error uploading featured image:', uploadErr)
-            // Continue anyway - user can upload in editor
+          }
+        } else if (wizardState.featuredImage && isDataUrl(wizardState.featuredImage)) {
+          // AI-generated image (data URL) - convert to file and upload
+          const file = dataURLtoFile(wizardState.featuredImage, 'ai-generated-featured.png')
+          if (file) {
+            const formData = new FormData()
+            formData.append('file', file)
+            formData.append('eventId', eventId)
+            formData.append('imageType', 'featured')
+
+            try {
+              await fetch('/api/upload/event-image', {
+                method: 'POST',
+                body: formData,
+              })
+            } catch (uploadErr) {
+              console.error('Error uploading AI featured image:', uploadErr)
+            }
           }
         }
 
@@ -351,19 +430,13 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
         {currentStep === 5 && (
           <StepFeaturedImage
             eventType={eventType}
-            names={wizardState.names}
-            title={wizardState.title}
             featuredImage={wizardState.featuredImage}
             featuredImageFile={wizardState.featuredImageFile}
-            selectedAssetId={wizardState.featuredImageAssetId}
-            onFeaturedImageChange={(url, file, assetId) => updateWizardState({
+            onFeaturedImageChange={(url, file) => updateWizardState({
               featuredImage: url,
               featuredImageFile: file,
-              featuredImageAssetId: assetId
+              featuredImageAssetId: undefined
             })}
-            aiStatus={aiStatus}
-            tokenCost={tokenCosts?.imageEdit || 5}
-            onTokensUsed={refreshAIStatus}
             locale={locale}
           />
         )}

@@ -10,6 +10,8 @@ const CreateEventSchema = z.object({
   eventTypeId: z.string().min(1, 'Event type is required'),
   title: z.string().min(1, 'Title is required').max(100),
   welcomePhrase: z.string().max(500).optional(),
+  coverImage: z.string().url().optional(),
+  featuredImage: z.string().url().optional(),
 })
 
 /**
@@ -89,7 +91,7 @@ export async function createEvent(values: z.infer<typeof CreateEventSchema>) {
       return { error: 'InvalidFields' }
     }
 
-    const { eventTypeId, title, welcomePhrase } = validatedFields.data
+    const { eventTypeId, title, welcomePhrase, coverImage, featuredImage } = validatedFields.data
 
     // Verificar que el tipo de evento exista y esté activo
     const eventType = await prisma.eventType.findFirst({
@@ -116,6 +118,8 @@ export async function createEvent(values: z.infer<typeof CreateEventSchema>) {
         description: welcomePhrase || null, // Also set description for the editor
         slug: uniqueSlug,
         isPublished: false,
+        coverImage: coverImage || null,
+        featuredImage: featuredImage || null,
       },
       include: {
         eventType: true
