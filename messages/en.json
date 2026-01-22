@@ -1189,6 +1189,21 @@
     "upgradeToPro": "Upgrade to Pro",
     "insufficientTokensMessage": "You need {cost} tokens for this operation but only have {remaining}",
 
+    "aiGenerateTab": "Generate with AI",
+    "aiGenerateNoAccess": "You need a Pro plan to generate images with AI",
+    "upgradePlan": "Upgrade my plan",
+    "aiGenerated": "AI Generated",
+    "acceptImage": "Use this image",
+    "tryAgain": "Try again",
+    "aiGenerateTitle": "Generate unique images with AI",
+    "aiGenerateDescription": "Describe the image you want to create and our AI will generate it for you",
+    "aiGeneratePromptLabel": "Describe the image you want to create",
+    "aiGeneratePromptPlaceholder": "Ex: An elegant background with golden flowers and pink tones for a wedding invitation...",
+    "aiGeneratePromptHelp": "Be specific about colors, styles and elements you want to include",
+    "tokensRequired": "tokens required",
+    "tokensAvailable": "available",
+    "generateImage": "Generate Image",
+
     "errors": {
       "Unauthorized": "Unauthorized",
       "NoAIAccess": "Your plan does not include AI access",
@@ -1197,7 +1212,10 @@
       "GenerationFailed": "Failed to generate content. Please try again.",
       "CreateFailed": "Failed to create event. Please try again.",
       "ImageLoadFailed": "Failed to load image. Please try another one.",
-      "ImageGenerationNotConfigured": "AI image generation is not yet configured. Use the prompt suggestions to manually enhance your images."
+      "ImageGenerationNotConfigured": "AI image generation is not yet configured. Use the prompt suggestions to manually enhance your images.",
+      "PromptRequired": "Please enter a description of the image you want to generate",
+      "NoImageGenerated": "Could not generate the image. Try a different description.",
+      "ImageModelNotConfigured": "The image generation model is not configured. Contact the administrator."
     }
   }
 }

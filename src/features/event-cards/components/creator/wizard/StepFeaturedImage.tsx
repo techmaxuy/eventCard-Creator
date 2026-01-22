@@ -2,10 +2,10 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { User, Upload, X, Loader2, Palette, Check } from 'lucide-react'
+import { User, Upload, X, Loader2, Palette, Check, Sparkles, RefreshCw } from 'lucide-react'
 import Image from 'next/image'
 import { AIAssistPanel } from './AIAssistPanel'
-import { generateImagePrompt } from '@/features/event-cards/actions/event-ai'
+import { generateImagePrompt, generateEventImage } from '@/features/event-cards/actions/event-ai'
 import { getAssets } from '@/features/event-cards/actions/assets'
 
 interface EventType {
@@ -58,16 +58,19 @@ export function StepFeaturedImage({
 }: StepFeaturedImageProps) {
   const t = useTranslations('EventWizard')
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false)
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [aiPrompt, setAiPrompt] = useState('')
+  const [aiGeneratePrompt, setAiGeneratePrompt] = useState('')
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Assets state
   const [assets, setAssets] = useState<Asset[]>([])
   const [isLoadingAssets, setIsLoadingAssets] = useState(true)
-  const [activeTab, setActiveTab] = useState<'upload' | 'gallery'>('gallery')
+  const [activeTab, setActiveTab] = useState<'gallery' | 'upload' | 'ai'>('gallery')
 
   const eventTypeName = locale === 'es' ? eventType.name : eventType.nameEn
 
@@ -118,6 +121,7 @@ export function StepFeaturedImage({
     onFeaturedImageChange('', null, undefined)
     setSuggestions([])
     setAiPrompt('')
+    setGeneratedImageUrl(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -171,6 +175,57 @@ export function StepFeaturedImage({
   const handleSelectSuggestion = (suggestion: string) => {
     setAiPrompt(suggestion)
     setSuggestions([])
+  }
+
+  // Generate image using AI
+  const handleGenerateImage = async () => {
+    if (!aiGeneratePrompt.trim()) {
+      setError(t('errors.PromptRequired'))
+      return
+    }
+
+    setIsGeneratingImage(true)
+    setError(null)
+    setGeneratedImageUrl(null)
+
+    try {
+      const result = await generateEventImage({
+        eventTypeId: eventType.id,
+        names: names.filter(n => n.trim()),
+        title,
+        imageType: 'featured',
+        prompt: aiGeneratePrompt,
+        locale
+      })
+
+      if (result.error) {
+        setError(t(`errors.${result.error}`) || result.content || result.error)
+      } else if (result.imageUrl) {
+        setGeneratedImageUrl(result.imageUrl)
+        onTokensUsed()
+      } else {
+        setError(t('errors.NoImageGenerated'))
+      }
+    } catch (err) {
+      console.error('Error generating image:', err)
+      setError(t('errors.GenerationFailed'))
+    } finally {
+      setIsGeneratingImage(false)
+    }
+  }
+
+  // Accept the generated image
+  const handleAcceptGeneratedImage = () => {
+    if (generatedImageUrl) {
+      onFeaturedImageChange(generatedImageUrl, null, undefined)
+      setGeneratedImageUrl(null)
+      setAiGeneratePrompt('')
+    }
+  }
+
+  // Reject the generated image and try again
+  const handleRejectGeneratedImage = () => {
+    setGeneratedImageUrl(null)
   }
 
   return (
@@ -234,7 +289,7 @@ export function StepFeaturedImage({
         </div>
       )}
 
-      {/* Tabs for gallery/upload - show when no image selected */}
+      {/* Tabs for gallery/upload/ai - show when no image selected */}
       {!featuredImage && (
         <div className="max-w-2xl mx-auto">
           {/* Tab buttons */}
@@ -267,6 +322,18 @@ export function StepFeaturedImage({
             >
               <Upload className="w-4 h-4" />
               {t('uploadTab')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('ai')}
+              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === 'ai'
+                  ? 'border-purple-600 text-purple-600 dark:text-purple-400'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+              }`}
+            >
+              <Sparkles className="w-4 h-4" />
+              {t('aiGenerateTab')}
             </button>
           </div>
 
@@ -355,6 +422,130 @@ export function StepFeaturedImage({
                   </>
                 )}
               </label>
+            </div>
+          )}
+
+          {/* AI Generate tab content */}
+          {activeTab === 'ai' && (
+            <div className="space-y-4">
+              {/* AI Access check */}
+              {!aiStatus?.hasAccess ? (
+                <div className="text-center p-8 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
+                  <Sparkles className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                    {t('aiGenerateNoAccess')}
+                  </p>
+                  <a
+                    href="/pricing"
+                    className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
+                  >
+                    {t('upgradePlan')}
+                  </a>
+                </div>
+              ) : (
+                <>
+                  {/* Generated image preview */}
+                  {generatedImageUrl && (
+                    <div className="space-y-4">
+                      <div className="relative w-full h-64 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
+                        <Image
+                          src={generatedImageUrl}
+                          alt="Generated preview"
+                          fill
+                          className="object-cover"
+                        />
+                        <div className="absolute top-2 right-2 px-3 py-1 bg-purple-600 text-white text-xs rounded-full">
+                          {t('aiGenerated')}
+                        </div>
+                      </div>
+                      <div className="flex gap-3 justify-center">
+                        <button
+                          type="button"
+                          onClick={handleAcceptGeneratedImage}
+                          className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                        >
+                          <Check className="w-4 h-4" />
+                          {t('acceptImage')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleRejectGeneratedImage}
+                          className="flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors"
+                        >
+                          <RefreshCw className="w-4 h-4" />
+                          {t('tryAgain')}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* AI prompt input - show when no generated image */}
+                  {!generatedImageUrl && (
+                    <div className="space-y-4">
+                      <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+                        <div className="flex items-start gap-3">
+                          <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
+                          <div>
+                            <h4 className="text-sm font-medium text-purple-900 dark:text-purple-100">
+                              {t('aiGenerateTitle')}
+                            </h4>
+                            <p className="text-xs text-purple-700 dark:text-purple-300 mt-1">
+                              {t('aiGenerateDescription')}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          {t('aiGeneratePromptLabel')}
+                        </label>
+                        <textarea
+                          value={aiGeneratePrompt}
+                          onChange={(e) => setAiGeneratePrompt(e.target.value)}
+                          rows={3}
+                          maxLength={500}
+                          disabled={isGeneratingImage}
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none disabled:opacity-50"
+                          placeholder={t('aiGeneratePromptPlaceholder')}
+                        />
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {t('aiGeneratePromptHelp')}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          <span className="font-medium">{tokenCost * 2}</span> {t('tokensRequired')}
+                          {aiStatus && (
+                            <span className="ml-2 text-xs">
+                              ({aiStatus.tokensRemaining} {t('tokensAvailable')})
+                            </span>
+                          )}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleGenerateImage}
+                          disabled={isGeneratingImage || !aiGeneratePrompt.trim() || (aiStatus?.tokensRemaining || 0) < tokenCost * 2}
+                          className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+                        >
+                          {isGeneratingImage ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              {t('generating')}
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="w-4 h-4" />
+                              {t('generateImage')}
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           )}
         </div>

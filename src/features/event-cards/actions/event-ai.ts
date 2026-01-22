@@ -408,17 +408,17 @@ export async function generateEventImage(params: {
       return { error: 'Unauthorized' }
     }
 
-    // Check AI access
-    const accessCheck = await checkAIAccess(session.user.id)
+    // Check AI access for image generation
+    const accessCheck = await checkAIAccess(session.user.id, 'image_generation')
     if (!accessCheck.hasAccess) {
       return { error: 'NoAIAccess' }
     }
 
-    // Get token cost for image generation
-    const tokenCost = await getTokenCostForOperation('imageGeneration')
-    if (accessCheck.tokensRemaining < tokenCost) {
+    if (!accessCheck.canAfford) {
       return { error: 'InsufficientTokens' }
     }
+
+    const tokenCost = accessCheck.tokenCost
 
     // Get event type for context
     const eventType = await prisma.eventType.findUnique({

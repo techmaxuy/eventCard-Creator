@@ -1206,6 +1206,21 @@
     "upgradeToPro": "Mejorar a Pro",
     "insufficientTokensMessage": "Necesitas {cost} tokens para esta operación pero solo tienes {remaining}",
 
+    "aiGenerateTab": "Generar con IA",
+    "aiGenerateNoAccess": "Necesitas un plan Pro para generar imágenes con IA",
+    "upgradePlan": "Mejorar mi plan",
+    "aiGenerated": "Generado con IA",
+    "acceptImage": "Usar esta imagen",
+    "tryAgain": "Intentar de nuevo",
+    "aiGenerateTitle": "Genera imágenes únicas con IA",
+    "aiGenerateDescription": "Describe la imagen que deseas crear y nuestra IA la generará para ti",
+    "aiGeneratePromptLabel": "Describe la imagen que quieres crear",
+    "aiGeneratePromptPlaceholder": "Ej: Un fondo elegante con flores doradas y tonos rosados para una invitación de boda...",
+    "aiGeneratePromptHelp": "Sé específico con colores, estilos y elementos que deseas incluir",
+    "tokensRequired": "tokens necesarios",
+    "tokensAvailable": "disponibles",
+    "generateImage": "Generar Imagen",
+
     "errors": {
       "Unauthorized": "No autorizado",
       "NoAIAccess": "Tu plan no incluye acceso a IA",
@@ -1214,7 +1229,10 @@
       "GenerationFailed": "Error al generar contenido. Intenta nuevamente.",
       "CreateFailed": "Error al crear el evento. Intenta nuevamente.",
       "ImageLoadFailed": "Error al cargar la imagen. Intenta con otra.",
-      "ImageGenerationNotConfigured": "La generación de imágenes con IA aún no está configurada. Usa las sugerencias de prompts para mejorar tus imágenes manualmente."
+      "ImageGenerationNotConfigured": "La generación de imágenes con IA aún no está configurada. Usa las sugerencias de prompts para mejorar tus imágenes manualmente.",
+      "PromptRequired": "Por favor escribe una descripción de la imagen que deseas generar",
+      "NoImageGenerated": "No se pudo generar la imagen. Intenta con otra descripción.",
+      "ImageModelNotConfigured": "El modelo de generación de imágenes no está configurado. Contacta al administrador."
     }
   }
 }
