@@ -358,13 +358,15 @@ export async function generateImagePrompt(params: {
     console.log('💰 Token Cost:', tokenCost)
     console.log('=========================================================\n')
 
-    // Generate with AI - use image model for image-related operations
+    // Generate with AI - use TEXT model for generating text suggestions
+    // Note: Even though this is for image editing suggestions, we need the TEXT model
+    // because we're generating text (suggestions), not images
     const result = await generateAIResponse({
       userId: session.user.id,
       prompt: fullPrompt,
       maxTokens: 300,
       tokensToConsume: tokenCost,
-      useImageModel: true,  // Use image model if configured
+      useImageModel: false,  // Use text model for generating text suggestions
     })
 
     if (result.error) {
@@ -489,6 +491,119 @@ export async function generateEventImage(params: {
     }
   } catch (error) {
     console.error('[EventAI] Error generating image:', error)
+    return { error: 'GenerationFailed' }
+  }
+}
+
+/**
+ * Retouch/edit an existing image using AI
+ * Takes the user's image + editing instructions and returns the modified image
+ */
+export async function retouchEventImage(params: {
+  eventTypeId: string
+  names: string[]
+  title: string
+  imageType: 'background' | 'featured'
+  editPrompt: string           // User's editing instructions
+  imageBase64: string          // The image to edit (base64)
+  imageMimeType: string        // e.g., 'image/jpeg'
+  locale: string
+}): Promise<AIResult> {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return { error: 'Unauthorized' }
+    }
+
+    // Check AI access for image editing
+    const accessCheck = await checkAIAccess(session.user.id, 'image_edit')
+    if (!accessCheck.hasAccess) {
+      return { error: 'NoAIAccess' }
+    }
+
+    if (!accessCheck.canAfford) {
+      return { error: 'InsufficientTokens' }
+    }
+
+    const tokenCost = accessCheck.tokenCost
+
+    // Get event type for context
+    const eventType = await prisma.eventType.findUnique({
+      where: { id: params.eventTypeId },
+      select: { name: true, nameEn: true }
+    })
+
+    const eventTypeName = params.locale === 'es' ? eventType?.name : eventType?.nameEn
+    const namesText = params.names.filter(n => n.trim()).join(' y ')
+    const imageTypeLabel = params.imageType === 'background'
+      ? (params.locale === 'es' ? 'imagen de fondo' : 'background image')
+      : (params.locale === 'es' ? 'foto principal' : 'featured photo')
+
+    // Build prompt for image editing
+    const fullPrompt = params.locale === 'es'
+      ? `Edita esta ${imageTypeLabel} para una invitación de ${eventTypeName}${namesText ? ` para ${namesText}` : ''}${params.title ? `. Título: "${params.title}"` : ''}.
+
+Instrucciones de edición del usuario: ${params.editPrompt}
+
+Aplica los cambios solicitados manteniendo la esencia y calidad de la imagen original. La imagen resultante debe ser elegante y apropiada para una invitación formal.`
+      : `Edit this ${imageTypeLabel} for a ${eventTypeName} invitation${namesText ? ` for ${namesText}` : ''}${params.title ? `. Title: "${params.title}"` : ''}.
+
+User editing instructions: ${params.editPrompt}
+
+Apply the requested changes while maintaining the essence and quality of the original image. The resulting image should be elegant and appropriate for a formal invitation.`
+
+    console.log('\n========== AI IMAGE RETOUCH REQUEST ==========')
+    console.log('📋 Input Parameters:')
+    console.log('   - eventTypeId:', params.eventTypeId)
+    console.log('   - eventTypeName:', eventTypeName)
+    console.log('   - names:', params.names)
+    console.log('   - title:', params.title || '(none)')
+    console.log('   - imageType:', params.imageType)
+    console.log('   - editPrompt:', params.editPrompt)
+    console.log('   - imageMimeType:', params.imageMimeType)
+    console.log('   - imageBase64 length:', params.imageBase64.length)
+    console.log('   - locale:', params.locale)
+    console.log('📝 FULL PROMPT:')
+    console.log('---')
+    console.log(fullPrompt)
+    console.log('---')
+    console.log('💰 Token Cost:', tokenCost)
+    console.log('===============================================\n')
+
+    // Generate retouched image using AI service
+    const result = await generateAIImage({
+      userId: session.user.id,
+      prompt: fullPrompt,
+      sourceImageBase64: params.imageBase64,
+      sourceMimeType: params.imageMimeType,
+      tokensToConsume: tokenCost,
+    })
+
+    if (result.error) {
+      console.log('[EventAI] Image retouch error:', result.error)
+      return { error: result.error, content: result.content }
+    }
+
+    // Get updated tokens
+    const subscription = await prisma.userSubscription.findUnique({
+      where: { userId: session.user.id }
+    })
+
+    console.log('\n========== AI IMAGE RETOUCH RESPONSE ==========')
+    console.log('📥 Success:', result.success)
+    console.log('📥 Has Image URL:', !!result.imageUrl)
+    console.log('📥 Tokens Used:', result.tokensUsed || 0)
+    console.log('================================================\n')
+
+    return {
+      success: true,
+      content: result.content,
+      imageUrl: result.imageUrl,
+      tokensUsed: tokenCost,
+      tokensRemaining: subscription?.tokensRemaining || 0
+    }
+  } catch (error) {
+    console.error('[EventAI] Error retouching image:', error)
     return { error: 'GenerationFailed' }
   }
 }

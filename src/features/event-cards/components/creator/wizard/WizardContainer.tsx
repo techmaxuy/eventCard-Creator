@@ -430,6 +430,8 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
         {currentStep === 5 && (
           <StepFeaturedImage
             eventType={eventType}
+            names={wizardState.names}
+            title={wizardState.title}
             featuredImage={wizardState.featuredImage}
             featuredImageFile={wizardState.featuredImageFile}
             onFeaturedImageChange={(url, file) => updateWizardState({
@@ -437,6 +439,9 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
               featuredImageFile: file,
               featuredImageAssetId: undefined
             })}
+            aiStatus={aiStatus}
+            tokenCost={tokenCosts?.imageEdit || 5}
+            onTokensUsed={refreshAIStatus}
             locale={locale}
           />
         )}

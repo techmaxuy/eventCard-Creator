@@ -1221,6 +1221,16 @@
     "tokensAvailable": "disponibles",
     "generateImage": "Generar Imagen",
 
+    "aiRetouchTitle": "Retocar imagen con IA",
+    "aiRetouchDescription": "Describe los cambios que quieres aplicar a tu imagen",
+    "aiRetouchPlaceholder": "Ej: Agregar más brillo, colores más cálidos, efecto vintage, añadir flores decorativas...",
+    "retouchImage": "Retocar con IA",
+    "retouching": "Retocando...",
+    "originalImage": "Original",
+    "retouchedImage": "Retocada",
+    "useRetouched": "Usar retocada",
+    "keepOriginal": "Mantener original",
+
     "errors": {
       "Unauthorized": "No autorizado",
       "NoAIAccess": "Tu plan no incluye acceso a IA",
@@ -1230,9 +1240,10 @@
       "CreateFailed": "Error al crear el evento. Intenta nuevamente.",
       "ImageLoadFailed": "Error al cargar la imagen. Intenta con otra.",
       "ImageGenerationNotConfigured": "La generación de imágenes con IA aún no está configurada. Usa las sugerencias de prompts para mejorar tus imágenes manualmente.",
-      "PromptRequired": "Por favor escribe una descripción de la imagen que deseas generar",
+      "PromptRequired": "Por favor escribe una descripción de los cambios que deseas",
       "NoImageGenerated": "No se pudo generar la imagen. Intenta con otra descripción.",
-      "ImageModelNotConfigured": "El modelo de generación de imágenes no está configurado. Contacta al administrador."
+      "ImageModelNotConfigured": "El modelo de generación de imágenes no está configurado. Contacta al administrador.",
+      "NoImageToRetouch": "No hay imagen para retocar. Por favor sube una imagen primero."
     }
   }
 }

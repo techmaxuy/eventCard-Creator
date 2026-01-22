@@ -1204,6 +1204,16 @@
     "tokensAvailable": "available",
     "generateImage": "Generate Image",
 
+    "aiRetouchTitle": "Retouch image with AI",
+    "aiRetouchDescription": "Describe the changes you want to apply to your image",
+    "aiRetouchPlaceholder": "Ex: Add more brightness, warmer colors, vintage effect, add decorative flowers...",
+    "retouchImage": "Retouch with AI",
+    "retouching": "Retouching...",
+    "originalImage": "Original",
+    "retouchedImage": "Retouched",
+    "useRetouched": "Use retouched",
+    "keepOriginal": "Keep original",
+
     "errors": {
       "Unauthorized": "Unauthorized",
       "NoAIAccess": "Your plan does not include AI access",
@@ -1213,9 +1223,10 @@
       "CreateFailed": "Failed to create event. Please try again.",
       "ImageLoadFailed": "Failed to load image. Please try another one.",
       "ImageGenerationNotConfigured": "AI image generation is not yet configured. Use the prompt suggestions to manually enhance your images.",
-      "PromptRequired": "Please enter a description of the image you want to generate",
+      "PromptRequired": "Please enter a description of the changes you want",
       "NoImageGenerated": "Could not generate the image. Try a different description.",
-      "ImageModelNotConfigured": "The image generation model is not configured. Contact the administrator."
+      "ImageModelNotConfigured": "The image generation model is not configured. Contact the administrator.",
+      "NoImageToRetouch": "No image to retouch. Please upload an image first."
     }
   }
 }
