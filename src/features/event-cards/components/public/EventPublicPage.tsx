@@ -12,7 +12,7 @@ import { MusicPlayer } from './MusicPlayer'
 import { FloatingActionButtons } from './FloatingActionButtons'
 import { getEventTheme } from '@/features/event-cards/config/event-themes'
 import { getFontFamilyName } from '@/features/event-cards/config/fonts'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionTemplate } from 'framer-motion'
 
 interface EventType {
   name: string
@@ -68,7 +68,14 @@ interface EventPublicPageProps {
 
 export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets = [] }: EventPublicPageProps) {
   const t = useTranslations('EventPublic')
-  
+
+  // Scroll-based brightness effect for the background
+  const { scrollYProgress } = useScroll()
+
+  // Brightness effect: starts bright (1.15), dims to normal (1.0) as you scroll
+  const brightnessValue = useTransform(scrollYProgress, [0, 0.15, 0.3], [1.15, 1.05, 1])
+  const filterStyle = useMotionTemplate`brightness(${brightnessValue})`
+
   // Obtener tema visual según tipo de evento
   const theme = getEventTheme(
     event.eventType.slug || event.eventType.name.toLowerCase() || 'default',
@@ -98,25 +105,31 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
       {/* Cargar fuente de Google Fonts si está seleccionada */}
       <GoogleFontLoader fontId={event.fontFamily} />
 
-    {/* Fondo global con imagen y partículas */}
-        <div 
+    {/* Fondo global con imagen, efecto de brillo animado y partículas */}
+        <motion.div
             className="fixed inset-0 -z-10 overflow-hidden"
-            style={{
-            backgroundImage: event.coverImage ? `url(${event.coverImage})` : undefined,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed',
-            }}
+            style={{ filter: filterStyle }}
         >
-            {/* Overlay oscuro para mejorar legibilidad */}
-            <div className="absolute inset-0 bg-black/50 dark:bg-black/70" />
+            {/* Cover image */}
+            {event.coverImage && (
+              <Image
+                src={event.coverImage}
+                alt={event.title}
+                fill
+                className="object-cover"
+                priority
+                sizes="100vw"
+              />
+            )}
+            {/* Overlay oscuro para mejorar legibilidad - más sutil */}
+            <div className="absolute inset-0 bg-black/40 dark:bg-black/60" />
 
 
 
       {/* Particle Background */}
       <ParticleBackground theme={theme} />
 
- </div>
+ </motion.div>
 
       {/* Decorative Elements */}
       {(() => {
