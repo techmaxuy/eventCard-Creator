@@ -12,6 +12,8 @@ const GuestConfirmationSchema = z.object({
   numberOfGuests: z.number().min(1).max(10),
   message: z.string().max(500).optional(),
   status: z.enum(['CONFIRMED', 'DECLINED', 'MAYBE']),
+  dietaryRequirements: z.array(z.string()).optional(), // ["celiac", "vegan", etc.]
+  dietaryNotes: z.string().max(300).optional(), // Notes for allergies, etc.
 })
 
 /**
@@ -186,6 +188,8 @@ async function sendGuestNotification(
         ${guest.email ? `<p><strong>Email:</strong> ${guest.email}</p>` : ''}
         <p><strong>Estado:</strong> ${guest.status === 'CONFIRMED' ? '✅ Confirmado' : guest.status === 'DECLINED' ? '❌ No asistirá' : '❓ Tal vez'}</p>
         ${guest.status === 'CONFIRMED' ? `<p><strong>Cantidad de personas:</strong> ${guest.numberOfGuests}</p>` : ''}
+        ${guest.dietaryRequirements && Array.isArray(guest.dietaryRequirements) && guest.dietaryRequirements.length > 0 ? `<p><strong>Requerimientos alimenticios:</strong> ${guest.dietaryRequirements.join(', ')}</p>` : ''}
+        ${guest.dietaryNotes ? `<p><strong>Notas alimenticias:</strong> ${guest.dietaryNotes}</p>` : ''}
         ${guest.message ? `<p><strong>Mensaje:</strong> ${guest.message}</p>` : ''}
       </div>
       
@@ -356,13 +360,15 @@ export async function exportGuestsToCSV(eventId: string) {
     })
 
     // Generar CSV
-    const headers = ['Nombre', 'Teléfono', 'Email', 'Estado', 'Cantidad', 'Mensaje', 'Fecha de Confirmación']
+    const headers = ['Nombre', 'Teléfono', 'Email', 'Estado', 'Cantidad', 'Requerimientos Alimenticios', 'Notas Alimenticias', 'Mensaje', 'Fecha de Confirmación']
     const rows = guests.map(g => [
       g.name,
       g.phone,
       g.email || '',
       g.status,
       g.numberOfGuests.toString(),
+      (g.dietaryRequirements as string[] || []).join('; '),
+      g.dietaryNotes || '',
       g.message || '',
       g.createdAt.toLocaleString()
     ])

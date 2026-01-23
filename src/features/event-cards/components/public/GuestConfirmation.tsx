@@ -2,19 +2,29 @@
 
 import { useState, useTransition, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { Check, X, HelpCircle, Loader2, Mail, Phone, User, Users, MessageSquare } from 'lucide-react'
+import { Check, X, HelpCircle, Loader2, Mail, Phone, User, Users, MessageSquare, UtensilsCrossed } from 'lucide-react'
 import { confirmGuest } from '@/features/event-cards/actions/guests'
+
+// Dietary requirement options
+const DIETARY_OPTIONS = [
+  { id: 'celiac', labelEs: 'Celíaco', labelEn: 'Celiac' },
+  { id: 'vegan', labelEs: 'Vegano', labelEn: 'Vegan' },
+  { id: 'vegetarian', labelEs: 'Vegetariano', labelEn: 'Vegetarian' },
+  { id: 'lactose_intolerant', labelEs: 'Intolerante a la lactosa', labelEn: 'Lactose intolerant' },
+  { id: 'allergic', labelEs: 'Alérgico (especificar)', labelEn: 'Allergic (specify)' },
+]
 
 interface GuestConfirmationProps {
   eventId: string
   eventSlug: string
   requirePhone: boolean
+  askDietaryRequirements: boolean
   locale: string
   fontFamily?: string | null
   onSuccess?: () => void
 }
 
-export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fontFamily, onSuccess }: GuestConfirmationProps) {
+export function GuestConfirmation({ eventId, eventSlug, requirePhone, askDietaryRequirements, locale, fontFamily, onSuccess }: GuestConfirmationProps) {
   const t = useTranslations('EventPublic')
   const [isPending, startTransition] = useTransition()
 
@@ -27,8 +37,19 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
   const [numberOfGuests, setNumberOfGuests] = useState(1)
   const [message, setMessage] = useState('')
   const [status, setStatus] = useState<'CONFIRMED' | 'DECLINED' | 'MAYBE'>('CONFIRMED')
+  const [dietaryRequirements, setDietaryRequirements] = useState<string[]>([])
+  const [dietaryNotes, setDietaryNotes] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  // Toggle dietary requirement
+  const toggleDietaryRequirement = (id: string) => {
+    setDietaryRequirements(prev =>
+      prev.includes(id)
+        ? prev.filter(r => r !== id)
+        : [...prev, id]
+    )
+  }
 
   // Cargar estado de confirmación previo desde localStorage
   useEffect(() => {
@@ -61,6 +82,8 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
         numberOfGuests,
         message: message || undefined,
         status,
+        dietaryRequirements: dietaryRequirements.length > 0 ? dietaryRequirements : undefined,
+        dietaryNotes: dietaryNotes || undefined,
       }, {
         ipAddress: typeof window !== 'undefined' ? window.location.hostname : undefined,
         userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
@@ -296,6 +319,55 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, locale, fo
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               {t('numberOfGuestsHelp')}
             </p>
+          </div>
+        )}
+
+        {/* Dietary Requirements - Only show when confirmed and enabled */}
+        {status === 'CONFIRMED' && askDietaryRequirements && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3" style={fontStyle}>
+              <div className="flex items-center gap-2">
+                <UtensilsCrossed className="w-4 h-4" />
+                {locale === 'es' ? 'Requerimientos alimenticios' : 'Dietary requirements'} ({t('optional')})
+              </div>
+            </label>
+            <div className="space-y-2">
+              {DIETARY_OPTIONS.map((option) => (
+                <label
+                  key={option.id}
+                  className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
+                    dietaryRequirements.includes(option.id)
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={dietaryRequirements.includes(option.id)}
+                    onChange={() => toggleDietaryRequirement(option.id)}
+                    className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span style={fontStyle} className="text-sm text-gray-700 dark:text-gray-300">
+                    {locale === 'es' ? option.labelEs : option.labelEn}
+                  </span>
+                </label>
+              ))}
+            </div>
+
+            {/* Notes for allergies or other details */}
+            {dietaryRequirements.includes('allergic') && (
+              <div className="mt-3">
+                <input
+                  type="text"
+                  value={dietaryNotes}
+                  onChange={(e) => setDietaryNotes(e.target.value)}
+                  maxLength={200}
+                  style={fontStyle}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  placeholder={locale === 'es' ? '¿A qué eres alérgico?' : 'What are you allergic to?'}
+                />
+              </div>
+            )}
           </div>
         )}
 

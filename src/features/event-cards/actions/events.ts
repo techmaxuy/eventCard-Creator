@@ -264,6 +264,7 @@ const UpdateEventSchema = z.object({
     assetId: z.string(),
     position: z.string(),
   })).optional(),
+  askDietaryRequirements: z.boolean().optional(),
 })
 
 /**

@@ -70,11 +70,12 @@ interface Event {
   fontFamily: string | null
   decorations: any
   isPublished: boolean
+  askDietaryRequirements: boolean
   eventType: EventType
-  user?: {  // ← AGREGAR
+  user?: {
     name: string | null
   }
-  _count?: {  // ← AGREGAR
+  _count?: {
     guests: number
   }
 }
@@ -148,6 +149,9 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   const [isCustomCoverImage, setIsCustomCoverImage] = useState(false)
   const [isCustomFeaturedImage, setIsCustomFeaturedImage] = useState(false)
 
+  // Guest confirmation settings
+  const [askDietaryRequirements, setAskDietaryRequirements] = useState(event.askDietaryRequirements || false)
+
   // Inicializar el asset de música seleccionado cuando el evento ya tiene música
   useEffect(() => {
     if (event.musicUrl && availableAssets.length > 0) {
@@ -179,7 +183,8 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
         welcomePhrase: welcomePhrase || undefined,
         musicUrl: musicUrl || undefined,
         fontFamily: fontFamily || undefined,
-        decorations: selectedDecorations
+        decorations: selectedDecorations,
+        askDietaryRequirements
       })
 
       if (result.error) {
@@ -1022,6 +1027,48 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
             </div>
           )}
 
+
+          {/* Guest Confirmation Settings */}
+          <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+              <User className="w-5 h-5" />
+              {locale === 'es' ? 'Configuración de Confirmación' : 'Confirmation Settings'}
+            </h2>
+
+            {/* Dietary Requirements Toggle */}
+            <label className="flex items-center justify-between cursor-pointer">
+              <div>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {locale === 'es' ? 'Preguntar requerimientos alimenticios' : 'Ask for dietary requirements'}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {locale === 'es'
+                    ? 'Los invitados podrán indicar si son celíacos, veganos, vegetarianos o tienen alergias'
+                    : 'Guests can indicate if they are celiac, vegan, vegetarian or have allergies'}
+                </p>
+              </div>
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  checked={askDietaryRequirements}
+                  onChange={(e) => setAskDietaryRequirements(e.target.checked)}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-11 h-6 rounded-full transition-colors ${
+                    askDietaryRequirements ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+                  }`}
+                  onClick={() => setAskDietaryRequirements(!askDietaryRequirements)}
+                >
+                  <div
+                    className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform ${
+                      askDietaryRequirements ? 'translate-x-5' : 'translate-x-0.5'
+                    } mt-0.5`}
+                  />
+                </div>
+              </div>
+            </label>
+          </div>
 
           {/* Save Button */}
           <button

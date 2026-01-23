@@ -13,6 +13,7 @@ interface FloatingActionButtonsProps {
   eventDescription?: string
   eventUrl: string
   requirePhone: boolean
+  askDietaryRequirements: boolean
   primaryColor: string
   locale: string
   fontFamily?: string | null
@@ -25,6 +26,7 @@ export function FloatingActionButtons({
   eventDescription,
   eventUrl,
   requirePhone,
+  askDietaryRequirements,
   primaryColor,
   locale,
   fontFamily
@@ -102,20 +104,21 @@ export function FloatingActionButtons({
                 <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full" />
               </div>
 
-              {/* Close button */}
+              {/* Close button - z-10 to stay above form content */}
               <button
                 onClick={() => setShowRSVP(false)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-colors"
+                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center justify-center transition-colors shadow-lg border border-gray-300 dark:border-gray-600"
               >
-                <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <X className="w-5 h-5 text-gray-700 dark:text-gray-300" />
               </button>
 
-              {/* Content */}
-              <div className="px-4 pb-8 pt-2">
+              {/* Content - add top margin to avoid close button overlap */}
+              <div className="px-4 pb-8 pt-4">
                 <GuestConfirmation
                   eventId={eventId}
                   eventSlug={eventSlug}
                   requirePhone={requirePhone}
+                  askDietaryRequirements={askDietaryRequirements}
                   locale={locale}
                   fontFamily={fontFamily}
                   onSuccess={() => {

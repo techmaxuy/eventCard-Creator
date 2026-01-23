@@ -48,6 +48,7 @@ interface Event {
   gallery: any
   primaryColor: string
   requirePhone: boolean
+  askDietaryRequirements: boolean
   welcomePhrase: string | null
   musicUrl: string | null
   fontFamily: string | null
@@ -268,6 +269,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
         eventDescription={event.description || undefined}
         eventUrl={fullEventUrl}
         requirePhone={event.requirePhone}
+        askDietaryRequirements={event.askDietaryRequirements}
         primaryColor={event.primaryColor}
         locale={locale}
         fontFamily={cssFontFamily}

@@ -422,10 +422,17 @@ export async function generateEventImage(params: {
 
     const tokenCost = accessCheck.tokenCost
 
-    // Get event type for context
+    // Get event type for context including admin prompts
     const eventType = await prisma.eventType.findUnique({
       where: { id: params.eventTypeId },
-      select: { name: true, nameEn: true }
+      select: {
+        name: true,
+        nameEn: true,
+        aiBackgroundPromptEs: true,
+        aiBackgroundPromptEn: true,
+        aiPhotoPromptEs: true,
+        aiPhotoPromptEn: true
+      }
     })
 
     const eventTypeName = params.locale === 'es' ? eventType?.name : eventType?.nameEn
@@ -434,8 +441,13 @@ export async function generateEventImage(params: {
       ? (params.locale === 'es' ? 'imagen de fondo' : 'background image')
       : (params.locale === 'es' ? 'foto principal' : 'featured photo')
 
-    // Build a detailed prompt for image generation with high quality emphasis
-    const fullPrompt = params.locale === 'es'
+    // Get admin prompt based on image type
+    const adminPrompt = params.imageType === 'background'
+      ? (params.locale === 'es' ? eventType?.aiBackgroundPromptEs : eventType?.aiBackgroundPromptEn)
+      : (params.locale === 'es' ? eventType?.aiPhotoPromptEs : eventType?.aiPhotoPromptEn)
+
+    // Build base prompt
+    const basePrompt = params.locale === 'es'
       ? `IMPORTANTE: Genera una imagen de ALTA CALIDAD, ALTA RESOLUCIÓN y MÁXIMA NITIDEZ.
 
 Genera una ${imageTypeLabel} elegante y profesional para una invitación de ${eventTypeName}${namesText ? ` para ${namesText}` : ''}${params.title ? `. Título: "${params.title}"` : ''}. ${params.prompt}.
@@ -461,6 +473,11 @@ Quality requirements:
 
 The image should be high quality, visually appealing and appropriate for a high-end formal invitation.`
 
+    // Combine admin prompt with base prompt if admin prompt exists
+    const fullPrompt = adminPrompt
+      ? `${adminPrompt}\n\n${basePrompt}`
+      : basePrompt
+
     console.log('\n========== AI IMAGE GENERATION REQUEST ==========')
     console.log('📋 Input Parameters:')
     console.log('   - eventTypeId:', params.eventTypeId)
@@ -471,6 +488,7 @@ The image should be high quality, visually appealing and appropriate for a high-
     console.log('   - userPrompt:', params.prompt)
     console.log('   - hasSourceImage:', !!params.sourceImageBase64)
     console.log('   - locale:', params.locale)
+    console.log('📝 Admin Prompt:', adminPrompt || '(none)')
     console.log('📝 FULL PROMPT:')
     console.log('---')
     console.log(fullPrompt)
@@ -549,10 +567,17 @@ export async function retouchEventImage(params: {
 
     const tokenCost = accessCheck.tokenCost
 
-    // Get event type for context
+    // Get event type for context including admin prompts
     const eventType = await prisma.eventType.findUnique({
       where: { id: params.eventTypeId },
-      select: { name: true, nameEn: true }
+      select: {
+        name: true,
+        nameEn: true,
+        aiBackgroundPromptEs: true,
+        aiBackgroundPromptEn: true,
+        aiPhotoPromptEs: true,
+        aiPhotoPromptEn: true
+      }
     })
 
     const eventTypeName = params.locale === 'es' ? eventType?.name : eventType?.nameEn
@@ -561,8 +586,13 @@ export async function retouchEventImage(params: {
       ? (params.locale === 'es' ? 'imagen de fondo' : 'background image')
       : (params.locale === 'es' ? 'foto principal' : 'featured photo')
 
-    // Build prompt for image editing with emphasis on high quality
-    const fullPrompt = params.locale === 'es'
+    // Get admin prompt based on image type
+    const adminPrompt = params.imageType === 'background'
+      ? (params.locale === 'es' ? eventType?.aiBackgroundPromptEs : eventType?.aiBackgroundPromptEn)
+      : (params.locale === 'es' ? eventType?.aiPhotoPromptEs : eventType?.aiPhotoPromptEn)
+
+    // Build base prompt for image editing with emphasis on high quality
+    const basePrompt = params.locale === 'es'
       ? `IMPORTANTE: Genera una imagen de ALTA CALIDAD y ALTA RESOLUCIÓN.
 
 Edita esta ${imageTypeLabel} para una invitación de ${eventTypeName}${namesText ? ` para ${namesText}` : ''}${params.title ? `. Título: "${params.title}"` : ''}.
@@ -592,6 +622,11 @@ Quality requirements:
 
 Apply the requested changes while maintaining the essence and quality of the original image. The resulting image should be elegant, sharp and appropriate for a high-quality formal invitation.`
 
+    // Combine admin prompt with base prompt if admin prompt exists
+    const fullPrompt = adminPrompt
+      ? `${adminPrompt}\n\n${basePrompt}`
+      : basePrompt
+
     console.log('\n========== AI IMAGE RETOUCH REQUEST ==========')
     console.log('📋 Input Parameters:')
     console.log('   - eventTypeId:', params.eventTypeId)
@@ -603,6 +638,7 @@ Apply the requested changes while maintaining the essence and quality of the ori
     console.log('   - imageMimeType:', params.imageMimeType)
     console.log('   - imageBase64 length:', params.imageBase64.length)
     console.log('   - locale:', params.locale)
+    console.log('📝 Admin Prompt:', adminPrompt || '(none)')
     console.log('📝 FULL PROMPT:')
     console.log('---')
     console.log(fullPrompt)

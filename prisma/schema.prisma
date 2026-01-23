@@ -206,6 +206,7 @@ model Event {
   allowComments     Boolean     @default(false)
   maxGuests         Int?        // Límite de confirmaciones
   requirePhone      Boolean     @default(true)
+  askDietaryRequirements Boolean @default(false) // Preguntar por requerimientos alimenticios
   
   // Estadísticas
   views             Int         @default(0)
@@ -238,7 +239,11 @@ model Guest {
   status            GuestStatus @default(PENDING)
   numberOfGuests    Int         @default(1) // Cuántas personas trae
   message           String?     // Mensaje opcional del invitado
-  
+
+  // Requerimientos alimenticios
+  dietaryRequirements Json?     // Array de strings: ["celiac", "vegan", "vegetarian", "allergic"]
+  dietaryNotes        String?   // Notas adicionales (ej: "alérgico a maní")
+
   // Metadata
   ipAddress         String?
   userAgent         String?
