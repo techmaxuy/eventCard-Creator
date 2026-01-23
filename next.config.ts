@@ -4,6 +4,12 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
+  // Increase body size limit for Server Actions (for AI image processing)
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10MB',
+    },
+  },
   images: {
     remotePatterns: [
       // Azure Blob Storage

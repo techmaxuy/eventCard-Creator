@@ -1036,7 +1036,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
             </h2>
 
             {/* Dietary Requirements Toggle */}
-            <label className="flex items-center justify-between cursor-pointer">
+            <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {locale === 'es' ? 'Preguntar requerimientos alimenticios' : 'Ask for dietary requirements'}
@@ -1047,27 +1047,20 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                     : 'Guests can indicate if they are celiac, vegan, vegetarian or have allergies'}
                 </p>
               </div>
-              <div className="relative">
-                <input
-                  type="checkbox"
-                  checked={askDietaryRequirements}
-                  onChange={(e) => setAskDietaryRequirements(e.target.checked)}
-                  className="sr-only"
-                />
+              <button
+                type="button"
+                onClick={() => setAskDietaryRequirements(!askDietaryRequirements)}
+                className={`relative w-11 h-6 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                  askDietaryRequirements ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+                }`}
+              >
                 <div
-                  className={`w-11 h-6 rounded-full transition-colors ${
-                    askDietaryRequirements ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
-                  }`}
-                  onClick={() => setAskDietaryRequirements(!askDietaryRequirements)}
-                >
-                  <div
-                    className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform ${
-                      askDietaryRequirements ? 'translate-x-5' : 'translate-x-0.5'
-                    } mt-0.5`}
-                  />
-                </div>
-              </div>
-            </label>
+                  className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform ${
+                    askDietaryRequirements ? 'translate-x-5' : 'translate-x-0.5'
+                  } mt-0.5`}
+                />
+              </button>
+            </div>
           </div>
 
           {/* Save Button */}
