@@ -72,8 +72,8 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
   // Scroll-based brightness effect for the background
   const { scrollYProgress } = useScroll()
 
-  // Brightness effect: starts bright (1.15), dims to normal (1.0) as you scroll
-  const brightnessValue = useTransform(scrollYProgress, [0, 0.15, 0.3], [1.15, 1.05, 1])
+  // Brightness effect: starts very bright (1.3), dims to normal (1.0) as you scroll
+  const brightnessValue = useTransform(scrollYProgress, [0, 0.15, 0.3], [1.3, 1.15, 1])
   const filterStyle = useMotionTemplate`brightness(${brightnessValue})`
 
   // Obtener tema visual según tipo de evento
