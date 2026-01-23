@@ -37,9 +37,8 @@ export function HeroSection({
     offset: ['start start', 'end start']
   })
 
-  // Parallax effect - la imagen se mueve más lento que el scroll
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 0.5, 1],)
+  // Brightness effect - starts bright (high overlay), dims to normal on scroll
+  const brightnessOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.4, 0.2, 0])
   
   // Gradientes según tipo de background
   const getBackground = () => {
@@ -68,13 +67,11 @@ export function HeroSection({
 
   return (
     <div ref={ref} className="relative h-screen w-full overflow-hidden">
-      {/* Background con Parallax */}
+      {/* Background - static image with brightness effect */}
       {coverImage ? (
         <>
-          <motion.div 
-            style={{ y }}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm w-full h-[120%]"
-          >
+          {/* Static cover image - no parallax */}
+          <div className="absolute inset-0">
             <Image
               src={coverImage}
               alt={title}
@@ -83,22 +80,27 @@ export function HeroSection({
               priority
               sizes="100vw"
             />
-          </motion.div>
-          <motion.div 
-            style={{ opacity }}
-            className="absolute inset-0 " 
+          </div>
+          {/* Brightness overlay - starts bright white, fades to transparent on scroll */}
+          <motion.div
+            style={{ opacity: brightnessOpacity }}
+            className="absolute inset-0 bg-white pointer-events-none"
           />
         </>
       ) : (
-        <motion.div 
-          style={{ opacity }}
-          className="absolute inset-0"
-        >
-          <div 
-            className="w-full h-full"
-            style={{ background: getBackground() || primaryColor }}
+        <>
+          <div className="absolute inset-0">
+            <div
+              className="w-full h-full"
+              style={{ background: getBackground() || primaryColor }}
+            />
+          </div>
+          {/* Brightness overlay for gradient backgrounds too */}
+          <motion.div
+            style={{ opacity: brightnessOpacity }}
+            className="absolute inset-0 bg-white pointer-events-none"
           />
-        </motion.div>
+        </>
       )}
 
       {/* Content */}

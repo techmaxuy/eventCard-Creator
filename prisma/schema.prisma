@@ -142,6 +142,10 @@ model EventType {
   aiPhotoPromptEs   String?  @db.Text // Spanish context for additional photo
   aiPhotoPromptEn   String?  @db.Text // English context for additional photo
 
+  // Font Configuration
+  showFonts         Boolean  @default(true)    // Whether to show font selector for this event type
+  fontCategories    Json?    // Array of allowed font categories: ["playful", "elegant", "modern", "handwritten"]
+
   // Estado
   isActive          Boolean  @default(true)
 

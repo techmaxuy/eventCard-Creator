@@ -38,6 +38,9 @@ interface EventTypeFormProps {
     aiBackgroundPromptEn: string | null
     aiPhotoPromptEs: string | null
     aiPhotoPromptEn: string | null
+    // Font Configuration
+    showFonts: boolean
+    fontCategories: unknown // Json type from Prisma, will be cast to string[]
   }
   locale: string
 }
@@ -77,6 +80,12 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
   const [aiBackgroundPromptEn, setAiBackgroundPromptEn] = useState(eventType?.aiBackgroundPromptEn || '')
   const [aiPhotoPromptEs, setAiPhotoPromptEs] = useState(eventType?.aiPhotoPromptEs || '')
   const [aiPhotoPromptEn, setAiPhotoPromptEn] = useState(eventType?.aiPhotoPromptEn || '')
+
+  // Font Configuration state
+  const [showFonts, setShowFonts] = useState(eventType?.showFonts ?? true)
+  const [fontCategories, setFontCategories] = useState<string[]>(
+    (eventType?.fontCategories as string[]) || ['playful', 'elegant', 'modern', 'handwritten']
+  )
 
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
 
@@ -130,6 +139,9 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
         aiBackgroundPromptEn: aiBackgroundPromptEn || undefined,
         aiPhotoPromptEs: aiPhotoPromptEs || undefined,
         aiPhotoPromptEn: aiPhotoPromptEn || undefined,
+        // Font Configuration
+        showFonts,
+        fontCategories: showFonts ? fontCategories : [],
       }
 
       const result = eventType
@@ -448,7 +460,68 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
                 </span>
               </div>
             </label>
+
+            {/* Show Fonts */}
+            <label className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-800">
+              <input
+                type="checkbox"
+                checked={showFonts}
+                onChange={(e) => setShowFonts(e.target.checked)}
+                className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+              />
+              <div className="flex-1">
+                <span className="text-sm font-medium text-gray-900 dark:text-white block">
+                  {locale === 'es' ? 'Mostrar selector de fuentes' : 'Show font selector'}
+                </span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {locale === 'es' ? 'Permitir que el usuario elija tipografías' : 'Allow users to choose typography'}
+                </span>
+              </div>
+            </label>
           </div>
+
+          {/* Font Categories - Only show if fonts are enabled */}
+          {showFonts && (
+            <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {locale === 'es' ? 'Categorías de fuentes permitidas' : 'Allowed font categories'}
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {['playful', 'elegant', 'modern', 'handwritten'].map((category) => (
+                  <label
+                    key={category}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors ${
+                      fontCategories.includes(category)
+                        ? 'bg-blue-100 dark:bg-blue-900/30 border-blue-500 text-blue-700 dark:text-blue-300'
+                        : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={fontCategories.includes(category)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setFontCategories([...fontCategories, category])
+                        } else {
+                          setFontCategories(fontCategories.filter(c => c !== category))
+                        }
+                      }}
+                      className="sr-only"
+                    />
+                    <span className="text-sm font-medium">
+                      {category === 'playful' ? (locale === 'es' ? '🎉 Juguetona' : '🎉 Playful') :
+                       category === 'elegant' ? (locale === 'es' ? '✨ Elegante' : '✨ Elegant') :
+                       category === 'modern' ? (locale === 'es' ? '🚀 Moderna' : '🚀 Modern') :
+                       (locale === 'es' ? '✍️ Manuscrita' : '✍️ Handwritten')}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                {locale === 'es' ? 'Selecciona qué estilos de fuente estarán disponibles' : 'Select which font styles will be available'}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* AI Wizard Configuration */}

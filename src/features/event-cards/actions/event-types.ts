@@ -36,6 +36,9 @@ const EventTypeSchema = z.object({
   aiBackgroundPromptEn: z.string().optional(),
   aiPhotoPromptEs: z.string().optional(),
   aiPhotoPromptEn: z.string().optional(),
+  // Font Configuration
+  showFonts: z.boolean().default(true),
+  fontCategories: z.array(z.string()).optional(),
 })
 
 

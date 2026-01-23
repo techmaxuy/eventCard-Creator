@@ -174,12 +174,18 @@ export function getFontsByCategory(category?: EventFont['category']): EventFont[
 
 /**
  * Obtener fuentes recomendadas para un tipo de evento
- * Para casamientos/bodas: solo fuentes elegantes
- * Para cumpleaños: solo fuentes juguesas (playful)
- * Para otros: todas las fuentes apropiadas
+ * Usa las categorías configuradas en la base de datos si se proporcionan,
+ * o aplica la lógica legacy basada en el slug del evento
  */
-export function getFontsForEventType(eventTypeSlug: string): EventFont[] {
-  // Normalizar el slug a minúsculas para comparación
+export function getFontsForEventType(eventTypeSlug: string, fontCategories?: string[]): EventFont[] {
+  // Si hay categorías configuradas desde la base de datos, usarlas
+  if (fontCategories && fontCategories.length > 0) {
+    return EVENT_FONTS.filter(font =>
+      fontCategories.includes(font.category)
+    )
+  }
+
+  // Fallback: Comportamiento legacy basado en slug
   const normalizedSlug = eventTypeSlug.toLowerCase()
 
   // Para casamientos/bodas: solo fuentes elegantes
@@ -220,10 +226,8 @@ export function getFontsForEventType(eventTypeSlug: string): EventFont[] {
     )
   }
 
-  // Para cualquier otro evento: filtrar por eventTypes si están definidos
-  return EVENT_FONTS.filter(
-    (font) => !font.eventTypes || font.eventTypes.some((type) => normalizedSlug.includes(type))
-  )
+  // Para cualquier otro evento: mostrar TODAS las fuentes
+  return EVENT_FONTS
 }
 
 /**

@@ -8,6 +8,7 @@ import { AssetSelector } from './AssetSelector'
 import { FontSelector } from './FontSelector'
 import { DecorationSelector } from './DecorationSelector'
 import { EditorAIPanel } from './EditorAIPanel'
+import { EditorImageAIPanel } from './EditorImageAIPanel'
 
 import {
   Save,
@@ -43,6 +44,8 @@ interface EventType {
   hasGiftRegistry: boolean
   hasMenu: boolean
   allowDecorations: boolean
+  showFonts: boolean
+  fontCategories: unknown // Json type from Prisma
   color: string
   icon: string | null
 }
@@ -550,15 +553,18 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
             </div>
           </div>
 
-          {/* Font Selector - Solo para eventos juguetones como cumpleaños */}
-          <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6">
-            <FontSelector
-              eventTypeSlug={event.eventType.slug}
-              selectedFontId={fontFamily}
-              onSelect={(fontId) => setFontFamily(fontId || '')}
-              eventTitle={title}
-            />
-          </div>
+          {/* Font Selector - Configurable per EventType */}
+          {event.eventType.showFonts !== false && (
+            <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6">
+              <FontSelector
+                eventTypeSlug={event.eventType.slug}
+                fontCategories={(event.eventType.fontCategories as string[]) || undefined}
+                selectedFontId={fontFamily}
+                onSelect={(fontId) => setFontFamily(fontId || '')}
+                eventTitle={title}
+              />
+            </div>
+          )}
 
           {/* Decoration Selector */}
           {event.eventType.allowDecorations && (
@@ -784,17 +790,18 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
               </div>
             )}
 
-            {/* AI Enhancement for custom cover images */}
-            {event.coverImage && isCustomCoverImage && (
-              <EditorAIPanel
+            {/* AI Enhancement for cover images */}
+            {event.coverImage && (
+              <EditorImageAIPanel
                 type="background"
                 eventTypeId={event.eventType.id}
                 eventTypeName={locale === 'es' ? event.eventType.name : event.eventType.nameEn}
                 title={title}
-                hasCustomImage={true}
-                onSelectSuggestion={(suggestion) => {
-                  // The suggestion is an enhancement prompt - user can use it as guidance
-                  setMessage({ type: 'success', text: suggestion })
+                currentImageUrl={event.coverImage || ''}
+                currentImageFile={null}
+                onImageChange={(url) => {
+                  setEvent({ ...event, coverImage: url })
+                  setIsCustomCoverImage(true)
                 }}
                 locale={locale}
               />
@@ -913,17 +920,18 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
               </div>
             )}
 
-            {/* AI Enhancement for custom featured images */}
-            {event.featuredImage && isCustomFeaturedImage && (
-              <EditorAIPanel
+            {/* AI Enhancement for featured images */}
+            {event.featuredImage && (
+              <EditorImageAIPanel
                 type="featured"
                 eventTypeId={event.eventType.id}
                 eventTypeName={locale === 'es' ? event.eventType.name : event.eventType.nameEn}
                 title={title}
-                hasCustomImage={true}
-                onSelectSuggestion={(suggestion) => {
-                  // The suggestion is an enhancement prompt - user can use it as guidance
-                  setMessage({ type: 'success', text: suggestion })
+                currentImageUrl={event.featuredImage || ''}
+                currentImageFile={null}
+                onImageChange={(url) => {
+                  setEvent({ ...event, featuredImage: url })
+                  setIsCustomFeaturedImage(true)
                 }}
                 locale={locale}
               />

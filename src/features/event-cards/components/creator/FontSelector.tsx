@@ -7,6 +7,7 @@ import { EVENT_FONTS, getFontsForEventType, type EventFont } from '@/features/ev
 
 interface FontSelectorProps {
   eventTypeSlug?: string
+  fontCategories?: string[] // Categories configured in EventType
   selectedFontId?: string
   onSelect: (fontId: string | null) => void
   eventTitle: string // Para preview personalizado
@@ -14,6 +15,7 @@ interface FontSelectorProps {
 
 export function FontSelector({
   eventTypeSlug,
+  fontCategories,
   selectedFontId,
   onSelect,
   eventTitle
@@ -22,9 +24,9 @@ export function FontSelector({
   const [loadedFonts, setLoadedFonts] = useState<Set<string>>(new Set())
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'playful' | 'elegant' | 'modern' | 'handwritten'>('all')
 
-  // Obtener fuentes recomendadas según tipo de evento
+  // Obtener fuentes recomendadas según tipo de evento y categorías configuradas
   const recommendedFonts = eventTypeSlug
-    ? getFontsForEventType(eventTypeSlug)
+    ? getFontsForEventType(eventTypeSlug, fontCategories)
     : EVENT_FONTS
 
   // Filtrar por categoría
