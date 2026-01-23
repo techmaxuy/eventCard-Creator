@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionTemplate } from 'framer-motion'
 import Image from 'next/image'
 import { EventTheme } from '@/features/event-cards/config/event-themes'
 import { ChevronDown } from 'lucide-react'
@@ -37,8 +37,12 @@ export function HeroSection({
     offset: ['start start', 'end start']
   })
 
-  // Brightness effect - starts bright (high overlay), dims to normal on scroll
-  const brightnessOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.4, 0.2, 0])
+  // Brightness filter effect - starts bright (1.2), dims to normal (1.0) on scroll
+  const brightnessValue = useTransform(scrollYProgress, [0, 0.5, 1], [1.2, 1.1, 1])
+  const filterStyle = useMotionTemplate`brightness(${brightnessValue})`
+
+  // Subtle vignette/darkening effect - transparent at start, subtle dark overlay on scroll
+  const vignetteOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 0.1, 0.25])
   
   // Gradientes según tipo de background
   const getBackground = () => {
@@ -67,11 +71,14 @@ export function HeroSection({
 
   return (
     <div ref={ref} className="relative h-screen w-full overflow-hidden">
-      {/* Background - static image with brightness effect */}
+      {/* Background - static image with animated brightness filter */}
       {coverImage ? (
         <>
-          {/* Static cover image - no parallax */}
-          <div className="absolute inset-0">
+          {/* Static cover image with brightness filter - always visible */}
+          <motion.div
+            className="absolute inset-0"
+            style={{ filter: filterStyle }}
+          >
             <Image
               src={coverImage}
               alt={title}
@@ -80,26 +87,43 @@ export function HeroSection({
               priority
               sizes="100vw"
             />
-          </div>
-          {/* Brightness overlay - starts bright white, fades to transparent on scroll */}
+          </motion.div>
+          {/* Subtle radial vignette - dark edges that appear on scroll */}
           <motion.div
-            style={{ opacity: brightnessOpacity }}
-            className="absolute inset-0 bg-white pointer-events-none"
-          />
+            style={{ opacity: vignetteOpacity }}
+            className="absolute inset-0 pointer-events-none"
+          >
+            <div
+              className="w-full h-full"
+              style={{
+                background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)'
+              }}
+            />
+          </motion.div>
         </>
       ) : (
         <>
-          <div className="absolute inset-0">
+          <motion.div
+            className="absolute inset-0"
+            style={{ filter: filterStyle }}
+          >
             <div
               className="w-full h-full"
               style={{ background: getBackground() || primaryColor }}
             />
-          </div>
-          {/* Brightness overlay for gradient backgrounds too */}
+          </motion.div>
+          {/* Subtle radial vignette for gradient backgrounds too */}
           <motion.div
-            style={{ opacity: brightnessOpacity }}
-            className="absolute inset-0 bg-white pointer-events-none"
-          />
+            style={{ opacity: vignetteOpacity }}
+            className="absolute inset-0 pointer-events-none"
+          >
+            <div
+              className="w-full h-full"
+              style={{
+                background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)'
+              }}
+            />
+          </motion.div>
         </>
       )}
 
