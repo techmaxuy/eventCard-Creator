@@ -147,21 +147,6 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
       
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
           
-          {/* Description (if exists) */}
-          {event.description && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="max-w-2xl mx-auto text-center"
-            >
-              <p className="text-3xl md:text-4xl text-white dark:text-white leading-relaxed font-medium" style={cssFontFamily ? { fontFamily: cssFontFamily } : {}}>
-                {event.description}
-              </p>
-            </motion.div>
-          )}
-
           {/* Featured Image - Foto principal */}
           {event.featuredImage && (
             <motion.div

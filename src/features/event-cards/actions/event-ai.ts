@@ -434,10 +434,32 @@ export async function generateEventImage(params: {
       ? (params.locale === 'es' ? 'imagen de fondo' : 'background image')
       : (params.locale === 'es' ? 'foto principal' : 'featured photo')
 
-    // Build a detailed prompt for image generation
+    // Build a detailed prompt for image generation with high quality emphasis
     const fullPrompt = params.locale === 'es'
-      ? `Genera una ${imageTypeLabel} elegante y profesional para una invitación de ${eventTypeName}${namesText ? ` para ${namesText}` : ''}${params.title ? `. Título: "${params.title}"` : ''}. ${params.prompt}. La imagen debe ser de alta calidad, visualmente atractiva y apropiada para una invitación formal.`
-      : `Generate an elegant and professional ${imageTypeLabel} for a ${eventTypeName} invitation${namesText ? ` for ${namesText}` : ''}${params.title ? `. Title: "${params.title}"` : ''}. ${params.prompt}. The image should be high quality, visually appealing and appropriate for a formal invitation.`
+      ? `IMPORTANTE: Genera una imagen de ALTA CALIDAD, ALTA RESOLUCIÓN y MÁXIMA NITIDEZ.
+
+Genera una ${imageTypeLabel} elegante y profesional para una invitación de ${eventTypeName}${namesText ? ` para ${namesText}` : ''}${params.title ? `. Título: "${params.title}"` : ''}. ${params.prompt}.
+
+Requisitos de calidad:
+- Imagen nítida, clara y de alta resolución
+- Detalles finos bien definidos
+- Colores vibrantes y bien balanceados
+- Sin artefactos ni ruido visual
+- Estilo fotográfico profesional
+
+La imagen debe ser de alta calidad, visualmente atractiva y apropiada para una invitación formal de alto nivel.`
+      : `IMPORTANT: Generate a HIGH QUALITY, HIGH RESOLUTION and MAXIMUM SHARPNESS image.
+
+Generate an elegant and professional ${imageTypeLabel} for a ${eventTypeName} invitation${namesText ? ` for ${namesText}` : ''}${params.title ? `. Title: "${params.title}"` : ''}. ${params.prompt}.
+
+Quality requirements:
+- Sharp, clear and high resolution image
+- Fine details well defined
+- Vibrant and well-balanced colors
+- No artifacts or visual noise
+- Professional photographic style
+
+The image should be high quality, visually appealing and appropriate for a high-end formal invitation.`
 
     console.log('\n========== AI IMAGE GENERATION REQUEST ==========')
     console.log('📋 Input Parameters:')
@@ -539,18 +561,36 @@ export async function retouchEventImage(params: {
       ? (params.locale === 'es' ? 'imagen de fondo' : 'background image')
       : (params.locale === 'es' ? 'foto principal' : 'featured photo')
 
-    // Build prompt for image editing
+    // Build prompt for image editing with emphasis on high quality
     const fullPrompt = params.locale === 'es'
-      ? `Edita esta ${imageTypeLabel} para una invitación de ${eventTypeName}${namesText ? ` para ${namesText}` : ''}${params.title ? `. Título: "${params.title}"` : ''}.
+      ? `IMPORTANTE: Genera una imagen de ALTA CALIDAD y ALTA RESOLUCIÓN.
+
+Edita esta ${imageTypeLabel} para una invitación de ${eventTypeName}${namesText ? ` para ${namesText}` : ''}${params.title ? `. Título: "${params.title}"` : ''}.
 
 Instrucciones de edición del usuario: ${params.editPrompt}
 
-Aplica los cambios solicitados manteniendo la esencia y calidad de la imagen original. La imagen resultante debe ser elegante y apropiada para una invitación formal.`
-      : `Edit this ${imageTypeLabel} for a ${eventTypeName} invitation${namesText ? ` for ${namesText}` : ''}${params.title ? `. Title: "${params.title}"` : ''}.
+Requisitos de calidad:
+- Mantén la máxima resolución y nitidez posible
+- Preserva los detalles finos y texturas de la imagen original
+- Aplica los cambios de forma sutil y profesional
+- La imagen debe verse nítida, clara y de alta calidad
+- Evita artefactos, ruido o pérdida de calidad
+
+Aplica los cambios solicitados manteniendo la esencia y calidad de la imagen original. La imagen resultante debe ser elegante, nítida y apropiada para una invitación formal de alta calidad.`
+      : `IMPORTANT: Generate a HIGH QUALITY and HIGH RESOLUTION image.
+
+Edit this ${imageTypeLabel} for a ${eventTypeName} invitation${namesText ? ` for ${namesText}` : ''}${params.title ? `. Title: "${params.title}"` : ''}.
 
 User editing instructions: ${params.editPrompt}
 
-Apply the requested changes while maintaining the essence and quality of the original image. The resulting image should be elegant and appropriate for a formal invitation.`
+Quality requirements:
+- Maintain maximum resolution and sharpness possible
+- Preserve fine details and textures from the original image
+- Apply changes subtly and professionally
+- The image must look sharp, clear and high quality
+- Avoid artifacts, noise or quality loss
+
+Apply the requested changes while maintaining the essence and quality of the original image. The resulting image should be elegant, sharp and appropriate for a high-quality formal invitation.`
 
     console.log('\n========== AI IMAGE RETOUCH REQUEST ==========')
     console.log('📋 Input Parameters:')

@@ -117,7 +117,7 @@ export function HeroSection({
           className="mb-6"
         >
           <div
-            className="w-24 h-24 rounded-full flex items-center justify-center shadow-2xl overflow-hidden border-4 border-white/30"
+            className="w-36 h-36 rounded-full flex items-center justify-center shadow-2xl overflow-hidden border-4 border-white/30"
             style={{
               backgroundColor: coverImage ? 'rgba(255, 255, 255, 0.9)' : `${primaryColor}20`,
               backdropFilter: 'blur(10px)',
@@ -127,8 +127,8 @@ export function HeroSection({
               <Image
                 src={featuredImage}
                 alt={title}
-                width={96}
-                height={96}
+                width={144}
+                height={144}
                 className="object-cover w-full h-full"
               />
             ) : (
