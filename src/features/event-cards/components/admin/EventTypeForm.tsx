@@ -41,6 +41,8 @@ interface EventTypeFormProps {
     // Font Configuration
     showFonts: boolean
     fontCategories: unknown // Json type from Prisma, will be cast to string[]
+    // Featured Image Configuration
+    showFeaturedImage: boolean
   }
   locale: string
 }
@@ -86,6 +88,9 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
   const [fontCategories, setFontCategories] = useState<string[]>(
     (eventType?.fontCategories as string[]) || ['playful', 'elegant', 'modern', 'handwritten']
   )
+
+  // Featured Image Configuration state
+  const [showFeaturedImage, setShowFeaturedImage] = useState(eventType?.showFeaturedImage ?? true)
 
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
 
@@ -142,6 +147,8 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
         // Font Configuration
         showFonts,
         fontCategories: showFonts ? fontCategories : [],
+        // Featured Image Configuration
+        showFeaturedImage,
       }
 
       const result = eventType
@@ -475,6 +482,24 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
                 </span>
                 <span className="text-xs text-gray-500 dark:text-gray-400">
                   {locale === 'es' ? 'Permitir que el usuario elija tipografías' : 'Allow users to choose typography'}
+                </span>
+              </div>
+            </label>
+
+            {/* Show Featured Image */}
+            <label className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-800">
+              <input
+                type="checkbox"
+                checked={showFeaturedImage}
+                onChange={(e) => setShowFeaturedImage(e.target.checked)}
+                className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+              />
+              <div className="flex-1">
+                <span className="text-sm font-medium text-gray-900 dark:text-white block">
+                  {locale === 'es' ? 'Mostrar foto principal' : 'Show featured image'}
+                </span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {locale === 'es' ? 'Permitir subir una foto destacada (ej: foto de pareja, cumpleañero)' : 'Allow uploading a featured photo (e.g., couple photo, birthday person)'}
                 </span>
               </div>
             </label>

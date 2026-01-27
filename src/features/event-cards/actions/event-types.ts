@@ -39,6 +39,8 @@ const EventTypeSchema = z.object({
   // Font Configuration
   showFonts: z.boolean().default(true),
   fontCategories: z.array(z.string()).optional(),
+  // Featured Image Configuration
+  showFeaturedImage: z.boolean().default(true),
 })
 
 

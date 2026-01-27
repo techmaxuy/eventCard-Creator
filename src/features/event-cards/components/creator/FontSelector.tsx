@@ -11,6 +11,7 @@ interface FontSelectorProps {
   selectedFontId?: string
   onSelect: (fontId: string | null) => void
   eventTitle: string // Para preview personalizado
+  compact?: boolean // Compact mode for multiple font selectors
 }
 
 export function FontSelector({
@@ -18,7 +19,8 @@ export function FontSelector({
   fontCategories,
   selectedFontId,
   onSelect,
-  eventTitle
+  eventTitle,
+  compact = false
 }: FontSelectorProps) {
   const t = useTranslations('FontSelector')
   const [loadedFonts, setLoadedFonts] = useState<Set<string>>(new Set())
@@ -77,6 +79,50 @@ export function FontSelector({
       case 'handwritten':
         return '✍️'
     }
+  }
+
+  // Compact mode - simplified dropdown selector
+  if (compact) {
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <select
+            value={selectedFontId || ''}
+            onChange={(e) => onSelect(e.target.value || null)}
+            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          >
+            <option value="">{t('defaultFont')}</option>
+            {recommendedFonts.map((font) => (
+              <option key={font.id} value={font.id}>
+                {getCategoryIcon(font.category)} {font.displayName}
+              </option>
+            ))}
+          </select>
+          {selectedFontId && (
+            <button
+              onClick={() => onSelect(null)}
+              className="p-2 text-gray-500 hover:text-red-600 dark:hover:text-red-400"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+        {/* Preview */}
+        {selectedFontId && (
+          <div
+            style={{
+              fontFamily: loadedFonts.has(selectedFontId)
+                ? recommendedFonts.find(f => f.id === selectedFontId)?.name
+                : 'inherit',
+              fontSize: '18px',
+            }}
+            className="px-3 py-2 bg-gray-50 dark:bg-gray-800/50 rounded text-gray-900 dark:text-white truncate"
+          >
+            {eventTitle}
+          </div>
+        )}
+      </div>
+    )
   }
 
   return (

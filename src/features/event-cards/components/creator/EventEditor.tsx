@@ -46,6 +46,7 @@ interface EventType {
   allowDecorations: boolean
   showFonts: boolean
   fontCategories: unknown // Json type from Prisma
+  showFeaturedImage: boolean
   color: string
   icon: string | null
 }
@@ -54,6 +55,8 @@ interface Event {
   id: string
   slug: string
   title: string
+  titleNames: string | null
+  titleMessage: string | null
   description: string | null
   eventDate: Date | null
   eventTime: string | null
@@ -71,6 +74,10 @@ interface Event {
   welcomePhrase: string | null
   musicUrl: string | null
   fontFamily: string | null
+  fontEventType: string | null
+  fontTitle: string | null
+  fontMessage: string | null
+  fontBody: string | null
   decorations: any
   isPublished: boolean
   askDietaryRequirements: boolean
@@ -123,6 +130,8 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
 
   // Form state
   const [title, setTitle] = useState(event.title)
+  const [titleNames, setTitleNames] = useState(event.titleNames || '')
+  const [titleMessage, setTitleMessage] = useState(event.titleMessage || '')
   const [description, setDescription] = useState(event.description || event.welcomePhrase || '')
   const [eventDate, setEventDate] = useState(
     event.eventDate ? new Date(event.eventDate).toISOString().split('T')[0] : ''
@@ -144,6 +153,10 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   const [welcomePhrase, setWelcomePhrase] = useState(event.welcomePhrase || '')
   const [musicUrl, setMusicUrl] = useState(event.musicUrl || '')
   const [fontFamily, setFontFamily] = useState(event.fontFamily || '')
+  const [fontEventType, setFontEventType] = useState(event.fontEventType || '')
+  const [fontTitle, setFontTitle] = useState(event.fontTitle || '')
+  const [fontMessage, setFontMessage] = useState(event.fontMessage || '')
+  const [fontBody, setFontBody] = useState(event.fontBody || '')
   const [selectedDecorations, setSelectedDecorations] = useState<Array<{ assetId: string, position: string }>>(
     event.decorations ? (Array.isArray(event.decorations) ? event.decorations : []) : []
   )
@@ -171,6 +184,8 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
     startTransition(async () => {
       const result = await updateEvent(event.id, {
         title,
+        titleNames: titleNames || undefined,
+        titleMessage: titleMessage || undefined,
         description,
         eventDate: eventDate || undefined,
         eventTime: eventTime || undefined,
@@ -186,6 +201,10 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
         welcomePhrase: welcomePhrase || undefined,
         musicUrl: musicUrl || undefined,
         fontFamily: fontFamily || undefined,
+        fontEventType: fontEventType || undefined,
+        fontTitle: fontTitle || undefined,
+        fontMessage: fontMessage || undefined,
+        fontBody: fontBody || undefined,
         decorations: selectedDecorations,
         askDietaryRequirements
       })
@@ -481,26 +500,60 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
             </h2>
 
             <div className="space-y-4">
-              {/* Title */}
+              {/* Title Names - Protagonists */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  {t('eventTitle')} *
+                  {locale === 'es' ? 'Nombres de los protagonistas' : 'Protagonist names'}
                 </label>
                 <input
                   type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  value={titleNames}
+                  onChange={(e) => {
+                    setTitleNames(e.target.value)
+                    // Auto-update legacy title field
+                    setTitle(e.target.value + (titleMessage ? ' ' + titleMessage : ''))
+                  }}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder={locale === 'es' ? 'Ej: María y Juan, Lucía' : 'E.g.: Maria and John, Lucy'}
+                />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {locale === 'es'
+                    ? 'Los nombres aparecerán en líneas separadas y con mayor tamaño'
+                    : 'Names will appear on separate lines with larger size'}
+                </p>
+              </div>
+
+              {/* Title Message */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  {locale === 'es' ? 'Mensaje del título' : 'Title message'}
+                </label>
+                <input
+                  type="text"
+                  value={titleMessage}
+                  onChange={(e) => {
+                    setTitleMessage(e.target.value)
+                    // Auto-update legacy title field
+                    setTitle((titleNames || '') + (e.target.value ? ' ' + e.target.value : ''))
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder={locale === 'es' ? 'Ej: se casan, cumple 30' : 'E.g.: are getting married, turns 30'}
                 />
                 <EditorAIPanel
                   type="title"
                   eventTypeId={event.eventType.id}
                   eventTypeName={locale === 'es' ? event.eventType.name : event.eventType.nameEn}
-                  title={title}
-                  onSelectSuggestion={(suggestion) => setTitle(suggestion)}
+                  title={titleNames}
+                  onSelectSuggestion={(suggestion) => {
+                    setTitleMessage(suggestion)
+                    setTitle((titleNames || '') + ' ' + suggestion)
+                  }}
                   locale={locale}
                 />
               </div>
+
+              {/* Legacy Title (hidden, for backward compatibility) */}
+              <input type="hidden" value={title} />
 
               {/* Description */}
               <div>
@@ -553,16 +606,84 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
             </div>
           </div>
 
-          {/* Font Selector - Configurable per EventType */}
+          {/* Font Selectors - Multiple fonts for different sections */}
           {event.eventType.showFonts !== false && (
-            <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6">
-              <FontSelector
-                eventTypeSlug={event.eventType.slug}
-                fontCategories={(event.eventType.fontCategories as string[]) || undefined}
-                selectedFontId={fontFamily}
-                onSelect={(fontId) => setFontFamily(fontId || '')}
-                eventTitle={title}
-              />
+            <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6 space-y-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                {locale === 'es' ? 'Tipografías' : 'Typography'}
+              </h2>
+
+              {/* Font for Event Type */}
+              <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {locale === 'es' ? 'Fuente para tipo de evento' : 'Font for event type'}
+                  <span className="text-xs text-gray-500 ml-2">
+                    ({locale === 'es' ? event.eventType.name : event.eventType.nameEn})
+                  </span>
+                </h3>
+                <FontSelector
+                  eventTypeSlug={event.eventType.slug}
+                  fontCategories={(event.eventType.fontCategories as string[]) || undefined}
+                  selectedFontId={fontEventType}
+                  onSelect={(fontId) => setFontEventType(fontId || '')}
+                  eventTitle={locale === 'es' ? event.eventType.name : event.eventType.nameEn}
+                  compact={true}
+                />
+              </div>
+
+              {/* Font for Names/Title */}
+              <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {locale === 'es' ? 'Fuente para nombres' : 'Font for names'}
+                  <span className="text-xs text-gray-500 ml-2">
+                    ({titleNames || 'María y Juan'})
+                  </span>
+                </h3>
+                <FontSelector
+                  eventTypeSlug={event.eventType.slug}
+                  fontCategories={(event.eventType.fontCategories as string[]) || undefined}
+                  selectedFontId={fontTitle}
+                  onSelect={(fontId) => setFontTitle(fontId || '')}
+                  eventTitle={titleNames || 'María y Juan'}
+                  compact={true}
+                />
+              </div>
+
+              {/* Font for Message */}
+              <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {locale === 'es' ? 'Fuente para mensaje y frase' : 'Font for message and phrase'}
+                  <span className="text-xs text-gray-500 ml-2">
+                    ({titleMessage || welcomePhrase || 'se casan'})
+                  </span>
+                </h3>
+                <FontSelector
+                  eventTypeSlug={event.eventType.slug}
+                  fontCategories={(event.eventType.fontCategories as string[]) || undefined}
+                  selectedFontId={fontMessage}
+                  onSelect={(fontId) => setFontMessage(fontId || '')}
+                  eventTitle={titleMessage || welcomePhrase || 'se casan'}
+                  compact={true}
+                />
+              </div>
+
+              {/* Font for Body/Rest */}
+              <div>
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {locale === 'es' ? 'Fuente para el resto de la invitación' : 'Font for rest of invitation'}
+                  <span className="text-xs text-gray-500 ml-2">
+                    ({locale === 'es' ? 'Detalles, ubicación, etc.' : 'Details, location, etc.'})
+                  </span>
+                </h3>
+                <FontSelector
+                  eventTypeSlug={event.eventType.slug}
+                  fontCategories={(event.eventType.fontCategories as string[]) || undefined}
+                  selectedFontId={fontBody}
+                  onSelect={(fontId) => setFontBody(fontId || '')}
+                  eventTitle={locale === 'es' ? 'Detalles del evento' : 'Event details'}
+                  compact={true}
+                />
+              </div>
             </div>
           )}
 
@@ -855,7 +976,8 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
             </div>
           )}
 
-          {/* Featured Image */}
+          {/* Featured Image - Conditional based on event type */}
+          {event.eventType.showFeaturedImage !== false && (
           <div className="bg-white dark:bg-zinc-900 rounded-lg shadow border border-gray-200 dark:border-zinc-800 p-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <User className="w-5 h-5" />
@@ -937,6 +1059,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
               />
             )}
           </div>
+          )}
 
           {/* NUEVO: Background Music */}
           {availableAssets.filter(a => a.type === 'AUDIO').length > 0 && (

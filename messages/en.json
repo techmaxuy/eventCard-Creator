@@ -837,7 +837,8 @@
     "handwritten": "Handwritten",
     "clearSelection": "Remove font",
     "noFonts": "No fonts available for this category",
-    "selectedFont": "Selected font"
+    "selectedFont": "Selected font",
+    "defaultFont": "Default font"
   },
   "DecorationSelector": {
     "title": "Decorations",

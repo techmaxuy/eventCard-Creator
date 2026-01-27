@@ -854,7 +854,8 @@
     "handwritten": "Manuscritas",
     "clearSelection": "Quitar fuente",
     "noFonts": "No hay fuentes disponibles para esta categoría",
-    "selectedFont": "Fuente seleccionada"
+    "selectedFont": "Fuente seleccionada",
+    "defaultFont": "Fuente por defecto"
   },
   "DecorationSelector": {
     "title": "Decoraciones",

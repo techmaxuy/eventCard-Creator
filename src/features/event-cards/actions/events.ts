@@ -243,6 +243,8 @@ export async function getUserEvent(id: string) {
 
 const UpdateEventSchema = z.object({
   title: z.string().min(1, 'Title is required').max(100).optional(),
+  titleNames: z.string().max(200).optional(),
+  titleMessage: z.string().max(200).optional(),
   description: z.string().max(1000).optional(),
   eventDate: z.string().optional(), // ISO date string
   eventTime: z.string().optional(),
@@ -260,6 +262,10 @@ const UpdateEventSchema = z.object({
   welcomePhrase: z.string().optional(),
   musicUrl: z.string().url().optional().or(z.literal('')),
   fontFamily: z.string().optional(),
+  fontEventType: z.string().optional(),
+  fontTitle: z.string().optional(),
+  fontMessage: z.string().optional(),
+  fontBody: z.string().optional(),
   decorations: z.array(z.object({
     assetId: z.string(),
     position: z.string(),

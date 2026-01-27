@@ -146,6 +146,9 @@ model EventType {
   showFonts         Boolean  @default(true)    // Whether to show font selector for this event type
   fontCategories    Json?    // Array of allowed font categories: ["playful", "elegant", "modern", "handwritten"]
 
+  // Featured Image Configuration
+  showFeaturedImage Boolean  @default(true)    // Whether to show/allow featured image for this event type
+
   // Estado
   isActive          Boolean  @default(true)
 
@@ -173,7 +176,9 @@ model Event {
   slug              String      @unique // "maria-cumple-30" 
   
   // Información básica
-  title             String      // "Cumpleaños de María"
+  title             String      // "Cumpleaños de María" (legacy, for backward compatibility)
+  titleNames        String?     // Nombres de protagonistas: "María y Juan", "Lucía"
+  titleMessage      String?     // Mensaje del título: "se casan", "cumple 30"
   description       String?     // Mensaje de bienvenida
   
   // Detalles del evento (campos comunes)
@@ -202,7 +207,11 @@ model Event {
   musicUrl        String?
 
   // NUEVO: Personalización visual avanzada
-  fontFamily      String?      // Fuente personalizada para título (ej: "Pacifico", "Fredoka One")
+  fontFamily      String?      // Fuente personalizada general (legacy, for backward compatibility)
+  fontEventType   String?      // Fuente para el tipo de evento (ej: "Casamiento")
+  fontTitle       String?      // Fuente para los nombres de protagonistas
+  fontMessage     String?      // Fuente para el mensaje del título y frase de bienvenida
+  fontBody        String?      // Fuente para el resto de la invitación
   decorations     Json?        // Array de decoraciones: [{assetId, position}]
 
   // Configuración
