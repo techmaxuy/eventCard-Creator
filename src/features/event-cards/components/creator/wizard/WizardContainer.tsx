@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 import { ArrowLeft, ArrowRight, Loader2, Check } from 'lucide-react'
 import Link from 'next/link'
 import { StepNames } from './StepNames'
-import { StepTitle } from './StepTitle'
 import { StepPhrase } from './StepPhrase'
 import { StepBackgroundImage } from './StepBackgroundImage'
 import { StepFeaturedImage } from './StepFeaturedImage'
@@ -20,6 +19,7 @@ interface EventType {
   slug: string
   numberOfPeople: number
   askNames: boolean
+  showFeaturedImage?: boolean
   aiTitlePromptEs: string | null
   aiTitlePromptEn: string | null
   aiPhrasePromptEs: string | null
@@ -61,9 +61,10 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
   const router = useRouter()
   const t = useTranslations('EventWizard')
 
-  // Current step (1 = names, 2 = title, 3 = phrase, 4 = background, 5 = featured)
+  // Current step (1 = names, 2 = phrase, 3 = background, 4 = featured)
   const [currentStep, setCurrentStep] = useState(1)
-  const totalSteps = 5
+  const showFeaturedStep = eventType.showFeaturedImage !== false
+  const totalSteps = showFeaturedStep ? 4 : 3
 
   // Wizard state
   const [wizardState, setWizardState] = useState<WizardState>({
@@ -118,13 +119,11 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
       case 1: // Names
         if (!eventType.askNames) return true
         return wizardState.names.every(name => name.trim().length > 0)
-      case 2: // Title
-        return wizardState.title.trim().length > 0
-      case 3: // Phrase
+      case 2: // Phrase
         return true // Phrase is optional
-      case 4: // Background Image
+      case 3: // Background Image
         return true // Background image is optional
-      case 5: // Featured Image
+      case 4: // Featured Image
         return true // Featured image is optional
       default:
         return false
@@ -189,9 +188,16 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
         featuredImageUrl = wizardState.featuredImage
       }
 
+      // Build titleNames from names array
+      const validNames = wizardState.names.filter(n => n.trim())
+      const titleNames = validNames.join(' y ')
+      // Auto-generate title from names
+      const autoTitle = titleNames || (locale === 'es' ? eventType.name : eventType.nameEn)
+
       const result = await createEvent({
         eventTypeId: eventType.id,
-        title: wizardState.title,
+        title: autoTitle,
+        titleNames: titleNames || undefined,
         welcomePhrase: wizardState.welcomePhrase || undefined,
         coverImage: coverImageUrl,
         featuredImage: featuredImageUrl,
@@ -343,10 +349,9 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
                       : 'text-gray-500 dark:text-gray-400'
                   }`}>
                     {stepNum === 1 && t('stepNames')}
-                    {stepNum === 2 && t('stepTitle')}
-                    {stepNum === 3 && t('stepPhrase')}
-                    {stepNum === 4 && t('stepBackground')}
-                    {stepNum === 5 && t('stepFeatured')}
+                    {stepNum === 2 && t('stepPhrase')}
+                    {stepNum === 3 && t('stepBackground')}
+                    {stepNum === 4 && showFeaturedStep && t('stepFeatured')}
                   </span>
                 </div>
 
@@ -381,23 +386,10 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
         )}
 
         {currentStep === 2 && (
-          <StepTitle
-            eventType={eventType}
-            names={wizardState.names}
-            title={wizardState.title}
-            onTitleChange={(title) => updateWizardState({ title })}
-            aiStatus={aiStatus}
-            tokenCost={tokenCosts?.titleSuggestion || 1}
-            onTokensUsed={refreshAIStatus}
-            locale={locale}
-          />
-        )}
-
-        {currentStep === 3 && (
           <StepPhrase
             eventType={eventType}
             names={wizardState.names}
-            title={wizardState.title}
+            title={wizardState.names.filter(n => n.trim()).join(' y ')}
             welcomePhrase={wizardState.welcomePhrase}
             onPhraseChange={(welcomePhrase) => updateWizardState({ welcomePhrase })}
             aiStatus={aiStatus}
@@ -407,11 +399,11 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
           />
         )}
 
-        {currentStep === 4 && (
+        {currentStep === 3 && (
           <StepBackgroundImage
             eventType={eventType}
             names={wizardState.names}
-            title={wizardState.title}
+            title={wizardState.names.filter(n => n.trim()).join(' y ')}
             coverImage={wizardState.coverImage}
             coverImageFile={wizardState.coverImageFile}
             selectedAssetId={wizardState.coverImageAssetId}
@@ -427,11 +419,11 @@ export function WizardContainer({ eventType, locale }: WizardContainerProps) {
           />
         )}
 
-        {currentStep === 5 && (
+        {currentStep === 4 && showFeaturedStep && (
           <StepFeaturedImage
             eventType={eventType}
             names={wizardState.names}
-            title={wizardState.title}
+            title={wizardState.names.filter(n => n.trim()).join(' y ')}
             featuredImage={wizardState.featuredImage}
             featuredImageFile={wizardState.featuredImageFile}
             onFeaturedImageChange={(url, file) => updateWizardState({

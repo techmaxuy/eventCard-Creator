@@ -18,6 +18,7 @@ interface EventType {
   color: string
   numberOfPeople: number
   askNames: boolean
+  showFeaturedImage: boolean
   aiTitlePromptEs: string | null
   aiTitlePromptEn: string | null
   aiPhrasePromptEs: string | null

@@ -213,6 +213,7 @@ model Event {
   fontMessage     String?      // Fuente para el mensaje del título y frase de bienvenida
   fontBody        String?      // Fuente para el resto de la invitación
   decorations     Json?        // Array de decoraciones: [{assetId, position}]
+  particleEffect  String?      // Efecto de partículas: "confetti", "petals", "bubbles", "stars", "none" (null = usar default del tipo de evento)
 
   // Configuración
   isPublished       Boolean     @default(false)

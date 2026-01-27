@@ -8,7 +8,6 @@ import { ChevronDown } from 'lucide-react'
 interface HeroSectionProps {
   title: string // Legacy field for backward compatibility
   titleNames?: string | null // Names of protagonists (e.g., "María y Juan")
-  titleMessage?: string | null // Message part of title (e.g., "se casan")
   welcomePhrase?: string | null
   eventTypeName: string
   eventTypeIcon: string | null
@@ -19,14 +18,12 @@ interface HeroSectionProps {
   // Multiple fonts for different sections
   fontFamily?: string | null // Legacy, used as fallback
   fontEventType?: string | null
-  fontTitle?: string | null
   fontMessage?: string | null
 }
 
 export function HeroSection({
   title,
   titleNames,
-  titleMessage,
   welcomePhrase,
   eventTypeName,
   eventTypeIcon,
@@ -36,7 +33,6 @@ export function HeroSection({
   primaryColor,
   fontFamily,
   fontEventType,
-  fontTitle,
   fontMessage,
 }: HeroSectionProps) {
 
@@ -56,10 +52,9 @@ export function HeroSection({
 
   // Get the names to display (prefer titleNames, fallback to title)
   const displayNames = titleNames ? parseNames(titleNames) : null
-  const displayMessage = titleMessage || null
 
-  // If no separated fields, use legacy title
-  const useLegacyTitle = !displayNames && !displayMessage
+  // If no separated names, use legacy title
+  const useLegacyTitle = !displayNames
 
   return (
     <div className="relative h-screen w-full overflow-hidden">
@@ -127,7 +122,7 @@ export function HeroSection({
             className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl"
             style={{
               textShadow: '0 4px 20px rgba(0,0,0,0.3)',
-              fontFamily: fontTitle || fontFamily || undefined
+              fontFamily: fontFamily || undefined
             }}
           >
             {title}
@@ -145,27 +140,13 @@ export function HeroSection({
                 className="text-5xl md:text-8xl font-bold text-white drop-shadow-2xl leading-tight"
                 style={{
                   textShadow: '0 4px 20px rgba(0,0,0,0.3)',
-                  fontFamily: fontTitle || fontFamily || undefined
+                  fontFamily: fontFamily || undefined
                 }}
               >
                 {name}
               </motion.h1>
             ))}
 
-            {/* Message - smaller than names */}
-            {displayMessage && (
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.6, delay: 0.5 + (displayNames?.length || 0) * 0.15 }}
-                className="text-2xl md:text-4xl text-white/95 mt-4 drop-shadow-lg"
-                style={{
-                  fontFamily: fontMessage || fontFamily || undefined
-                }}
-              >
-                {displayMessage}
-              </motion.p>
-            )}
           </div>
         )}
 

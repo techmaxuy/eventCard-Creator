@@ -36,7 +36,6 @@ interface Event {
   slug: string
   title: string
   titleNames: string | null
-  titleMessage: string | null
   description: string | null
   eventDate: Date | null
   eventTime: string | null
@@ -56,10 +55,10 @@ interface Event {
   musicUrl: string | null
   fontFamily: string | null
   fontEventType: string | null
-  fontTitle: string | null
   fontMessage: string | null
   fontBody: string | null
   decorations: any
+  particleEffect: string | null
   eventType: EventType
   _count: {
     guests: number
@@ -104,7 +103,6 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
   // Convertir los font IDs a nombres CSS correctos
   const cssFontFamily = event.fontFamily ? getFontFamilyName(event.fontFamily) : null
   const cssFontEventType = event.fontEventType ? getFontFamilyName(event.fontEventType) : null
-  const cssFontTitle = event.fontTitle ? getFontFamilyName(event.fontTitle) : null
   const cssFontMessage = event.fontMessage ? getFontFamilyName(event.fontMessage) : null
   const cssFontBody = event.fontBody ? getFontFamilyName(event.fontBody) : null
   console.log('[EventPublicPage] CSS Font Family Name:', cssFontFamily)
@@ -118,13 +116,10 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
       {event.fontEventType && event.fontEventType !== event.fontFamily && (
         <GoogleFontLoader fontId={event.fontEventType} />
       )}
-      {event.fontTitle && event.fontTitle !== event.fontFamily && event.fontTitle !== event.fontEventType && (
-        <GoogleFontLoader fontId={event.fontTitle} />
-      )}
-      {event.fontMessage && event.fontMessage !== event.fontFamily && event.fontMessage !== event.fontEventType && event.fontMessage !== event.fontTitle && (
+      {event.fontMessage && event.fontMessage !== event.fontFamily && event.fontMessage !== event.fontEventType && (
         <GoogleFontLoader fontId={event.fontMessage} />
       )}
-      {event.fontBody && event.fontBody !== event.fontFamily && event.fontBody !== event.fontEventType && event.fontBody !== event.fontTitle && event.fontBody !== event.fontMessage && (
+      {event.fontBody && event.fontBody !== event.fontFamily && event.fontBody !== event.fontEventType && event.fontBody !== event.fontMessage && (
         <GoogleFontLoader fontId={event.fontBody} />
       )}
 
@@ -150,7 +145,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
 
 
       {/* Particle Background */}
-      <ParticleBackground theme={theme} />
+      <ParticleBackground theme={theme} particleOverride={event.particleEffect} />
 
  </motion.div>
 
@@ -172,7 +167,6 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
       <HeroSection
         title={event.title}
         titleNames={event.titleNames}
-        titleMessage={event.titleMessage}
         welcomePhrase={event.welcomePhrase}
         eventTypeName={eventTypeName}
         eventTypeIcon={event.eventType.icon}
@@ -182,7 +176,6 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
         primaryColor={event.primaryColor}
         fontFamily={cssFontFamily}
         fontEventType={cssFontEventType}
-        fontTitle={cssFontTitle}
         fontMessage={cssFontMessage}
       />
 

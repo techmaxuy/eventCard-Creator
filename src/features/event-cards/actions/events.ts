@@ -8,7 +8,8 @@ import { checkEventCreationLimit, getEventSubscriptionInfo } from '../lib/subscr
 
 const CreateEventSchema = z.object({
   eventTypeId: z.string().min(1, 'Event type is required'),
-  title: z.string().min(1, 'Title is required').max(100),
+  title: z.string().min(1, 'Title is required').max(200),
+  titleNames: z.string().max(200).optional(),
   welcomePhrase: z.string().max(500).optional(),
   coverImage: z.string().url().optional(),
   featuredImage: z.string().url().optional(),
@@ -91,7 +92,7 @@ export async function createEvent(values: z.infer<typeof CreateEventSchema>) {
       return { error: 'InvalidFields' }
     }
 
-    const { eventTypeId, title, welcomePhrase, coverImage, featuredImage } = validatedFields.data
+    const { eventTypeId, title, titleNames, welcomePhrase, coverImage, featuredImage } = validatedFields.data
 
     // Verificar que el tipo de evento exista y esté activo
     const eventType = await prisma.eventType.findFirst({
@@ -114,6 +115,7 @@ export async function createEvent(values: z.infer<typeof CreateEventSchema>) {
         userId: session.user.id,
         eventTypeId,
         title,
+        titleNames: titleNames || null,
         welcomePhrase: welcomePhrase || null,
         description: welcomePhrase || null, // Also set description for the editor
         slug: uniqueSlug,
@@ -271,6 +273,7 @@ const UpdateEventSchema = z.object({
     position: z.string(),
   })).optional(),
   askDietaryRequirements: z.boolean().optional(),
+  particleEffect: z.enum(['confetti', 'petals', 'bubbles', 'stars', 'none']).optional().nullable(),
 })
 
 /**

@@ -8,9 +8,10 @@ import { EventTheme } from '@/features/event-cards/config/event-themes'
 interface ParticleBackgroundProps {
   theme: EventTheme
   isActive?: boolean
+  particleOverride?: string | null // Per-event particle effect override
 }
 
-export function ParticleBackground({ theme, isActive = true }: ParticleBackgroundProps) {
+export function ParticleBackground({ theme, isActive = true, particleOverride }: ParticleBackgroundProps) {
   const { width, height } = useWindowSize()
   const [mounted, setMounted] = useState(false)
 
@@ -36,15 +37,18 @@ export function ParticleBackground({ theme, isActive = true }: ParticleBackgroun
     return null
   }
 
-  if (theme.particles === 'none') {
+  // Use per-event override if set, otherwise use theme default
+  const activeParticle = particleOverride || theme.particles
+
+  if (activeParticle === 'none') {
     console.log('[ParticleBackground] Particles set to none')
     return null
   }
 
-  console.log('[ParticleBackground] Rendering particles:', theme.particles)
+  console.log('[ParticleBackground] Rendering particles:', activeParticle, '(override:', particleOverride, ')')
 
   // Confetti (cumpleaños, graduación)
-  if (theme.particles === 'confetti') {
+  if (activeParticle === 'confetti') {
     return (
       <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
         <Confetti
@@ -61,7 +65,7 @@ export function ParticleBackground({ theme, isActive = true }: ParticleBackgroun
   }
 
   // Pétalos (boda, aniversario)
-  if (theme.particles === 'petals') {
+  if (activeParticle === 'petals') {
     return (
       <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
         <Confetti
@@ -79,7 +83,7 @@ export function ParticleBackground({ theme, isActive = true }: ParticleBackgroun
   }
 
   // Burbujas (baby shower)
-  if (theme.particles === 'bubbles') {
+  if (activeParticle === 'bubbles') {
     return (
       <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
         <Confetti
@@ -97,7 +101,7 @@ export function ParticleBackground({ theme, isActive = true }: ParticleBackgroun
   }
 
   // Estrellas (graduación)
-  if (theme.particles === 'stars') {
+  if (activeParticle === 'stars') {
     return (
       <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
         <Confetti
