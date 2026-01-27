@@ -132,7 +132,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   // Form state
   const [title, setTitle] = useState(event.title)
   const [titleNames, setTitleNames] = useState(event.titleNames || '')
-  const [description, setDescription] = useState(event.description || event.welcomePhrase || '')
+  const [description, setDescription] = useState(event.welcomePhrase || event.description || '')
   const [eventDate, setEventDate] = useState(
     event.eventDate ? new Date(event.eventDate).toISOString().split('T')[0] : ''
   )
@@ -150,10 +150,10 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   const [showCoverAssets, setShowCoverAssets] = useState(false)
   const [showMusicAssets, setShowMusicAssets] = useState(false)
   const [showPhraseAssets, setShowPhraseAssets] = useState(false)
-  const [welcomePhrase, setWelcomePhrase] = useState(event.welcomePhrase || '')
   const [musicUrl, setMusicUrl] = useState(event.musicUrl || '')
   const [fontFamily, setFontFamily] = useState(event.fontFamily || '')
   const [fontEventType, setFontEventType] = useState(event.fontEventType || '')
+  const [fontTitle, setFontTitle] = useState(event.fontTitle || '')
   const [fontMessage, setFontMessage] = useState(event.fontMessage || '')
   const [fontBody, setFontBody] = useState(event.fontBody || '')
   const [particleEffect, setParticleEffect] = useState(event.particleEffect || '')
@@ -197,10 +197,11 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
         primaryColor,
         coverImage: event.coverImage || undefined,
         featuredImage: event.featuredImage || undefined,
-        welcomePhrase: welcomePhrase || undefined,
+        welcomePhrase: description || undefined,
         musicUrl: musicUrl || undefined,
         fontFamily: fontFamily || undefined,
         fontEventType: fontEventType || undefined,
+        fontTitle: fontTitle || undefined,
         fontMessage: fontMessage || undefined,
         fontBody: fontBody || undefined,
         decorations: selectedDecorations,
@@ -526,10 +527,10 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
               {/* Legacy Title (hidden, synced from titleNames) */}
               <input type="hidden" value={title} />
 
-              {/* Description */}
+              {/* Welcome Phrase */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  {t('description')}
+                  {locale === 'es' ? 'Frase de bienvenida' : 'Welcome phrase'}
                 </label>
                 <textarea
                   value={description}
@@ -537,7 +538,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                   rows={4}
                   maxLength={1000}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                  placeholder={t('descriptionPlaceholder')}
+                  placeholder={locale === 'es' ? 'Ej: Con mucha alegría los invitamos a celebrar...' : 'E.g.: With great joy we invite you to celebrate...'}
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {description.length}/1000
@@ -640,12 +641,30 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                 />
               </div>
 
-              {/* Font for Message */}
+              {/* Font for Protagonist Names */}
               <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
                 <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  {locale === 'es' ? 'Fuente para mensaje y frase' : 'Font for message and phrase'}
+                  {locale === 'es' ? 'Fuente para nombres' : 'Font for names'}
                   <span className="text-xs text-gray-500 ml-2">
-                    ({welcomePhrase || locale === 'es' ? 'Frase de bienvenida' : 'Welcome phrase'})
+                    ({titleNames || 'María y Juan'})
+                  </span>
+                </h3>
+                <FontSelector
+                  eventTypeSlug={event.eventType.slug}
+                  fontCategories={(event.eventType.fontCategories as string[]) || undefined}
+                  selectedFontId={fontTitle}
+                  onSelect={(fontId) => setFontTitle(fontId || '')}
+                  eventTitle={titleNames || 'María y Juan'}
+                  compact={true}
+                />
+              </div>
+
+              {/* Font for Welcome Phrase */}
+              <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {locale === 'es' ? 'Fuente para frase de bienvenida' : 'Font for welcome phrase'}
+                  <span className="text-xs text-gray-500 ml-2">
+                    ({description || (locale === 'es' ? 'Frase de bienvenida' : 'Welcome phrase')})
                   </span>
                 </h3>
                 <FontSelector
@@ -653,7 +672,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                   fontCategories={(event.eventType.fontCategories as string[]) || undefined}
                   selectedFontId={fontMessage}
                   onSelect={(fontId) => setFontMessage(fontId || '')}
-                  eventTitle={welcomePhrase || (locale === 'es' ? 'Frase de bienvenida' : 'Welcome phrase')}
+                  eventTitle={description || (locale === 'es' ? 'Frase de bienvenida' : 'Welcome phrase')}
                   compact={true}
                 />
               </div>
@@ -1134,9 +1153,9 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                       setSelectedPhraseAsset(asset)
                       if (asset) {
                         const phrase = locale === 'es' ? asset.phraseEs : asset.phraseEn
-                        setWelcomePhrase(phrase || '')
+                        setDescription(phrase || '')
                       } else {
-                        setWelcomePhrase('')
+                        setDescription('')
                       }
                     }}
                     locale={locale}

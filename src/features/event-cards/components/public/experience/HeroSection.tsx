@@ -18,6 +18,7 @@ interface HeroSectionProps {
   // Multiple fonts for different sections
   fontFamily?: string | null // Legacy, used as fallback
   fontEventType?: string | null
+  fontTitle?: string | null // Font for protagonist names
   fontMessage?: string | null
 }
 
@@ -33,6 +34,7 @@ export function HeroSection({
   primaryColor,
   fontFamily,
   fontEventType,
+  fontTitle,
   fontMessage,
 }: HeroSectionProps) {
 
@@ -122,7 +124,7 @@ export function HeroSection({
             className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl"
             style={{
               textShadow: '0 4px 20px rgba(0,0,0,0.3)',
-              fontFamily: fontFamily || undefined
+              fontFamily: fontTitle || fontFamily || undefined
             }}
           >
             {title}
@@ -140,7 +142,7 @@ export function HeroSection({
                 className="text-5xl md:text-8xl font-bold text-white drop-shadow-2xl leading-tight"
                 style={{
                   textShadow: '0 4px 20px rgba(0,0,0,0.3)',
-                  fontFamily: fontFamily || undefined
+                  fontFamily: fontTitle || fontFamily || undefined
                 }}
               >
                 {name}
