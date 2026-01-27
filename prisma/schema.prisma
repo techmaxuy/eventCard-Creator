@@ -212,6 +212,10 @@ model Event {
   fontTitle       String?      // Fuente para los nombres de protagonistas
   fontMessage     String?      // Fuente para el mensaje del título y frase de bienvenida
   fontBody        String?      // Fuente para el resto de la invitación
+  colorEventType  String?      // Color para el tipo de evento
+  colorTitle      String?      // Color para los nombres de protagonistas
+  colorMessage    String?      // Color para la frase de bienvenida
+  colorBody       String?      // Color para el resto de la invitación
   decorations     Json?        // Array de decoraciones: [{assetId, position}]
   particleEffect  String?      // Efecto de partículas: "confetti", "petals", "bubbles", "stars", "none" (null = usar default del tipo de evento)
 

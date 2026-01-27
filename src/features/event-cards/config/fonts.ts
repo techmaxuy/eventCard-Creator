@@ -153,6 +153,16 @@ export const EVENT_FONTS: EventFont[] = [
     eventTypes: ['corporate', 'graduation', 'launch'],
   },
   {
+    id: 'poppins',
+    name: 'Poppins',
+    displayName: 'Poppins',
+    category: 'modern',
+    googleFontName: 'Poppins',
+    previewText: 'Estilo Actual',
+    weights: [400, 600, 700],
+    eventTypes: ['corporate', 'graduation', 'launch'],
+  },
+  {
     id: 'bebas-neue',
     name: 'Bebas Neue',
     displayName: 'Bebas Neue',
@@ -161,6 +171,50 @@ export const EVENT_FONTS: EventFont[] = [
     previewText: 'GRAN EVENTO',
     weights: [400],
     eventTypes: ['corporate', 'launch', 'conference'],
+  },
+
+  // Fuentes Elegantes Manuscritas - Caligráficas y decorativas
+  {
+    id: 'monte-carlo',
+    name: 'MonteCarlo',
+    displayName: 'MonteCarlo',
+    category: 'elegant',
+    googleFontName: 'MonteCarlo',
+    previewText: 'Elegancia Pura',
+    weights: [400],
+    eventTypes: ['wedding', 'casamiento', 'anniversary'],
+  },
+  {
+    id: 'meow-script',
+    name: 'Meow Script',
+    displayName: 'Meow Script',
+    category: 'elegant',
+    googleFontName: 'Meow+Script',
+    previewText: 'Con Cariño',
+    weights: [400],
+    eventTypes: ['wedding', 'casamiento', 'anniversary', 'baby-shower'],
+  },
+
+  // Fuentes Divertidas - Gruesas y expresivas
+  {
+    id: 'modak',
+    name: 'Modak',
+    displayName: 'Modak',
+    category: 'playful',
+    googleFontName: 'Modak',
+    previewText: '¡Gran Fiesta!',
+    weights: [400],
+    eventTypes: ['birthday', 'cumpleanos', 'kids-party'],
+  },
+  {
+    id: 'sniglet',
+    name: 'Sniglet',
+    displayName: 'Sniglet',
+    category: 'playful',
+    googleFontName: 'Sniglet',
+    previewText: '¡A Celebrar!',
+    weights: [400, 800],
+    eventTypes: ['birthday', 'cumpleanos', 'baby-shower', 'kids-party'],
   },
 ]
 

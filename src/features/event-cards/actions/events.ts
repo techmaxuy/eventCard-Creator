@@ -268,6 +268,10 @@ const UpdateEventSchema = z.object({
   fontTitle: z.string().optional(),
   fontMessage: z.string().optional(),
   fontBody: z.string().optional(),
+  colorEventType: z.string().optional(),
+  colorTitle: z.string().optional(),
+  colorMessage: z.string().optional(),
+  colorBody: z.string().optional(),
   decorations: z.array(z.object({
     assetId: z.string(),
     position: z.string(),

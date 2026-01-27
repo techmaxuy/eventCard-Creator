@@ -20,6 +20,10 @@ interface HeroSectionProps {
   fontEventType?: string | null
   fontTitle?: string | null // Font for protagonist names
   fontMessage?: string | null
+  // Per-group text colors
+  colorEventType?: string | null
+  colorTitle?: string | null
+  colorMessage?: string | null
 }
 
 export function HeroSection({
@@ -36,6 +40,9 @@ export function HeroSection({
   fontEventType,
   fontTitle,
   fontMessage,
+  colorEventType,
+  colorTitle,
+  colorMessage,
 }: HeroSectionProps) {
 
   const scrollToContent = () => {
@@ -74,6 +81,7 @@ export function HeroSection({
           style={{
             fontFamily: fontEventType || fontFamily || undefined,
             textShadow: '0 2px 10px rgba(0,0,0,0.3)',
+            color: colorEventType || undefined,
           }}
         >
           {eventTypeName}
@@ -124,7 +132,8 @@ export function HeroSection({
             className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl"
             style={{
               textShadow: '0 4px 20px rgba(0,0,0,0.3)',
-              fontFamily: fontTitle || fontFamily || undefined
+              fontFamily: fontTitle || fontFamily || undefined,
+              color: colorTitle || undefined,
             }}
           >
             {title}
@@ -142,7 +151,8 @@ export function HeroSection({
                 className="text-5xl md:text-8xl font-bold text-white drop-shadow-2xl leading-tight"
                 style={{
                   textShadow: '0 4px 20px rgba(0,0,0,0.3)',
-                  fontFamily: fontTitle || fontFamily || undefined
+                  fontFamily: fontTitle || fontFamily || undefined,
+                  color: colorTitle || undefined,
                 }}
               >
                 {name}
@@ -160,7 +170,8 @@ export function HeroSection({
             transition={{ duration: 1.6, delay: 0.6 }}
             className="text-xl md:text-3xl italic font-semibold mb-4 text-white/95 max-w-3xl drop-shadow-lg"
             style={{
-              fontFamily: fontMessage || fontFamily || undefined
+              fontFamily: fontMessage || fontFamily || undefined,
+              color: colorMessage || undefined,
             }}
           >
             "{welcomePhrase}"

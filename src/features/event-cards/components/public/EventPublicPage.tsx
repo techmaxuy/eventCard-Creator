@@ -60,6 +60,10 @@ interface Event {
   fontBody: string | null
   decorations: any
   particleEffect: string | null
+  colorEventType: string | null
+  colorTitle: string | null
+  colorMessage: string | null
+  colorBody: string | null
   eventType: EventType
   _count: {
     guests: number
@@ -183,6 +187,9 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
         fontEventType={cssFontEventType}
         fontTitle={cssFontTitle}
         fontMessage={cssFontMessage}
+        colorEventType={event.colorEventType}
+        colorTitle={event.colorTitle}
+        colorMessage={event.colorMessage}
       />
 
       {/* Main Content */}
