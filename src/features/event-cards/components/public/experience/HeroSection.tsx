@@ -156,7 +156,7 @@ export function HeroSection({
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.1 }}
-          className="text-white font-bold mb-6 drop-shadow-lg uppercase tracking-wider"
+          className="text-white font-bold mb-6 drop-shadow-lg tracking-wider"
           style={{
             fontFamily: fontEventType || fontFamily || undefined,
             textShadow: '0 2px 10px rgba(0,0,0,0.3)',
