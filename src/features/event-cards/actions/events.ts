@@ -319,9 +319,12 @@ export async function updateEvent(id: string, values: z.infer<typeof UpdateEvent
     const data = validatedFields.data
 
     // Convertir fecha ISO a DateTime si existe
+    // IMPORTANTE: Guardamos la fecha al mediodía UTC para evitar problemas de zona horaria
+    // que pueden cambiar el día cuando se visualiza en diferentes zonas horarias
     const updateData: any = { ...data }
     if (data.eventDate) {
-      updateData.eventDate = new Date(data.eventDate)
+      // data.eventDate viene como "2026-02-22", lo convertimos a "2026-02-22T12:00:00Z"
+      updateData.eventDate = new Date(`${data.eventDate}T12:00:00Z`)
     }
 
     // Actualizar evento

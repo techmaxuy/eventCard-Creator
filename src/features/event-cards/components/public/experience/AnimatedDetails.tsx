@@ -101,7 +101,8 @@ export function AnimatedDetails({
   const details = []
   let index = 0
 
-  // Date
+  // Date - Usamos timeZone: 'UTC' para mostrar la fecha exacta que guardó el usuario
+  // sin conversiones de zona horaria
   if (eventDate) {
     details.push(
       <DetailItem
@@ -112,6 +113,7 @@ export function AnimatedDetails({
           year: 'numeric',
           month: 'long',
           day: 'numeric',
+          timeZone: 'UTC',
         })}
         accentColor={accentColor}
         index={index++}
@@ -256,6 +258,7 @@ export function AnimatedDetails({
       year: 'numeric',
       month: 'long',
       day: 'numeric',
+      timeZone: 'UTC',
     }) : ''
 
     const timeStr = eventTime ? ` a las ${eventTime}` : ''
