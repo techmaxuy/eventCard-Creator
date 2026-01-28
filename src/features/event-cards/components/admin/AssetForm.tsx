@@ -113,25 +113,47 @@ export function AssetForm({ asset, eventTypes, locale }: AssetFormProps) {
     setUploadingAudio(true)
     setMessage(null)
 
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('assetType', 'audio')
-
     try {
-      const response = await fetch('/api/upload/asset', {
+      // Step 1: Get presigned URL from our API
+      const presignedResponse = await fetch('/api/upload/presigned', {
         method: 'POST',
-        body: formData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fileName: file.name,
+          contentType: file.type,
+          assetType: 'audio',
+        }),
       })
 
-      const result = await response.json()
+      const presignedResult = await presignedResponse.json()
 
-      if (!response.ok || result.error) {
-        setMessage({ type: 'error', text: result.error || t('errors.UploadFailed') })
-      } else {
-        setAudioUrl(result.audioUrl)
-        setMessage({ type: 'success', text: t('audioUploaded') })
+      if (!presignedResponse.ok || presignedResult.error) {
+        setMessage({ type: 'error', text: presignedResult.error || t('errors.UploadFailed') })
+        setUploadingAudio(false)
+        return
       }
+
+      // Step 2: Upload directly to Azure using presigned URL
+      const uploadResponse = await fetch(presignedResult.uploadUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type,
+          'x-ms-blob-type': 'BlockBlob',
+        },
+        body: file,
+      })
+
+      if (!uploadResponse.ok) {
+        setMessage({ type: 'error', text: t('errors.UploadFailed') })
+        setUploadingAudio(false)
+        return
+      }
+
+      // Step 3: Use the final blob URL
+      setAudioUrl(presignedResult.blobUrl)
+      setMessage({ type: 'success', text: t('audioUploaded') })
     } catch (error) {
+      console.error('[AudioUpload] Error:', error)
       setMessage({ type: 'error', text: t('errors.UploadFailed') })
     }
 

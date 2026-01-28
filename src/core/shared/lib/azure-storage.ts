@@ -1,4 +1,4 @@
-import { BlobServiceClient, ContainerClient } from '@azure/storage-blob'
+import { BlobServiceClient, ContainerClient, generateBlobSASQueryParameters, BlobSASPermissions, StorageSharedKeyCredential } from '@azure/storage-blob'
 import sharp from 'sharp'
 
 const accountName = process.env.AZURE_STORAGE_ACCOUNT_NAME
@@ -226,10 +226,76 @@ export async function uploadAudio(
     const url = blockBlobClient.url
     
     console.log(`[Azure] ✅ Audio uploaded: ${url}`)
-    
+
     return url
   } catch (error) {
     console.error('[Azure] ❌ Audio upload error:', error)
     throw error
+  }
+}
+
+/**
+ * Generate a SAS URL for direct client-side upload to Azure Blob Storage
+ * This bypasses Vercel's 4.5MB body size limit for serverless functions
+ */
+export interface PresignedUploadInfo {
+  uploadUrl: string      // URL with SAS token for uploading
+  blobUrl: string        // Final public URL after upload
+  blobName: string       // Name of the blob
+  expiresAt: Date        // When the SAS token expires
+}
+
+export async function generatePresignedUploadUrl(
+  options: {
+    folder?: string
+    fileName: string
+    contentType: string
+    expiresInMinutes?: number
+  }
+): Promise<PresignedUploadInfo> {
+  const {
+    folder = 'uploads',
+    fileName,
+    contentType,
+    expiresInMinutes = 10,
+  } = options
+
+  // Generate unique blob name
+  const timestamp = Date.now()
+  const randomString = Math.random().toString(36).substring(7)
+  const extension = fileName.split('.').pop() || 'bin'
+  const blobName = `${folder}/${timestamp}-${randomString}.${extension}`
+
+  // Create shared key credential
+  const sharedKeyCredential = new StorageSharedKeyCredential(accountName!, accountKey!)
+
+  // Calculate expiry time
+  const startsOn = new Date()
+  const expiresOn = new Date(startsOn.getTime() + expiresInMinutes * 60 * 1000)
+
+  // Generate SAS token with write permission
+  const sasToken = generateBlobSASQueryParameters(
+    {
+      containerName: containerName!,
+      blobName: blobName,
+      permissions: BlobSASPermissions.parse('cw'), // Create and Write
+      startsOn: startsOn,
+      expiresOn: expiresOn,
+      contentType: contentType,
+    },
+    sharedKeyCredential
+  ).toString()
+
+  const blockBlobClient = containerClient.getBlockBlobClient(blobName)
+  const uploadUrl = `${blockBlobClient.url}?${sasToken}`
+  const blobUrl = blockBlobClient.url
+
+  console.log(`[Azure] ✅ Presigned URL generated for: ${blobName}`)
+
+  return {
+    uploadUrl,
+    blobUrl,
+    blobName,
+    expiresAt: expiresOn,
   }
 }
