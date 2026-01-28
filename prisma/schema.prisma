@@ -190,7 +190,8 @@ model Event {
   
   // Campos opcionales según tipo
   dressCode         String?     // "Formal", "Casual", etc.
-  giftRegistry      String?     // URL de registro de regalos
+  giftRegistry      String?     // URL o texto de registro de regalos
+  giftRegistryType  String?     // "url" o "text" (default: "url")
   menu              String?     // Descripción del menú
   customData        Json?       // Campos personalizados adicionales
   

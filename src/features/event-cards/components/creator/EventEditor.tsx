@@ -65,6 +65,7 @@ interface Event {
   locationUrl: string | null
   dressCode: string | null
   giftRegistry: string | null
+  giftRegistryType: string | null
   menu: string | null
   theme: string
   primaryColor: string
@@ -151,6 +152,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   const [locationUrl, setLocationUrl] = useState(event.locationUrl || '')
   const [dressCode, setDressCode] = useState(event.dressCode || '')
   const [giftRegistry, setGiftRegistry] = useState(event.giftRegistry || '')
+  const [giftRegistryType, setGiftRegistryType] = useState<'url' | 'text'>(event.giftRegistryType as 'url' | 'text' || 'url')
   const [menu, setMenu] = useState(event.menu || '')
   const [primaryColor, setPrimaryColor] = useState(event.primaryColor)
   const [selectedCoverAsset, setSelectedCoverAsset] = useState<Asset | null>(null)
@@ -211,6 +213,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
         locationUrl,
         dressCode,
         giftRegistry,
+        giftRegistryType,
         menu,
         primaryColor,
         coverImage: event.coverImage || undefined,
@@ -1016,13 +1019,43 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       {t('giftRegistry')}
                     </label>
-                    <input
-                      type="url"
-                      value={giftRegistry}
-                      onChange={(e) => setGiftRegistry(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="https://..."
-                    />
+                    {/* Toggle between URL and Text */}
+                    <div className="flex gap-2 mb-2">
+                      {[
+                        { value: 'url', label: locale === 'es' ? 'URL / Enlace' : 'URL / Link' },
+                        { value: 'text', label: locale === 'es' ? 'Texto / Datos' : 'Text / Data' },
+                      ].map(option => (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() => setGiftRegistryType(option.value as 'url' | 'text')}
+                          className={`flex-1 px-3 py-1.5 text-sm rounded-lg border-2 transition-all ${
+                            giftRegistryType === option.value
+                              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-gray-300'
+                          }`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                    {giftRegistryType === 'url' ? (
+                      <input
+                        type="url"
+                        value={giftRegistry}
+                        onChange={(e) => setGiftRegistry(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="https://..."
+                      />
+                    ) : (
+                      <textarea
+                        value={giftRegistry}
+                        onChange={(e) => setGiftRegistry(e.target.value)}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                        placeholder={locale === 'es' ? 'Ej: CBU: 1234567890 / Alias: mi.alias' : 'Ex: Account: 1234567890 / Alias: my.alias'}
+                      />
+                    )}
                   </div>
                 )}
 

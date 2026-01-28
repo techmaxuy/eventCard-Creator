@@ -44,6 +44,7 @@ interface Event {
   locationUrl: string | null
   dressCode: string | null
   giftRegistry: string | null
+  giftRegistryType: string | null
   menu: string | null
   coverImage: string | null
   featuredImage: string | null
@@ -271,6 +272,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               locationUrl={event.locationUrl}
               dressCode={event.dressCode}
               giftRegistry={event.giftRegistry}
+              giftRegistryType={event.giftRegistryType}
               menu={event.menu}
               accentColor={event.primaryColor}
               locale={locale}

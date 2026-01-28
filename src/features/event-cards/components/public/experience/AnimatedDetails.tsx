@@ -66,6 +66,7 @@ interface AnimatedDetailsProps {
   locationUrl?: string | null
   dressCode?: string | null
   giftRegistry?: string | null
+  giftRegistryType?: string | null
   menu?: string | null
   accentColor: string
   locale: string
@@ -83,6 +84,7 @@ export function AnimatedDetails({
   locationUrl,
   dressCode,
   giftRegistry,
+  giftRegistryType,
   menu,
   accentColor,
   locale,
@@ -190,20 +192,27 @@ export function AnimatedDetails({
 
   // Gift Registry
   if (giftRegistry) {
+    const isUrl = giftRegistryType === 'url' || !giftRegistryType
     details.push(
       <DetailItem
         key="giftRegistry"
         icon={<Gift className="w-6 h-6" />}
         value={
-
-            <a href={giftRegistry}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:underline"
-            style={{ color: accentColor, ...(fontFamily ? { fontFamily } : {}) }}
-          >
-            Ver lista de regalos →
-          </a>
+          isUrl ? (
+            <a
+              href={giftRegistry}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+              style={{ color: accentColor, ...(fontFamily ? { fontFamily } : {}) }}
+            >
+              {locale === 'es' ? 'Ver lista de regalos →' : 'View gift registry →'}
+            </a>
+          ) : (
+            <p className="whitespace-pre-line" style={fontFamily ? { fontFamily } : {}}>
+              {giftRegistry}
+            </p>
+          )
         }
         accentColor={accentColor}
         index={index++}
