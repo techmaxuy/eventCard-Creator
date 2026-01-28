@@ -24,6 +24,23 @@ interface HeroSectionProps {
   colorEventType?: string | null
   colorTitle?: string | null
   colorMessage?: string | null
+  // Per-group font sizes (percentage)
+  fontSizeEventType?: number | null
+  fontSizeTitle?: number | null
+  fontSizeMessage?: number | null
+  // Welcome phrase position
+  welcomePhrasePosition?: string | null
+}
+
+/**
+ * Compute a responsive font size using clamp() based on a percentage value.
+ * The percentage maps to real sizes: 100% ≈ 2.5rem desktop, scaling proportionally.
+ */
+function heroFontSize(pct: number): string {
+  const maxRem = pct * 0.025
+  const minRem = Math.max(1, maxRem * 0.5)
+  const vw = pct * 0.055
+  return `clamp(${minRem.toFixed(2)}rem, ${vw.toFixed(1)}vw, ${maxRem.toFixed(2)}rem)`
 }
 
 export function HeroSection({
@@ -43,6 +60,10 @@ export function HeroSection({
   colorEventType,
   colorTitle,
   colorMessage,
+  fontSizeEventType,
+  fontSizeTitle,
+  fontSizeMessage,
+  welcomePhrasePosition,
 }: HeroSectionProps) {
 
   const scrollToContent = () => {
@@ -54,40 +75,99 @@ export function HeroSection({
 
   // Parse names - split by common separators like "y", "and", "&", ","
   const parseNames = (names: string): string[] => {
-    // Split by common separators
     const separators = /\s+y\s+|\s+and\s+|\s*&\s*|\s*,\s*/i
     return names.split(separators).map(name => name.trim()).filter(Boolean)
   }
 
   // Get the names to display (prefer titleNames, fallback to title)
   const displayNames = titleNames ? parseNames(titleNames) : null
-
-  // If no separated names, use legacy title
   const useLegacyTitle = !displayNames
+
+  // Compute font sizes (use defaults if not set)
+  const eventTypeFontSize = heroFontSize(fontSizeEventType ?? 150)
+  const titleFontSize = heroFontSize(fontSizeTitle ?? 200)
+  const messageFontSize = heroFontSize(fontSizeMessage ?? 150)
+
+  // Position: 'above' = welcome phrase before names, 'below' = after (default)
+  const phraseAbove = welcomePhrasePosition === 'above'
+
+  // Welcome phrase element (reusable for above/below positioning)
+  const welcomePhraseElement = welcomePhrase ? (
+    <motion.p
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1.6, delay: phraseAbove ? 0.3 : 0.6 }}
+      className="italic font-semibold mb-4 text-white/95 max-w-3xl drop-shadow-lg"
+      style={{
+        fontFamily: fontMessage || fontFamily || undefined,
+        color: colorMessage || undefined,
+        fontSize: messageFontSize,
+      }}
+    >
+      &ldquo;{welcomePhrase}&rdquo;
+    </motion.p>
+  ) : null
+
+  // Names element
+  const namesElement = useLegacyTitle ? (
+    <motion.h1
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1.6, delay: phraseAbove ? 0.5 : 0.4 }}
+      className="font-bold mb-6 text-white drop-shadow-2xl"
+      style={{
+        textShadow: '0 4px 20px rgba(0,0,0,0.3)',
+        fontFamily: fontTitle || fontFamily || undefined,
+        color: colorTitle || undefined,
+        fontSize: titleFontSize,
+      }}
+    >
+      {title}
+    </motion.h1>
+  ) : (
+    <div className="mb-6">
+      {displayNames && displayNames.map((name, index) => (
+        <motion.h1
+          key={index}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.6, delay: (phraseAbove ? 0.45 : 0.3) + index * 0.15 }}
+          className="font-bold text-white drop-shadow-2xl leading-tight"
+          style={{
+            textShadow: '0 4px 20px rgba(0,0,0,0.3)',
+            fontFamily: fontTitle || fontFamily || undefined,
+            color: colorTitle || undefined,
+            fontSize: titleFontSize,
+          }}
+        >
+          {name}
+        </motion.h1>
+      ))}
+    </div>
+  )
 
   return (
     <div className="relative h-screen w-full overflow-hidden">
-      {/* Transparent background - the actual background is rendered in EventPublicPage */}
-
       {/* Content */}
       <div className="relative h-full flex flex-col items-center justify-center px-4 text-center z-10">
 
-        {/* 1. Event Type - First, larger */}
+        {/* 1. Event Type */}
         <motion.p
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.1 }}
-          className="text-3xl md:text-5xl text-white font-bold mb-6 drop-shadow-lg uppercase tracking-wider"
+          className="text-white font-bold mb-6 drop-shadow-lg uppercase tracking-wider"
           style={{
             fontFamily: fontEventType || fontFamily || undefined,
             textShadow: '0 2px 10px rgba(0,0,0,0.3)',
             color: colorEventType || undefined,
+            fontSize: eventTypeFontSize,
           }}
         >
           {eventTypeName}
         </motion.p>
 
-        {/* 2. Featured Image / Icon - Only if showFeaturedImage is true */}
+        {/* 2. Featured Image / Icon */}
         {showFeaturedImage && (
           <motion.div
             initial={{ scale: 0, rotate: -360 }}
@@ -122,60 +202,17 @@ export function HeroSection({
           </motion.div>
         )}
 
-        {/* 3. Title - Names on separate lines (larger) + Message */}
-        {useLegacyTitle ? (
-          // Legacy: single title field
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.6, delay: 0.4 }}
-            className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl"
-            style={{
-              textShadow: '0 4px 20px rgba(0,0,0,0.3)',
-              fontFamily: fontTitle || fontFamily || undefined,
-              color: colorTitle || undefined,
-            }}
-          >
-            {title}
-          </motion.h1>
+        {/* 3 & 4. Names and Welcome Phrase (order depends on position setting) */}
+        {phraseAbove ? (
+          <>
+            {welcomePhraseElement}
+            {namesElement}
+          </>
         ) : (
-          // New: separate names and message
-          <div className="mb-6">
-            {/* Names - each on its own line, larger */}
-            {displayNames && displayNames.map((name, index) => (
-              <motion.h1
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.6, delay: 0.3 + index * 0.15 }}
-                className="text-5xl md:text-8xl font-bold text-white drop-shadow-2xl leading-tight"
-                style={{
-                  textShadow: '0 4px 20px rgba(0,0,0,0.3)',
-                  fontFamily: fontTitle || fontFamily || undefined,
-                  color: colorTitle || undefined,
-                }}
-              >
-                {name}
-              </motion.h1>
-            ))}
-
-          </div>
-        )}
-
-        {/* 4. Welcome Phrase */}
-        {welcomePhrase && (
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.6, delay: 0.6 }}
-            className="text-xl md:text-3xl italic font-semibold mb-4 text-white/95 max-w-3xl drop-shadow-lg"
-            style={{
-              fontFamily: fontMessage || fontFamily || undefined,
-              color: colorMessage || undefined,
-            }}
-          >
-            "{welcomePhrase}"
-          </motion.p>
+          <>
+            {namesElement}
+            {welcomePhraseElement}
+          </>
         )}
 
         {/* Scroll Indicator */}

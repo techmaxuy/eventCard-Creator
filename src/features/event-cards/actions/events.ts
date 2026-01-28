@@ -272,6 +272,11 @@ const UpdateEventSchema = z.object({
   colorTitle: z.string().optional(),
   colorMessage: z.string().optional(),
   colorBody: z.string().optional(),
+  fontSizeEventType: z.number().int().min(25).max(400).optional(),
+  fontSizeTitle: z.number().int().min(25).max(400).optional(),
+  fontSizeMessage: z.number().int().min(25).max(400).optional(),
+  fontSizeBody: z.number().int().min(25).max(400).optional(),
+  welcomePhrasePosition: z.enum(['above', 'below']).optional(),
   decorations: z.array(z.object({
     assetId: z.string(),
     position: z.string(),

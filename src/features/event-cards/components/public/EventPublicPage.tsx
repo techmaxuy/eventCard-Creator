@@ -64,6 +64,11 @@ interface Event {
   colorTitle: string | null
   colorMessage: string | null
   colorBody: string | null
+  fontSizeEventType: number | null
+  fontSizeTitle: number | null
+  fontSizeMessage: number | null
+  fontSizeBody: number | null
+  welcomePhrasePosition: string | null
   eventType: EventType
   _count: {
     guests: number
@@ -190,6 +195,10 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
         colorEventType={event.colorEventType}
         colorTitle={event.colorTitle}
         colorMessage={event.colorMessage}
+        fontSizeEventType={event.fontSizeEventType}
+        fontSizeTitle={event.fontSizeTitle}
+        fontSizeMessage={event.fontSizeMessage}
+        welcomePhrasePosition={event.welcomePhrasePosition}
       />
 
       {/* Main Content */}
@@ -234,7 +243,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
                 >
                   <Users className="w-8 h-8" style={{ color: event.primaryColor }} />
                 </motion.div>
-                <div className="text-center">
+                <div className="text-center" style={cssFontBody || cssFontFamily ? { fontFamily: cssFontBody || cssFontFamily || undefined } : {}}>
                   <p className="text-4xl font-bold text-gray-900 dark:text-white">
                     {event._count.guests}
                   </p>
@@ -265,8 +274,10 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               menu={event.menu}
               accentColor={event.primaryColor}
               locale={locale}
-              fontFamily={cssFontFamily}
+              fontFamily={cssFontBody || cssFontFamily}
               eventTypeSlug={event.eventType.slug || event.eventType.name.toLowerCase()}
+              fontSizeBody={event.fontSizeBody}
+              colorBody={event.colorBody}
             />
           </motion.div>
 
@@ -279,7 +290,13 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               transition={{ duration: 0.6 }}
               className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-zinc-800/50 p-8"
             >
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+              <h2
+                className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center"
+                style={{
+                  ...(cssFontBody || cssFontFamily ? { fontFamily: cssFontBody || cssFontFamily || undefined } : {}),
+                  ...(event.colorBody ? { color: event.colorBody } : {}),
+                }}
+              >
                 {t('gallery')}
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

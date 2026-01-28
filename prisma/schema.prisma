@@ -216,6 +216,11 @@ model Event {
   colorTitle      String?      // Color para los nombres de protagonistas
   colorMessage    String?      // Color para la frase de bienvenida
   colorBody       String?      // Color para el resto de la invitación
+  fontSizeEventType Int?       // Tamaño de fuente (%) para tipo de evento (default: 150)
+  fontSizeTitle     Int?       // Tamaño de fuente (%) para nombres (default: 200)
+  fontSizeMessage   Int?       // Tamaño de fuente (%) para frase de bienvenida (default: 150)
+  fontSizeBody      Int?       // Tamaño de fuente (%) para resto de invitación (default: 50)
+  welcomePhrasePosition String? // Posición de la frase: 'above' o 'below' nombres (default: 'below')
   decorations     Json?        // Array de decoraciones: [{assetId, position}]
   particleEffect  String?      // Efecto de partículas: "confetti", "petals", "bubbles", "stars", "none" (null = usar default del tipo de evento)
 

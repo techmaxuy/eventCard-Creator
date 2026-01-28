@@ -84,6 +84,11 @@ interface Event {
   colorTitle: string | null
   colorMessage: string | null
   colorBody: string | null
+  fontSizeEventType: number | null
+  fontSizeTitle: number | null
+  fontSizeMessage: number | null
+  fontSizeBody: number | null
+  welcomePhrasePosition: string | null
   isPublished: boolean
   askDietaryRequirements: boolean
   eventType: EventType
@@ -160,6 +165,11 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   const [fontTitle, setFontTitle] = useState(event.fontTitle || '')
   const [fontMessage, setFontMessage] = useState(event.fontMessage || '')
   const [fontBody, setFontBody] = useState(event.fontBody || '')
+  const [fontSizeEventType, setFontSizeEventType] = useState(event.fontSizeEventType ?? 150)
+  const [fontSizeTitle, setFontSizeTitle] = useState(event.fontSizeTitle ?? 200)
+  const [fontSizeMessage, setFontSizeMessage] = useState(event.fontSizeMessage ?? 150)
+  const [fontSizeBody, setFontSizeBody] = useState(event.fontSizeBody ?? 50)
+  const [welcomePhrasePosition, setWelcomePhrasePosition] = useState(event.welcomePhrasePosition || 'below')
   const [colorEventType, setColorEventType] = useState(event.colorEventType || '')
   const [colorTitle, setColorTitle] = useState(event.colorTitle || '')
   const [colorMessage, setColorMessage] = useState(event.colorMessage || '')
@@ -216,6 +226,11 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
         colorTitle: colorTitle || undefined,
         colorMessage: colorMessage || undefined,
         colorBody: colorBody || undefined,
+        fontSizeEventType,
+        fontSizeTitle,
+        fontSizeMessage,
+        fontSizeBody,
+        welcomePhrasePosition: welcomePhrasePosition as 'above' | 'below',
         decorations: selectedDecorations,
         askDietaryRequirements,
         particleEffect: (particleEffect || null) as 'confetti' | 'petals' | 'bubbles' | 'stars' | 'none' | null
@@ -635,6 +650,32 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                 {locale === 'es' ? 'Tipografías' : 'Typography'}
               </h2>
 
+              {/* Welcome Phrase Position Toggle */}
+              <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {locale === 'es' ? 'Posición de la frase de bienvenida' : 'Welcome phrase position'}
+                </h3>
+                <div className="flex gap-2">
+                  {[
+                    { value: 'above', label: locale === 'es' ? 'Sobre los nombres' : 'Above names' },
+                    { value: 'below', label: locale === 'es' ? 'Debajo de los nombres' : 'Below names' },
+                  ].map(option => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => setWelcomePhrasePosition(option.value)}
+                      className={`flex-1 px-3 py-2 text-sm rounded-lg border-2 transition-all ${
+                        welcomePhrasePosition === option.value
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                          : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-gray-300'
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Font for Event Type */}
               <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
                 <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -655,27 +696,34 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                     />
                   </div>
                   <div className="flex flex-col items-center gap-1">
-                    <label className="text-xs text-gray-500 dark:text-gray-400">
-                      {locale === 'es' ? 'Color' : 'Color'}
-                    </label>
+                    <label className="text-xs text-gray-500 dark:text-gray-400">Color</label>
                     <input
                       type="color"
                       value={colorEventType || '#ffffff'}
                       onChange={(e) => setColorEventType(e.target.value)}
                       className="h-9 w-12 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
-                      title={locale === 'es' ? 'Color del texto' : 'Text color'}
                     />
                     {colorEventType && (
-                      <button
-                        type="button"
-                        onClick={() => setColorEventType('')}
-                        className="text-xs text-gray-400 hover:text-red-500"
-                        title={locale === 'es' ? 'Quitar color' : 'Remove color'}
-                      >
+                      <button type="button" onClick={() => setColorEventType('')} className="text-xs text-gray-400 hover:text-red-500">
                         <X className="w-3 h-3" />
                       </button>
                     )}
                   </div>
+                </div>
+                <div className="mt-2 flex items-center gap-2">
+                  <label className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                    {locale === 'es' ? 'Tamaño' : 'Size'}
+                  </label>
+                  <input
+                    type="range"
+                    min={25}
+                    max={400}
+                    step={10}
+                    value={fontSizeEventType}
+                    onChange={(e) => setFontSizeEventType(Number(e.target.value))}
+                    className="flex-1 h-1.5 accent-blue-500"
+                  />
+                  <span className="text-xs font-mono text-gray-600 dark:text-gray-400 w-12 text-right">{fontSizeEventType}%</span>
                 </div>
               </div>
 
@@ -699,27 +747,34 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                     />
                   </div>
                   <div className="flex flex-col items-center gap-1">
-                    <label className="text-xs text-gray-500 dark:text-gray-400">
-                      {locale === 'es' ? 'Color' : 'Color'}
-                    </label>
+                    <label className="text-xs text-gray-500 dark:text-gray-400">Color</label>
                     <input
                       type="color"
                       value={colorTitle || '#ffffff'}
                       onChange={(e) => setColorTitle(e.target.value)}
                       className="h-9 w-12 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
-                      title={locale === 'es' ? 'Color del texto' : 'Text color'}
                     />
                     {colorTitle && (
-                      <button
-                        type="button"
-                        onClick={() => setColorTitle('')}
-                        className="text-xs text-gray-400 hover:text-red-500"
-                        title={locale === 'es' ? 'Quitar color' : 'Remove color'}
-                      >
+                      <button type="button" onClick={() => setColorTitle('')} className="text-xs text-gray-400 hover:text-red-500">
                         <X className="w-3 h-3" />
                       </button>
                     )}
                   </div>
+                </div>
+                <div className="mt-2 flex items-center gap-2">
+                  <label className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                    {locale === 'es' ? 'Tamaño' : 'Size'}
+                  </label>
+                  <input
+                    type="range"
+                    min={25}
+                    max={400}
+                    step={10}
+                    value={fontSizeTitle}
+                    onChange={(e) => setFontSizeTitle(Number(e.target.value))}
+                    className="flex-1 h-1.5 accent-blue-500"
+                  />
+                  <span className="text-xs font-mono text-gray-600 dark:text-gray-400 w-12 text-right">{fontSizeTitle}%</span>
                 </div>
               </div>
 
@@ -743,27 +798,34 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                     />
                   </div>
                   <div className="flex flex-col items-center gap-1">
-                    <label className="text-xs text-gray-500 dark:text-gray-400">
-                      {locale === 'es' ? 'Color' : 'Color'}
-                    </label>
+                    <label className="text-xs text-gray-500 dark:text-gray-400">Color</label>
                     <input
                       type="color"
                       value={colorMessage || '#ffffff'}
                       onChange={(e) => setColorMessage(e.target.value)}
                       className="h-9 w-12 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
-                      title={locale === 'es' ? 'Color del texto' : 'Text color'}
                     />
                     {colorMessage && (
-                      <button
-                        type="button"
-                        onClick={() => setColorMessage('')}
-                        className="text-xs text-gray-400 hover:text-red-500"
-                        title={locale === 'es' ? 'Quitar color' : 'Remove color'}
-                      >
+                      <button type="button" onClick={() => setColorMessage('')} className="text-xs text-gray-400 hover:text-red-500">
                         <X className="w-3 h-3" />
                       </button>
                     )}
                   </div>
+                </div>
+                <div className="mt-2 flex items-center gap-2">
+                  <label className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                    {locale === 'es' ? 'Tamaño' : 'Size'}
+                  </label>
+                  <input
+                    type="range"
+                    min={25}
+                    max={400}
+                    step={10}
+                    value={fontSizeMessage}
+                    onChange={(e) => setFontSizeMessage(Number(e.target.value))}
+                    className="flex-1 h-1.5 accent-blue-500"
+                  />
+                  <span className="text-xs font-mono text-gray-600 dark:text-gray-400 w-12 text-right">{fontSizeMessage}%</span>
                 </div>
               </div>
 
@@ -787,27 +849,34 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                     />
                   </div>
                   <div className="flex flex-col items-center gap-1">
-                    <label className="text-xs text-gray-500 dark:text-gray-400">
-                      {locale === 'es' ? 'Color' : 'Color'}
-                    </label>
+                    <label className="text-xs text-gray-500 dark:text-gray-400">Color</label>
                     <input
                       type="color"
                       value={colorBody || '#ffffff'}
                       onChange={(e) => setColorBody(e.target.value)}
                       className="h-9 w-12 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
-                      title={locale === 'es' ? 'Color del texto' : 'Text color'}
                     />
                     {colorBody && (
-                      <button
-                        type="button"
-                        onClick={() => setColorBody('')}
-                        className="text-xs text-gray-400 hover:text-red-500"
-                        title={locale === 'es' ? 'Quitar color' : 'Remove color'}
-                      >
+                      <button type="button" onClick={() => setColorBody('')} className="text-xs text-gray-400 hover:text-red-500">
                         <X className="w-3 h-3" />
                       </button>
                     )}
                   </div>
+                </div>
+                <div className="mt-2 flex items-center gap-2">
+                  <label className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                    {locale === 'es' ? 'Tamaño' : 'Size'}
+                  </label>
+                  <input
+                    type="range"
+                    min={25}
+                    max={400}
+                    step={10}
+                    value={fontSizeBody}
+                    onChange={(e) => setFontSizeBody(Number(e.target.value))}
+                    className="flex-1 h-1.5 accent-blue-500"
+                  />
+                  <span className="text-xs font-mono text-gray-600 dark:text-gray-400 w-12 text-right">{fontSizeBody}%</span>
                 </div>
               </div>
             </div>

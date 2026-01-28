@@ -4,16 +4,33 @@ import { motion } from 'framer-motion'
 import { Calendar, Clock, MapPin, Shirt, Gift, Utensils } from 'lucide-react'
 import { ReactNode } from 'react'
 
+/**
+ * Compute a responsive font size for body/detail text based on a percentage value.
+ * The percentage maps so that 50% ≈ current default size (~1.5rem desktop).
+ */
+function bodyFontSize(pct: number): string {
+  const maxRem = pct * 0.03
+  const minRem = Math.max(0.75, maxRem * 0.55)
+  const vw = pct * 0.06
+  return `clamp(${minRem.toFixed(2)}rem, ${vw.toFixed(1)}vw, ${maxRem.toFixed(2)}rem)`
+}
+
 interface DetailItemProps {
   icon: ReactNode
   value: string | ReactNode
   accentColor: string
   index: number
   fontFamily?: string | null
+  fontSize?: string
+  textColor?: string | null
 }
 
-function DetailItem({ icon, value, accentColor, index, fontFamily }: DetailItemProps) {
-  const fontStyle = fontFamily ? { fontFamily } : {}
+function DetailItem({ icon, value, accentColor, index, fontFamily, fontSize, textColor }: DetailItemProps) {
+  const fontStyle: React.CSSProperties = {
+    ...(fontFamily ? { fontFamily } : {}),
+    ...(fontSize ? { fontSize } : {}),
+    ...(textColor ? { color: textColor } : {}),
+  }
 
   return (
     <motion.div
@@ -34,7 +51,7 @@ function DetailItem({ icon, value, accentColor, index, fontFamily }: DetailItemP
       >
         {icon}
       </motion.div>
-      <div className="text-2xl md:text-3xl font-semibold text-white" style={fontStyle}>
+      <div className={`font-semibold ${textColor ? '' : 'text-white'}`} style={fontStyle}>
         {value}
       </div>
     </motion.div>
@@ -54,6 +71,8 @@ interface AnimatedDetailsProps {
   locale: string
   fontFamily?: string | null
   eventTypeSlug?: string
+  fontSizeBody?: number | null
+  colorBody?: string | null
 }
 
 export function AnimatedDetails({
@@ -69,7 +88,13 @@ export function AnimatedDetails({
   locale,
   fontFamily,
   eventTypeSlug,
+  fontSizeBody,
+  colorBody,
 }: AnimatedDetailsProps) {
+  // Compute responsive body font size (default 50%)
+  const computedFontSize = bodyFontSize(fontSizeBody ?? 50)
+  // Slightly larger for intro text
+  const introFontSize = bodyFontSize((fontSizeBody ?? 50) * 1.4)
   
   const details = []
   let index = 0
@@ -89,6 +114,8 @@ export function AnimatedDetails({
         accentColor={accentColor}
         index={index++}
         fontFamily={fontFamily}
+        fontSize={computedFontSize}
+        textColor={colorBody}
       />
     )
   }
@@ -103,6 +130,8 @@ export function AnimatedDetails({
         accentColor={accentColor}
         index={index++}
         fontFamily={fontFamily}
+        fontSize={computedFontSize}
+        textColor={colorBody}
       />
     )
   }
@@ -137,6 +166,8 @@ export function AnimatedDetails({
         accentColor={accentColor}
         index={index++}
         fontFamily={fontFamily}
+        fontSize={computedFontSize}
+        textColor={colorBody}
       />
     )
   }
@@ -151,6 +182,8 @@ export function AnimatedDetails({
         accentColor={accentColor}
         index={index++}
         fontFamily={fontFamily}
+        fontSize={computedFontSize}
+        textColor={colorBody}
       />
     )
   }
@@ -175,6 +208,8 @@ export function AnimatedDetails({
         accentColor={accentColor}
         index={index++}
         fontFamily={fontFamily}
+        fontSize={computedFontSize}
+        textColor={colorBody}
       />
     )
   }
@@ -193,6 +228,8 @@ export function AnimatedDetails({
         accentColor={accentColor}
         index={index++}
         fontFamily={fontFamily}
+        fontSize={computedFontSize}
+        textColor={colorBody}
       />
     )
   }
@@ -241,8 +278,12 @@ export function AnimatedDetails({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-3xl md:text-4xl text-white text-center font-medium"
-          style={fontFamily ? { fontFamily } : {}}
+          className={`text-center font-medium ${colorBody ? '' : 'text-white'}`}
+          style={{
+            ...(fontFamily ? { fontFamily } : {}),
+            fontSize: introFontSize,
+            ...(colorBody ? { color: colorBody } : {}),
+          }}
         >
           {introMessage}
         </motion.p>
