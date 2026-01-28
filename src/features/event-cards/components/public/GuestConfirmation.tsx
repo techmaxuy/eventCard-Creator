@@ -19,12 +19,13 @@ interface GuestConfirmationProps {
   eventSlug: string
   requirePhone: boolean
   askDietaryRequirements: boolean
+  primaryColor?: string
   locale: string
   fontFamily?: string | null
   onSuccess?: () => void
 }
 
-export function GuestConfirmation({ eventId, eventSlug, requirePhone, askDietaryRequirements, locale, fontFamily, onSuccess }: GuestConfirmationProps) {
+export function GuestConfirmation({ eventId, eventSlug, requirePhone, askDietaryRequirements, primaryColor = '#3b82f6', locale, fontFamily, onSuccess }: GuestConfirmationProps) {
   const t = useTranslations('EventPublic')
   const [isPending, startTransition] = useTransition()
 
@@ -123,7 +124,13 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, askDietary
 
   if (submitted) {
     return (
-      <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-lg border border-white/30 dark:border-zinc-800/50 p-8 text-center">
+      <div
+        className="backdrop-blur-md rounded-xl shadow-lg border p-8 text-center"
+        style={{
+          backgroundColor: `${primaryColor}10`,
+          borderColor: `${primaryColor}20`
+        }}
+      >
         <div className={`w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center ${
           status === 'CONFIRMED' 
             ? 'bg-green-100 dark:bg-green-900/20' 
@@ -155,7 +162,13 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, askDietary
   }
 
   return (
-    <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-lg border border-white/30 dark:border-zinc-800/50 p-8">
+    <div
+      className="backdrop-blur-md rounded-xl shadow-lg border p-8"
+      style={{
+        backgroundColor: `${primaryColor}10`,
+        borderColor: `${primaryColor}20`
+      }}
+    >
       <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2" style={fontStyle}>
         {t('confirmAttendance')}
       </h3>
@@ -397,8 +410,11 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, askDietary
         <button
           type="submit"
           disabled={isPending}
-          style={fontStyle}
-          className="w-full px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          style={{
+            ...fontStyle,
+            backgroundColor: primaryColor,
+          }}
+          className="w-full px-6 py-4 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:brightness-110"
         >
           {isPending ? (
             <>

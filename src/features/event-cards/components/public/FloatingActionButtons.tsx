@@ -43,7 +43,7 @@ export function FloatingActionButtons({
     <>
       {/* Floating Action Buttons */}
       <div className="fixed bottom-6 left-6 z-40 flex flex-col gap-3">
-        {/* RSVP Button */}
+        {/* RSVP Button - Primary color darker shade */}
         <motion.button
           initial={{ opacity: 0, scale: 0.8, x: -20 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -52,13 +52,16 @@ export function FloatingActionButtons({
             setShowShare(false)
             setShowRSVP(true)
           }}
-          className="w-14 h-14 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border-2 border-white/20"
+          className="w-14 h-14 rounded-full text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border-2 border-white/20 hover:brightness-110"
+          style={{
+            background: `linear-gradient(135deg, ${primaryColor} 0%, ${primaryColor}dd 100%)`,
+          }}
           title="Confirmar Asistencia"
         >
           <UserCheck className="w-6 h-6" />
         </motion.button>
 
-        {/* Share Button */}
+        {/* Share Button - Primary color lighter shade */}
         <motion.button
           initial={{ opacity: 0, scale: 0.8, x: -20 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -67,7 +70,10 @@ export function FloatingActionButtons({
             setShowRSVP(false)
             setShowShare(true)
           }}
-          className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border-2 border-white/20"
+          className="w-14 h-14 rounded-full text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border-2 border-white/20 hover:brightness-110"
+          style={{
+            background: `linear-gradient(135deg, ${primaryColor}bb 0%, ${primaryColor}88 100%)`,
+          }}
           title="Compartir Evento"
         >
           <Share2 className="w-6 h-6" />
@@ -98,16 +104,23 @@ export function FloatingActionButtons({
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="fixed bottom-0 left-0 right-0 z-50 max-h-[90vh] overflow-y-auto"
           >
-            <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md rounded-t-3xl shadow-2xl border-t border-white/20 dark:border-zinc-800/50">
+            <div
+              className="backdrop-blur-md rounded-t-3xl shadow-2xl border-t border-white/20"
+              style={{ backgroundColor: `${primaryColor}08` }}
+            >
               {/* Handle bar */}
               <div className="flex justify-center pt-3 pb-2">
-                <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full" />
+                <div className="w-12 h-1.5 rounded-full" style={{ backgroundColor: `${primaryColor}40` }} />
               </div>
 
               {/* Close button - z-10 to stay above form content */}
               <button
                 onClick={() => setShowRSVP(false)}
-                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center justify-center transition-colors shadow-lg border border-gray-300 dark:border-gray-600"
+                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center transition-colors shadow-lg border"
+                style={{
+                  backgroundColor: `${primaryColor}15`,
+                  borderColor: `${primaryColor}30`
+                }}
               >
                 <X className="w-5 h-5 text-gray-700 dark:text-gray-300" />
               </button>
@@ -119,6 +132,7 @@ export function FloatingActionButtons({
                   eventSlug={eventSlug}
                   requirePhone={requirePhone}
                   askDietaryRequirements={askDietaryRequirements}
+                  primaryColor={primaryColor}
                   locale={locale}
                   fontFamily={fontFamily}
                   onSuccess={() => {
@@ -142,16 +156,23 @@ export function FloatingActionButtons({
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="fixed bottom-0 left-0 right-0 z-50 max-h-[90vh] overflow-y-auto"
           >
-            <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md rounded-t-3xl shadow-2xl border-t border-white/20 dark:border-zinc-800/50">
+            <div
+              className="backdrop-blur-md rounded-t-3xl shadow-2xl border-t border-white/20"
+              style={{ backgroundColor: `${primaryColor}08` }}
+            >
               {/* Handle bar */}
               <div className="flex justify-center pt-3 pb-2">
-                <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full" />
+                <div className="w-12 h-1.5 rounded-full" style={{ backgroundColor: `${primaryColor}40` }} />
               </div>
 
               {/* Close button */}
               <button
                 onClick={() => setShowShare(false)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-colors"
+                className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+                style={{
+                  backgroundColor: `${primaryColor}15`,
+                  borderColor: `${primaryColor}30`
+                }}
               >
                 <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               </button>
