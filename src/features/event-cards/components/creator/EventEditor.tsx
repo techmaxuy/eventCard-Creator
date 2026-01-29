@@ -700,12 +700,26 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                   </div>
                   <div className="flex flex-col items-center gap-1">
                     <label className="text-xs text-gray-500 dark:text-gray-400">Color</label>
-                    <input
-                      type="color"
-                      value={colorEventType || '#ffffff'}
-                      onChange={(e) => setColorEventType(e.target.value)}
-                      className="h-9 w-12 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
-                    />
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="color"
+                        value={colorEventType || '#ffffff'}
+                        onChange={(e) => setColorEventType(e.target.value)}
+                        className="h-9 w-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={colorEventType || ''}
+                        onChange={(e) => {
+                          const val = e.target.value
+                          if (val === '' || /^#[0-9A-Fa-f]{0,6}$/.test(val)) {
+                            setColorEventType(val)
+                          }
+                        }}
+                        placeholder="#hex"
+                        className="w-20 px-1.5 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+                    </div>
                     {colorEventType && (
                       <button type="button" onClick={() => setColorEventType('')} className="text-xs text-gray-400 hover:text-red-500">
                         <X className="w-3 h-3" />
@@ -751,12 +765,26 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                   </div>
                   <div className="flex flex-col items-center gap-1">
                     <label className="text-xs text-gray-500 dark:text-gray-400">Color</label>
-                    <input
-                      type="color"
-                      value={colorTitle || '#ffffff'}
-                      onChange={(e) => setColorTitle(e.target.value)}
-                      className="h-9 w-12 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
-                    />
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="color"
+                        value={colorTitle || '#ffffff'}
+                        onChange={(e) => setColorTitle(e.target.value)}
+                        className="h-9 w-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={colorTitle || ''}
+                        onChange={(e) => {
+                          const val = e.target.value
+                          if (val === '' || /^#[0-9A-Fa-f]{0,6}$/.test(val)) {
+                            setColorTitle(val)
+                          }
+                        }}
+                        placeholder="#hex"
+                        className="w-20 px-1.5 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+                    </div>
                     {colorTitle && (
                       <button type="button" onClick={() => setColorTitle('')} className="text-xs text-gray-400 hover:text-red-500">
                         <X className="w-3 h-3" />
@@ -802,12 +830,26 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                   </div>
                   <div className="flex flex-col items-center gap-1">
                     <label className="text-xs text-gray-500 dark:text-gray-400">Color</label>
-                    <input
-                      type="color"
-                      value={colorMessage || '#ffffff'}
-                      onChange={(e) => setColorMessage(e.target.value)}
-                      className="h-9 w-12 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
-                    />
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="color"
+                        value={colorMessage || '#ffffff'}
+                        onChange={(e) => setColorMessage(e.target.value)}
+                        className="h-9 w-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={colorMessage || ''}
+                        onChange={(e) => {
+                          const val = e.target.value
+                          if (val === '' || /^#[0-9A-Fa-f]{0,6}$/.test(val)) {
+                            setColorMessage(val)
+                          }
+                        }}
+                        placeholder="#hex"
+                        className="w-20 px-1.5 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+                    </div>
                     {colorMessage && (
                       <button type="button" onClick={() => setColorMessage('')} className="text-xs text-gray-400 hover:text-red-500">
                         <X className="w-3 h-3" />
@@ -853,12 +895,26 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                   </div>
                   <div className="flex flex-col items-center gap-1">
                     <label className="text-xs text-gray-500 dark:text-gray-400">Color</label>
-                    <input
-                      type="color"
-                      value={colorBody || '#ffffff'}
-                      onChange={(e) => setColorBody(e.target.value)}
-                      className="h-9 w-12 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
-                    />
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="color"
+                        value={colorBody || '#ffffff'}
+                        onChange={(e) => setColorBody(e.target.value)}
+                        className="h-9 w-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={colorBody || ''}
+                        onChange={(e) => {
+                          const val = e.target.value
+                          if (val === '' || /^#[0-9A-Fa-f]{0,6}$/.test(val)) {
+                            setColorBody(val)
+                          }
+                        }}
+                        placeholder="#hex"
+                        className="w-20 px-1.5 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+                    </div>
                     {colorBody && (
                       <button type="button" onClick={() => setColorBody('')} className="text-xs text-gray-400 hover:text-red-500">
                         <X className="w-3 h-3" />
