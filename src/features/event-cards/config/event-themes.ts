@@ -1,3 +1,45 @@
+/**
+ * Calculate the relative luminance of a hex color
+ * Based on WCAG 2.0 formula
+ */
+function getLuminance(hex: string): number {
+  const rgb = hex.replace('#', '').match(/.{2}/g)
+  if (!rgb) return 0
+
+  const [r, g, b] = rgb.map(c => {
+    const sRGB = parseInt(c, 16) / 255
+    return sRGB <= 0.03928 ? sRGB / 12.92 : Math.pow((sRGB + 0.055) / 1.055, 2.4)
+  })
+
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b
+}
+
+/**
+ * Get a contrasting text color (black or white) based on background color
+ * Returns black for light backgrounds, white for dark backgrounds
+ */
+export function getContrastColor(hexColor: string): string {
+  if (!hexColor || !hexColor.startsWith('#')) return '#000000'
+
+  const luminance = getLuminance(hexColor)
+  // Using 0.5 as threshold - higher values make the switch happen earlier (more white text)
+  return luminance > 0.5 ? '#000000' : '#FFFFFF'
+}
+
+/**
+ * Get a contrasting text color for use on transparent/glass backgrounds
+ * that use the primary color as an accent
+ * Returns a dark gray for light colors, light gray for dark colors
+ */
+export function getModalTextColor(primaryColor: string): string {
+  if (!primaryColor || !primaryColor.startsWith('#')) return '#374151' // default gray-700
+
+  const luminance = getLuminance(primaryColor)
+  // For modal text, we want readable text that complements the primary color
+  // If primary is light, use dark text; if primary is dark, use slightly lighter text
+  return luminance > 0.5 ? '#1f2937' : '#374151' // gray-800 or gray-700
+}
+
 export interface EventTheme {
   particles: 'confetti' | 'petals' | 'bubbles' | 'stars' | 'none'
   colors: string[]

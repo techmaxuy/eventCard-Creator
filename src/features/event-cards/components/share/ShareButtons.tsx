@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Share2, Copy, Check, QrCode, Download } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
+import { getContrastColor } from '@/features/event-cards/config/event-themes'
 
 interface ShareButtonsProps {
   eventTitle: string
@@ -26,6 +27,7 @@ export function ShareButtons({
   const [copied, setCopied] = useState(false)
   const [showQR, setShowQR] = useState(false)
   const fontStyle = fontFamily ? { fontFamily } : {}
+  const buttonTextColor = getContrastColor(primaryColor)
 
   const isAbsoluteUrl = eventUrl.startsWith('http://') || eventUrl.startsWith('https://')
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || ''
@@ -227,8 +229,9 @@ export function ShareButtons({
               style={{
                 ...fontStyle,
                 backgroundColor: primaryColor,
+                color: buttonTextColor,
               }}
-              className="w-full px-4 py-2 text-white rounded-lg transition-colors flex items-center justify-center gap-2 hover:brightness-110"
+              className="w-full px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2 hover:brightness-110"
             >
               <Download className="w-4 h-4" />
               {t('downloadQR')}

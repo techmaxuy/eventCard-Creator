@@ -4,6 +4,7 @@ import { useState, useTransition, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Check, X, HelpCircle, Loader2, Mail, Phone, User, Users, MessageSquare, UtensilsCrossed } from 'lucide-react'
 import { confirmGuest } from '@/features/event-cards/actions/guests'
+import { getContrastColor } from '@/features/event-cards/config/event-themes'
 
 // Dietary requirement options
 const DIETARY_OPTIONS = [
@@ -31,6 +32,9 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, askDietary
 
   // Aplicar fuente personalizada si existe (ya viene convertida desde el padre)
   const fontStyle = fontFamily ? { fontFamily } : {}
+
+  // Get contrasting color for text on primary color backgrounds (like the submit button)
+  const buttonTextColor = getContrastColor(primaryColor)
 
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
@@ -413,8 +417,9 @@ export function GuestConfirmation({ eventId, eventSlug, requirePhone, askDietary
           style={{
             ...fontStyle,
             backgroundColor: primaryColor,
+            color: buttonTextColor,
           }}
-          className="w-full px-6 py-4 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:brightness-110"
+          className="w-full px-6 py-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:brightness-110"
         >
           {isPending ? (
             <>

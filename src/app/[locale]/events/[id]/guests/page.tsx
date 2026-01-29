@@ -3,7 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import { getUserEvent } from '@/features/event-cards/actions/events'
 import { getEventGuestsForOwner } from '@/features/event-cards/actions/guests'
 import { getTranslations } from 'next-intl/server'
-import { GuestsList } from '@/features/event-cards/components/guests/GuestsList'
+import { GuestsPageContent } from '@/features/event-cards/components/guests/GuestsPageContent'
 import Link from 'next/link'
 import { ChevronLeft, Users } from 'lucide-react'
 
@@ -76,11 +76,13 @@ export default async function GuestsPage({ params }: GuestsPageProps) {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <GuestsList 
-          guests={guests || []} 
+        <GuestsPageContent
+          guests={guests || []}
           eventId={id}
           eventSlug={event.slug}
-          locale={locale} 
+          locale={locale}
+          hasGiftRegistry={event.eventType?.hasGiftRegistry || false}
+          showGiftRegistry={(event as any).showGiftRegistry || false}
         />
       </div>
     </div>

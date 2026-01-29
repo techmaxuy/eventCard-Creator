@@ -24,6 +24,7 @@ interface EventType {
   slug?: string
   hideGuestCount?: boolean
   showFeaturedImage?: boolean
+  hasGiftRegistry?: boolean
 }
 
 interface DecorationAsset {
@@ -73,6 +74,7 @@ interface Event {
   fontSizeBody: number | null
   welcomePhrasePosition: string | null
   showCountdown: boolean
+  showGiftRegistry: boolean
   eventType: EventType
   _count: {
     guests: number
@@ -394,7 +396,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
         </div>
       </div>
 
-      {/* Floating Action Buttons (RSVP + Share) */}
+      {/* Floating Action Buttons (RSVP + Share + Gift Registry) */}
       <FloatingActionButtons
         eventId={event.id}
         eventSlug={event.slug}
@@ -403,6 +405,7 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
         eventUrl={fullEventUrl}
         requirePhone={event.requirePhone}
         askDietaryRequirements={event.askDietaryRequirements}
+        showGiftRegistry={event.showGiftRegistry && event.eventType.hasGiftRegistry !== false}
         primaryColor={event.primaryColor}
         locale={locale}
         fontFamily={cssFontFamily}

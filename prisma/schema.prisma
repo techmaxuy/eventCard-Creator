@@ -235,13 +235,19 @@ model Event {
   requirePhone      Boolean     @default(true)
   askDietaryRequirements Boolean @default(false) // Preguntar por requerimientos alimenticios
   showCountdown     Boolean     @default(false)   // Show countdown timer on public page
-  
+
+  // Gift Registry Feature
+  showGiftRegistry      Boolean     @default(false)  // Enable gift registry for this event
+  giftRegistryImage     String?     // AI-generated image of registered gifts
+  giftRegistryEmptyImage String?    // Default empty image when no gifts registered
+
   // Estadísticas
   views             Int         @default(0)
   shares            Int         @default(0)
-  
+
   // Relaciones
   guests            Guest[]
+  giftRegistrations GiftRegistration[]
   
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
@@ -275,13 +281,35 @@ model Guest {
   // Metadata
   ipAddress         String?
   userAgent         String?
-  
+
+  // Gift Registrations
+  giftRegistrations GiftRegistration[]
+
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
-  
+
   @@index([eventId])
   @@index([phone])
   @@index([status])
+}
+
+// Gift registrations by confirmed guests
+model GiftRegistration {
+  id          String   @id @default(cuid())
+  eventId     String
+  guestId     String
+  giftName    String   // "Tostadora", "Juego de sábanas", etc.
+  description String?  // Optional description
+  quantity    Int      @default(1)
+
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  guest       Guest    @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([eventId])
+  @@index([guestId])
 }
 
 enum GuestStatus {
