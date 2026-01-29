@@ -89,8 +89,14 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
   // Scroll-based brightness effect for the background
   const { scrollYProgress } = useScroll()
 
-  // Brightness effect: starts very bright (1.3), dims to normal (1.0) as you scroll
-  const brightnessValue = useTransform(scrollYProgress, [0, 0.15, 0.3], [1.3, 1.15, 1])
+  // Brightness effect: starts very bright at top (1.6), dims to 1.3 at bottom
+  // El brillo de la parte alta es el doble del anterior, y la parte baja tiene el brillo que antes tenía la parte alta
+  const brightnessValue = useTransform(
+    scrollYProgress,
+    [0, 0.3, 1],
+    [1.6, 1.45, 1.3],
+    { clamp: true } // Previene valores fuera del rango
+  )
   const filterStyle = useMotionTemplate`brightness(${brightnessValue})`
 
   // Obtener tema visual según tipo de evento
@@ -139,30 +145,40 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
       )}
 
     {/* Fondo global con imagen, efecto de brillo animado y partículas */}
-        <motion.div
-            className="fixed inset-0 -z-10 overflow-hidden"
-            style={{ filter: filterStyle }}
-        >
-            {/* Cover image */}
-            {event.coverImage && (
-              <Image
-                src={event.coverImage}
-                alt={event.title}
-                fill
-                className="object-cover"
-                priority
-                sizes="100vw"
-              />
-            )}
-            {/* Overlay oscuro para mejorar legibilidad - más sutil */}
-            <div className="absolute inset-0 bg-black/40 dark:bg-black/60" />
+    {/* Usamos un div fijo sin transformaciones para evitar efectos de resize en scroll */}
+    <div className="fixed inset-0 -z-10 overflow-hidden">
+      {/* Container para la imagen con el efecto de brillo */}
+      <motion.div
+        className="absolute inset-0"
+        style={{
+          filter: filterStyle,
+          willChange: 'filter',
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
+        }}
+      >
+        {/* Cover image */}
+        {event.coverImage && (
+          <Image
+            src={event.coverImage}
+            alt={event.title}
+            fill
+            className="object-cover"
+            style={{
+              transform: 'translateZ(0)', // Force GPU layer for stable rendering
+            }}
+            priority
+            sizes="100vw"
+          />
+        )}
+      </motion.div>
 
-
+      {/* Overlay oscuro para mejorar legibilidad - más sutil */}
+      <div className="absolute inset-0 bg-black/40 dark:bg-black/60" />
 
       {/* Particle Background */}
       <ParticleBackground theme={theme} particleOverride={event.particleEffect} />
-
- </motion.div>
+    </div>
 
       {/* Decorative Elements */}
       {(() => {
@@ -204,7 +220,8 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
 
       {/* Main Content */}
       
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+        {/* pb-[50vh] permite que el contenido final suba hasta el centro de la pantalla */}
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 pb-[50vh] space-y-12">
           
           {/* Featured Image - Foto principal */}
           {event.featuredImage && (

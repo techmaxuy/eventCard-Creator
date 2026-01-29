@@ -698,14 +698,14 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                       compact={true}
                     />
                   </div>
-                  <div className="flex flex-col items-center gap-1">
+                  <div className="flex flex-col items-center gap-1 shrink-0">
                     <label className="text-xs text-gray-500 dark:text-gray-400">Color</label>
-                    <div className="flex items-center gap-1">
+                    <div className="flex flex-col sm:flex-row items-center gap-1">
                       <input
                         type="color"
                         value={colorEventType || '#ffffff'}
                         onChange={(e) => setColorEventType(e.target.value)}
-                        className="h-9 w-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+                        className="h-8 w-8 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
                       />
                       <input
                         type="text"
@@ -717,7 +717,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                           }
                         }}
                         placeholder="#hex"
-                        className="w-20 px-1.5 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="w-[4.5rem] px-1 py-0.5 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                       />
                     </div>
                     {colorEventType && (
@@ -763,14 +763,14 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                       compact={true}
                     />
                   </div>
-                  <div className="flex flex-col items-center gap-1">
+                  <div className="flex flex-col items-center gap-1 shrink-0">
                     <label className="text-xs text-gray-500 dark:text-gray-400">Color</label>
-                    <div className="flex items-center gap-1">
+                    <div className="flex flex-col sm:flex-row items-center gap-1">
                       <input
                         type="color"
                         value={colorTitle || '#ffffff'}
                         onChange={(e) => setColorTitle(e.target.value)}
-                        className="h-9 w-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+                        className="h-8 w-8 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
                       />
                       <input
                         type="text"
@@ -782,7 +782,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                           }
                         }}
                         placeholder="#hex"
-                        className="w-20 px-1.5 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="w-[4.5rem] px-1 py-0.5 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                       />
                     </div>
                     {colorTitle && (
@@ -828,14 +828,14 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                       compact={true}
                     />
                   </div>
-                  <div className="flex flex-col items-center gap-1">
+                  <div className="flex flex-col items-center gap-1 shrink-0">
                     <label className="text-xs text-gray-500 dark:text-gray-400">Color</label>
-                    <div className="flex items-center gap-1">
+                    <div className="flex flex-col sm:flex-row items-center gap-1">
                       <input
                         type="color"
                         value={colorMessage || '#ffffff'}
                         onChange={(e) => setColorMessage(e.target.value)}
-                        className="h-9 w-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+                        className="h-8 w-8 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
                       />
                       <input
                         type="text"
@@ -847,7 +847,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                           }
                         }}
                         placeholder="#hex"
-                        className="w-20 px-1.5 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="w-[4.5rem] px-1 py-0.5 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                       />
                     </div>
                     {colorMessage && (
@@ -893,14 +893,14 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                       compact={true}
                     />
                   </div>
-                  <div className="flex flex-col items-center gap-1">
+                  <div className="flex flex-col items-center gap-1 shrink-0">
                     <label className="text-xs text-gray-500 dark:text-gray-400">Color</label>
-                    <div className="flex items-center gap-1">
+                    <div className="flex flex-col sm:flex-row items-center gap-1">
                       <input
                         type="color"
                         value={colorBody || '#ffffff'}
                         onChange={(e) => setColorBody(e.target.value)}
-                        className="h-9 w-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+                        className="h-8 w-8 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
                       />
                       <input
                         type="text"
@@ -912,7 +912,7 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                           }
                         }}
                         placeholder="#hex"
-                        className="w-20 px-1.5 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="w-[4.5rem] px-1 py-0.5 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                       />
                     </div>
                     {colorBody && (
