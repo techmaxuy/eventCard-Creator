@@ -47,6 +47,7 @@ interface EventType {
   showFonts: boolean
   fontCategories: unknown // Json type from Prisma
   showFeaturedImage: boolean
+  hasCountdown: boolean
   color: string
   icon: string | null
 }
@@ -92,6 +93,7 @@ interface Event {
   welcomePhrasePosition: string | null
   isPublished: boolean
   askDietaryRequirements: boolean
+  showCountdown: boolean
   eventType: EventType
   user?: {
     name: string | null
@@ -188,6 +190,9 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
   // Guest confirmation settings
   const [askDietaryRequirements, setAskDietaryRequirements] = useState(event.askDietaryRequirements || false)
 
+  // Countdown toggle
+  const [showCountdown, setShowCountdown] = useState(event.showCountdown || false)
+
   // Inicializar el asset de música seleccionado cuando el evento ya tiene música
   useEffect(() => {
     if (event.musicUrl && availableAssets.length > 0) {
@@ -236,7 +241,8 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
         welcomePhrasePosition: welcomePhrasePosition as 'above' | 'below',
         decorations: selectedDecorations,
         askDietaryRequirements,
-        particleEffect: (particleEffect || null) as 'confetti' | 'petals' | 'bubbles' | 'stars' | 'none' | null
+        particleEffect: (particleEffect || null) as 'confetti' | 'petals' | 'bubbles' | 'stars' | 'none' | null,
+        showCountdown,
       })
 
       if (result.error) {
@@ -1476,6 +1482,35 @@ export function EventEditor({ event: initialEvent, locale,availableAssets = [] }
                 />
               </button>
             </div>
+
+            {/* Countdown Toggle - Only show if event type allows countdown */}
+            {event.eventType.hasCountdown && event.eventType.hasDate && (
+              <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div>
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {locale === 'es' ? 'Mostrar contador regresivo' : 'Show countdown timer'}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {locale === 'es'
+                      ? 'Muestra los días restantes hasta el evento al final de la invitación'
+                      : 'Shows remaining days until the event at the end of the invitation'}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowCountdown(!showCountdown)}
+                  className={`relative w-11 h-6 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                    showCountdown ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+                  }`}
+                >
+                  <div
+                    className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform ${
+                      showCountdown ? 'translate-x-5' : 'translate-x-0.5'
+                    } mt-0.5`}
+                  />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Save Button */}

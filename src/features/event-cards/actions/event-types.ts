@@ -41,6 +41,8 @@ const EventTypeSchema = z.object({
   fontCategories: z.array(z.string()).optional(),
   // Featured Image Configuration
   showFeaturedImage: z.boolean().default(true),
+  // Countdown Configuration
+  hasCountdown: z.boolean().default(true),
 })
 
 

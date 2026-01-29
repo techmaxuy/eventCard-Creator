@@ -284,6 +284,7 @@ const UpdateEventSchema = z.object({
   })).optional(),
   askDietaryRequirements: z.boolean().optional(),
   particleEffect: z.enum(['confetti', 'petals', 'bubbles', 'stars', 'none']).optional().nullable(),
+  showCountdown: z.boolean().optional(),
 })
 
 /**

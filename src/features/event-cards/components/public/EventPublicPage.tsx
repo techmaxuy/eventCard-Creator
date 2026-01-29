@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Users } from 'lucide-react'
 import { HeroSection } from './experience/HeroSection'
 import { AnimatedDetails } from './experience/AnimatedDetails'
+import { Countdown } from './experience/Countdown'
 import { ParticleBackground } from './experience/ParticleBackground'
 import { GoogleFontLoader } from './GoogleFontLoader'
 import { DecorativeElements } from './DecorativeElements'
@@ -12,7 +13,8 @@ import { MusicPlayer } from './MusicPlayer'
 import { FloatingActionButtons } from './FloatingActionButtons'
 import { getEventTheme } from '@/features/event-cards/config/event-themes'
 import { getFontFamilyName } from '@/features/event-cards/config/fonts'
-import { motion, useScroll, useTransform, useMotionTemplate } from 'framer-motion'
+import React from 'react'
+import { motion } from 'framer-motion'
 
 interface EventType {
   name: string
@@ -70,6 +72,7 @@ interface Event {
   fontSizeMessage: number | null
   fontSizeBody: number | null
   welcomePhrasePosition: string | null
+  showCountdown: boolean
   eventType: EventType
   _count: {
     guests: number
@@ -86,18 +89,69 @@ interface EventPublicPageProps {
 export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets = [] }: EventPublicPageProps) {
   const t = useTranslations('EventPublic')
 
-  // Scroll-based brightness effect for the background
-  const { scrollYProgress } = useScroll()
+  // DEBUG: Monitorear scroll y dimensiones de pantalla para diagnosticar el efecto de resize
+  React.useEffect(() => {
+    let lastScrollY = 0
+    let lastInnerHeight = window.innerHeight
+    let lastOuterHeight = window.outerHeight
+    let lastDocumentHeight = document.documentElement.scrollHeight
 
-  // Brightness effect: starts very bright at top (1.6), dims to 1.3 at bottom
-  // El brillo de la parte alta es el doble del anterior, y la parte baja tiene el brillo que antes tenía la parte alta
-  const brightnessValue = useTransform(
-    scrollYProgress,
-    [0, 0.3, 1],
-    [1.6, 1.45, 1.3],
-    { clamp: true } // Previene valores fuera del rango
-  )
-  const filterStyle = useMotionTemplate`brightness(${brightnessValue})`
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const maxScrollY = document.documentElement.scrollHeight - window.innerHeight
+      const scrollPercent = (currentScrollY / maxScrollY * 100).toFixed(1)
+      const isAtBottom = currentScrollY >= maxScrollY - 10
+
+      // Solo loguear si hay cambios significativos
+      if (Math.abs(currentScrollY - lastScrollY) > 50 || isAtBottom) {
+        console.log('[DEBUG Scroll]', {
+          scrollY: currentScrollY,
+          maxScrollY,
+          scrollPercent: `${scrollPercent}%`,
+          isAtBottom,
+          innerHeight: window.innerHeight,
+          outerHeight: window.outerHeight,
+          documentHeight: document.documentElement.scrollHeight,
+          visualViewportHeight: window.visualViewport?.height,
+        })
+        lastScrollY = currentScrollY
+      }
+
+      // Detectar cambios en dimensiones
+      if (window.innerHeight !== lastInnerHeight ||
+          window.outerHeight !== lastOuterHeight ||
+          document.documentElement.scrollHeight !== lastDocumentHeight) {
+        console.warn('[DEBUG Resize Detected During Scroll!]', {
+          innerHeight: { was: lastInnerHeight, now: window.innerHeight },
+          outerHeight: { was: lastOuterHeight, now: window.outerHeight },
+          documentHeight: { was: lastDocumentHeight, now: document.documentElement.scrollHeight },
+        })
+        lastInnerHeight = window.innerHeight
+        lastOuterHeight = window.outerHeight
+        lastDocumentHeight = document.documentElement.scrollHeight
+      }
+    }
+
+    const handleResize = () => {
+      console.warn('[DEBUG Window Resize Event!]', {
+        innerHeight: window.innerHeight,
+        outerHeight: window.outerHeight,
+        innerWidth: window.innerWidth,
+        documentHeight: document.documentElement.scrollHeight,
+        visualViewportHeight: window.visualViewport?.height,
+      })
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleResize)
+    window.visualViewport?.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleResize)
+      window.visualViewport?.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   // Obtener tema visual según tipo de evento
   const theme = getEventTheme(
@@ -144,37 +198,19 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
         <GoogleFontLoader fontId={event.fontBody} />
       )}
 
-    {/* Fondo global con imagen, efecto de brillo animado y partículas */}
-    {/* Usamos un div fijo sin transformaciones para evitar efectos de resize en scroll */}
+    {/* Fondo global con imagen y partículas - SIN efectos de brillo ni opacidad */}
     <div className="fixed inset-0 -z-10 overflow-hidden">
-      {/* Container para la imagen con el efecto de brillo */}
-      <motion.div
-        className="absolute inset-0"
-        style={{
-          filter: filterStyle,
-          willChange: 'filter',
-          backfaceVisibility: 'hidden',
-          WebkitBackfaceVisibility: 'hidden',
-        }}
-      >
-        {/* Cover image */}
-        {event.coverImage && (
-          <Image
-            src={event.coverImage}
-            alt={event.title}
-            fill
-            className="object-cover"
-            style={{
-              transform: 'translateZ(0)', // Force GPU layer for stable rendering
-            }}
-            priority
-            sizes="100vw"
-          />
-        )}
-      </motion.div>
-
-      {/* Overlay oscuro para mejorar legibilidad - más sutil */}
-      <div className="absolute inset-0 bg-black/40 dark:bg-black/60" />
+      {/* Cover image - sin filtros, sin transformaciones */}
+      {event.coverImage && (
+        <Image
+          src={event.coverImage}
+          alt={event.title}
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
+      )}
 
       {/* Particle Background */}
       <ParticleBackground theme={theme} particleOverride={event.particleEffect} />
@@ -298,6 +334,18 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
               fontSizeBody={event.fontSizeBody}
               colorBody={event.colorBody}
             />
+
+            {/* Countdown Timer - Shows remaining days until event */}
+            {event.showCountdown && event.eventDate && (
+              <Countdown
+                eventDate={event.eventDate}
+                accentColor={event.primaryColor}
+                locale={locale}
+                fontFamily={cssFontBody || cssFontFamily}
+                textColor={event.colorBody}
+                fontSize={event.fontSizeBody}
+              />
+            )}
           </motion.div>
 
           {/* Gallery */}

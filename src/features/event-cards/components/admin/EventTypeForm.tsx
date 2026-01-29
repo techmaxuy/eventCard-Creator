@@ -43,6 +43,8 @@ interface EventTypeFormProps {
     fontCategories: unknown // Json type from Prisma, will be cast to string[]
     // Featured Image Configuration
     showFeaturedImage: boolean
+    // Countdown Configuration
+    hasCountdown: boolean
   }
   locale: string
 }
@@ -91,6 +93,9 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
 
   // Featured Image Configuration state
   const [showFeaturedImage, setShowFeaturedImage] = useState(eventType?.showFeaturedImage ?? true)
+
+  // Countdown Configuration state
+  const [hasCountdown, setHasCountdown] = useState(eventType?.hasCountdown ?? true)
 
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
 
@@ -149,6 +154,8 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
         fontCategories: showFonts ? fontCategories : [],
         // Featured Image Configuration
         showFeaturedImage,
+        // Countdown Configuration
+        hasCountdown,
       }
 
       const result = eventType
@@ -500,6 +507,24 @@ export function EventTypeForm({ eventType, locale }: EventTypeFormProps) {
                 </span>
                 <span className="text-xs text-gray-500 dark:text-gray-400">
                   {locale === 'es' ? 'Permitir subir una foto destacada (ej: foto de pareja, cumpleañero)' : 'Allow uploading a featured photo (e.g., couple photo, birthday person)'}
+                </span>
+              </div>
+            </label>
+
+            {/* Has Countdown */}
+            <label className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-800">
+              <input
+                type="checkbox"
+                checked={hasCountdown}
+                onChange={(e) => setHasCountdown(e.target.checked)}
+                className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+              />
+              <div className="flex-1">
+                <span className="text-sm font-medium text-gray-900 dark:text-white block">
+                  {locale === 'es' ? 'Permitir contador regresivo' : 'Allow countdown timer'}
+                </span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {locale === 'es' ? 'Los usuarios pueden activar un contador de días restantes en la invitación' : 'Users can enable a days-remaining countdown on the invitation'}
                 </span>
               </div>
             </label>

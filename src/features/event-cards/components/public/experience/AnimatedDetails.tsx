@@ -42,15 +42,8 @@ function DetailItem({ icon, value, accentColor, index, fontFamily, fontSize, tex
         delay: index * 0.1,
         ease: 'easeOut'
       }}
-      className="flex items-center gap-4 text-center justify-center"
+      className="text-center"
     >
-      <motion.div
-        whileHover={{ scale: 1.2, rotate: 10 }}
-        className="flex items-center justify-center flex-shrink-0"
-        style={{ color: accentColor }}
-      >
-        {icon}
-      </motion.div>
       <div className={`font-semibold ${textColor ? '' : 'text-white'}`} style={fontStyle}>
         {value}
       </div>
