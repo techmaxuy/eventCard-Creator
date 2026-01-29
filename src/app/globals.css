@@ -48,6 +48,16 @@ body {
   }
 }
 
+/* Fixed viewport background - prevents resize when mobile address bar hides/shows */
+.bg-fixed-viewport {
+  /* Fallback for browsers that don't support lvh */
+  width: 100vw;
+  height: 100vh;
+  /* Modern browsers: use large viewport height (ignores address bar) */
+  width: 100lvw;
+  height: 100lvh;
+}
+
 /* Heartbeat animation for Create Event button */
 @keyframes heartbeat {
   0%, 100% {

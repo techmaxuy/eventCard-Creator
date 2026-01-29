@@ -199,7 +199,8 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
       )}
 
     {/* Fondo global con imagen y partículas - SIN efectos de brillo ni opacidad */}
-    <div className="fixed inset-0 -z-10 overflow-hidden">
+    {/* Usamos 100lvh (large viewport height) para evitar el resize cuando el address bar del móvil se oculta/muestra */}
+    <div className="fixed top-0 left-0 -z-10 overflow-hidden bg-fixed-viewport">
       {/* Cover image - sin filtros, sin transformaciones */}
       {event.coverImage && (
         <Image

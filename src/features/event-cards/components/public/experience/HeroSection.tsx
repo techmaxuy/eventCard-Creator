@@ -229,7 +229,7 @@ export function HeroSection({
           className="absolute bottom-10 cursor-pointer"
           onClick={scrollToContent}
         >
-          <div className="flex flex-col items-center gap-2 text-white/80 hover:text-white transition-colors">
+          <div className="flex flex-col items-center gap-2 transition-colors" style={{ color: '#262626' }}>
             <span className="text-sm font-medium">Desliza para ver más</span>
             <ChevronDown className="w-8 h-8 animate-bounce" />
           </div>

@@ -40,11 +40,12 @@ function calculateTimeLeft(eventDate: Date): TimeLeft {
 
 /**
  * Compute a responsive font size for countdown text based on a percentage value.
+ * Uses the same formula as AnimatedDetails bodyFontSize for consistency.
  */
-function countdownFontSize(pct: number): string {
-  const maxRem = pct * 0.04
-  const minRem = Math.max(1, maxRem * 0.55)
-  const vw = pct * 0.08
+function bodyFontSize(pct: number): string {
+  const maxRem = pct * 0.03
+  const minRem = Math.max(0.75, maxRem * 0.55)
+  const vw = pct * 0.06
   return `clamp(${minRem.toFixed(2)}rem, ${vw.toFixed(1)}vw, ${maxRem.toFixed(2)}rem)`
 }
 
@@ -66,9 +67,10 @@ export function Countdown({
     return () => clearInterval(timer)
   }, [eventDate])
 
-  // Compute responsive font size (default 50%)
-  const computedFontSize = countdownFontSize(fontSize ?? 50)
-  const numberFontSize = countdownFontSize((fontSize ?? 50) * 1.5)
+  // Compute responsive font size (default 50%) - same as "rest of invitation"
+  const computedFontSize = bodyFontSize(fontSize ?? 50)
+  // Numbers are slightly larger (1.5x the body percentage)
+  const numberFontSize = bodyFontSize((fontSize ?? 50) * 1.5)
 
   const fontStyle: React.CSSProperties = {
     ...(fontFamily ? { fontFamily } : {}),

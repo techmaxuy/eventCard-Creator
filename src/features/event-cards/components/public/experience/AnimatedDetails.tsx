@@ -143,17 +143,16 @@ export function AnimatedDetails({
           <div>
             <p style={fontFamily ? { fontFamily } : {}}>{location}</p>
             {locationAddress && (
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1" style={fontFamily ? { fontFamily } : {}}>
+              <p className="text-gray-400 mt-1" style={{ fontFamily: fontFamily || undefined, fontSize: computedFontSize }}>
                 {locationAddress}
               </p>
             )}
             {locationUrl && (
-
-                <a href={locationUrl}
+              <a href={locationUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block mt-2 text-sm font-medium hover:underline"
-                style={{ color: accentColor, ...(fontFamily ? { fontFamily } : {}) }}
+                className="inline-block mt-2 font-bold hover:underline"
+                style={{ color: accentColor, fontFamily: fontFamily || undefined, fontSize: computedFontSize }}
               >
                 Ver mapa →
               </a>
