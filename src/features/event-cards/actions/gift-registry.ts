@@ -4,6 +4,8 @@ import { prisma } from '@/core/shared/lib/db'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { auth } from '@/../auth'
+import { generateAIImage } from '@/core/shared/lib/ai'
+import { uploadBase64Image } from '@/core/shared/lib/azure-storage'
 
 const GiftRegistrationSchema = z.object({
   giftName: z.string().min(1, 'Gift name is required').max(200),
@@ -295,5 +297,167 @@ export async function checkGiftRegistryAccess(eventId: string, guestPhone: strin
   } catch (error) {
     console.error('[GiftRegistry] Error checking access:', error)
     return { canRegister: false, reason: 'Error' }
+  }
+}
+
+/**
+ * Generate AI image for the gift registry
+ * Generates an empty gift box image when no gifts, or a collection image when gifts exist
+ */
+export async function generateGiftRegistryImage(eventId: string, locale: string = 'es') {
+  try {
+    // Get event with owner info
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+      include: {
+        eventType: {
+          select: { name: true, nameEn: true },
+        },
+      },
+    })
+
+    if (!event) {
+      return { error: 'EventNotFound' }
+    }
+
+    // Get all registered gifts for this event
+    const gifts = await prisma.giftRegistration.findMany({
+      where: { eventId },
+      select: {
+        giftName: true,
+        quantity: true,
+      },
+    })
+
+    const eventTypeName = locale === 'es' ? event.eventType.name : event.eventType.nameEn
+
+    let prompt: string
+
+    if (gifts.length === 0) {
+      // Generate empty gift registry image
+      prompt = locale === 'es'
+        ? `Genera una imagen elegante y minimalista de una caja de regalo vacía o una mesa de regalos vacía para una invitación de ${eventTypeName}.
+           El estilo debe ser acuarela suave y romántica con tonos pastel.
+           La imagen debe transmitir anticipación y elegancia.
+           NO incluir texto ni palabras en la imagen.
+           Fondo suave y difuminado.
+           La imagen será usada como placeholder para un registro de regalos sin regalos aún.`
+        : `Generate an elegant and minimalist image of an empty gift box or empty gift table for a ${eventTypeName} invitation.
+           The style should be soft romantic watercolor with pastel tones.
+           The image should convey anticipation and elegance.
+           Do NOT include any text or words in the image.
+           Soft, blurred background.
+           This image will be used as a placeholder for an empty gift registry.`
+    } else {
+      // Generate image with the registered gifts
+      const giftsList = gifts
+        .map(g => g.quantity > 1 ? `${g.quantity}x ${g.giftName}` : g.giftName)
+        .join(', ')
+
+      prompt = locale === 'es'
+        ? `Genera una imagen elegante y festiva de una colección de regalos para una invitación de ${eventTypeName}.
+           Los regalos incluyen: ${giftsList}.
+           El estilo debe ser ilustración elegante con colores cálidos y festivos.
+           Muestra los regalos de forma artística y decorativa, envueltos en papel de regalo elegante.
+           NO incluir texto ni palabras en la imagen.
+           Fondo suave con detalles decorativos sutiles.
+           La imagen debe transmitir gratitud y celebración.`
+        : `Generate an elegant and festive image of a gift collection for a ${eventTypeName} invitation.
+           The gifts include: ${giftsList}.
+           The style should be elegant illustration with warm, festive colors.
+           Show the gifts artistically and decoratively, wrapped in elegant gift wrap.
+           Do NOT include any text or words in the image.
+           Soft background with subtle decorative details.
+           The image should convey gratitude and celebration.`
+    }
+
+    console.log('[GiftRegistry] Generating image with prompt:', prompt)
+
+    // Generate image using AI
+    const result = await generateAIImage({
+      userId: event.userId,
+      prompt,
+      tokensToConsume: 10, // Standard cost for image generation
+    })
+
+    if (result.error) {
+      console.error('[GiftRegistry] AI image generation error:', result.error)
+      return { error: result.error }
+    }
+
+    if (!result.imageBase64 || !result.imageMimeType) {
+      return { error: 'NoImageGenerated' }
+    }
+
+    // Upload the image to storage
+    const uploadResult = await uploadBase64Image(
+      result.imageBase64,
+      result.imageMimeType,
+      `gift-registry-${eventId}`
+    )
+
+    if (uploadResult.error || !uploadResult.url) {
+      console.error('[GiftRegistry] Upload error:', uploadResult.error)
+      return { error: 'UploadFailed' }
+    }
+
+    // Update event with the new gift registry image
+    const fieldToUpdate = gifts.length === 0 ? 'giftRegistryEmptyImage' : 'giftRegistryImage'
+
+    await prisma.event.update({
+      where: { id: eventId },
+      data: { [fieldToUpdate]: uploadResult.url },
+    })
+
+    revalidatePath(`/es/e/${event.slug}`)
+    revalidatePath(`/en/e/${event.slug}`)
+
+    console.log(`[GiftRegistry] ${fieldToUpdate} updated for event:`, eventId)
+
+    return {
+      success: true,
+      imageUrl: uploadResult.url,
+      isEmpty: gifts.length === 0,
+    }
+  } catch (error) {
+    console.error('[GiftRegistry] Error generating gift registry image:', error)
+    return { error: 'GenerationFailed' }
+  }
+}
+
+/**
+ * Get the current gift registry image for an event
+ */
+export async function getGiftRegistryImage(eventId: string) {
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+      select: {
+        giftRegistryImage: true,
+        giftRegistryEmptyImage: true,
+      },
+    })
+
+    if (!event) {
+      return { error: 'EventNotFound' }
+    }
+
+    const giftsCount = await prisma.giftRegistration.count({
+      where: { eventId },
+    })
+
+    // Return the appropriate image based on whether there are gifts
+    const imageUrl = giftsCount > 0
+      ? event.giftRegistryImage
+      : event.giftRegistryEmptyImage
+
+    return {
+      imageUrl,
+      hasGifts: giftsCount > 0,
+      giftsCount,
+    }
+  } catch (error) {
+    console.error('[GiftRegistry] Error getting gift registry image:', error)
+    return { error: 'FetchFailed' }
   }
 }

@@ -27,7 +27,14 @@ export function ShareButtons({
   const [copied, setCopied] = useState(false)
   const [showQR, setShowQR] = useState(false)
   const fontStyle = fontFamily ? { fontFamily } : {}
-  const buttonTextColor = getContrastColor(primaryColor)
+
+  // Get contrasting color for text - used for all modal text
+  const contrastColor = getContrastColor(primaryColor)
+
+  // Combined style for text with font and contrast color
+  const textStyle = { ...fontStyle, color: contrastColor }
+  const labelStyle = { ...fontStyle, color: contrastColor, opacity: 0.8 }
+  const hintStyle = { ...fontStyle, color: contrastColor, opacity: 0.6 }
 
   const isAbsoluteUrl = eventUrl.startsWith('http://') || eventUrl.startsWith('https://')
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || ''
@@ -115,8 +122,8 @@ export function ShareButtons({
     <div className="space-y-4">
       {/* Share Title */}
       <div className="flex items-center gap-2">
-        <Share2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-        <h3 className="font-semibold text-gray-900 dark:text-white" style={fontStyle}>
+        <Share2 className="w-5 h-5" style={{ color: contrastColor, opacity: 0.7 }} />
+        <h3 className="font-semibold" style={textStyle}>
           {t('shareEvent')}
         </h3>
       </div>
@@ -124,19 +131,19 @@ export function ShareButtons({
       {/* Copy Link */}
       <button
         onClick={handleCopyLink}
-        className="w-full px-4 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center justify-between group"
+        className="w-full px-4 py-3 bg-white/20 hover:bg-white/30 rounded-lg transition-colors flex items-center justify-between group"
       >
         <div className="flex items-center gap-3">
           {copied ? (
             <Check className="w-5 h-5 text-green-600 dark:text-green-400" />
           ) : (
-            <Copy className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            <Copy className="w-5 h-5" style={{ color: contrastColor, opacity: 0.7 }} />
           )}
           <div className="text-left">
-            <p className="font-medium text-gray-900 dark:text-white" style={fontStyle}>
+            <p className="font-medium" style={textStyle}>
               {copied ? t('linkCopied') : t('copyLink')}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[200px]" style={fontStyle}>
+            <p className="text-xs truncate max-w-[200px]" style={hintStyle}>
               {fullUrl}
             </p>
           </div>
@@ -191,25 +198,25 @@ export function ShareButtons({
       </div>
 
       {/* QR Code Section */}
-      <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+      <div className="border-t pt-4" style={{ borderColor: `${contrastColor}20` }}>
         <button
           onClick={() => setShowQR(!showQR)}
-          className="w-full px-4 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center justify-between"
+          className="w-full px-4 py-3 bg-white/20 hover:bg-white/30 rounded-lg transition-colors flex items-center justify-between"
         >
           <div className="flex items-center gap-3">
-            <QrCode className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-            <span className="font-medium text-gray-900 dark:text-white" style={fontStyle}>
+            <QrCode className="w-5 h-5" style={{ color: contrastColor, opacity: 0.7 }} />
+            <span className="font-medium" style={textStyle}>
               {showQR ? t('hideQR') : t('showQR')}
             </span>
           </div>
-          <span className="text-sm text-gray-500 dark:text-gray-400" style={fontStyle}>
+          <span className="text-sm" style={hintStyle}>
             {showQR ? '▼' : '▶'}
           </span>
         </button>
 
         {showQR && (
           <div className="mt-4 space-y-4">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 flex flex-col items-center">
+            <div className="bg-white p-6 rounded-lg border border-gray-200 flex flex-col items-center">
               <QRCodeSVG
                 id="qr-code-svg"
                 value={fullUrl}
@@ -219,7 +226,7 @@ export function ShareButtons({
                 fgColor={primaryColor}
                 bgColor="#ffffff"
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center" style={fontStyle}>
+              <p className="text-xs text-gray-500 mt-3 text-center" style={fontStyle}>
                 {t('qrDescription')}
               </p>
             </div>
@@ -229,7 +236,7 @@ export function ShareButtons({
               style={{
                 ...fontStyle,
                 backgroundColor: primaryColor,
-                color: buttonTextColor,
+                color: contrastColor,
               }}
               className="w-full px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2 hover:brightness-110"
             >

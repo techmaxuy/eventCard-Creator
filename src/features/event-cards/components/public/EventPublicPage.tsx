@@ -75,6 +75,8 @@ interface Event {
   welcomePhrasePosition: string | null
   showCountdown: boolean
   showGiftRegistry: boolean
+  giftRegistryImage: string | null
+  giftRegistryEmptyImage: string | null
   eventType: EventType
   _count: {
     guests: number
@@ -406,9 +408,11 @@ export function EventPublicPage({ event, locale, fullEventUrl, decorationAssets 
         requirePhone={event.requirePhone}
         askDietaryRequirements={event.askDietaryRequirements}
         showGiftRegistry={event.showGiftRegistry && event.eventType.hasGiftRegistry !== false}
+        giftRegistryImage={event.giftRegistryImage}
+        giftRegistryEmptyImage={event.giftRegistryEmptyImage}
         primaryColor={event.primaryColor}
         locale={locale}
-        fontFamily={cssFontFamily}
+        fontFamily={cssFontBody || cssFontFamily}
       />
 
       {/* Music Player */}

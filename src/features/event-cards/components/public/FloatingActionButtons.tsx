@@ -16,6 +16,8 @@ interface FloatingActionButtonsProps {
   requirePhone: boolean
   askDietaryRequirements: boolean
   showGiftRegistry?: boolean
+  giftRegistryImage?: string | null
+  giftRegistryEmptyImage?: string | null
   primaryColor: string
   locale: string
   fontFamily?: string | null
@@ -30,6 +32,8 @@ export function FloatingActionButtons({
   requirePhone,
   askDietaryRequirements,
   showGiftRegistry = false,
+  giftRegistryImage,
+  giftRegistryEmptyImage,
   primaryColor,
   locale,
   fontFamily
@@ -247,6 +251,8 @@ export function FloatingActionButtons({
                   primaryColor={primaryColor}
                   locale={locale}
                   fontFamily={fontFamily}
+                  giftRegistryImage={giftRegistryImage}
+                  giftRegistryEmptyImage={giftRegistryEmptyImage}
                 />
               </div>
             </div>

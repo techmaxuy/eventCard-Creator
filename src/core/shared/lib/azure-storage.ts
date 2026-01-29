@@ -235,6 +235,62 @@ export async function uploadAudio(
 }
 
 /**
+ * Upload a base64 image to Azure Blob Storage
+ * Used for AI-generated images
+ */
+export async function uploadBase64Image(
+  base64Data: string,
+  mimeType: string,
+  fileNamePrefix: string,
+  options: UploadOptions = {}
+): Promise<{ url?: string; error?: string }> {
+  try {
+    const {
+      folder = 'uploads',
+      maxWidth = 1200,
+      maxHeight = 1200,
+      quality = 85,
+    } = options
+
+    // Convert base64 to buffer
+    const buffer = Buffer.from(base64Data, 'base64')
+
+    // Process image with sharp (redimensionar y optimizar)
+    const processedBuffer = await sharp(buffer)
+      .resize(maxWidth, maxHeight, {
+        fit: 'inside',
+        withoutEnlargement: true,
+      })
+      .jpeg({ quality })
+      .toBuffer()
+
+    // Generate unique name
+    const timestamp = Date.now()
+    const randomString = Math.random().toString(36).substring(7)
+    const blobName = `${folder}/${fileNamePrefix}-${timestamp}-${randomString}.jpg`
+
+    // Upload to Azure
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName)
+
+    await blockBlobClient.uploadData(processedBuffer, {
+      blobHTTPHeaders: {
+        blobContentType: 'image/jpeg',
+        blobCacheControl: 'public, max-age=31536000',
+      },
+    })
+
+    const url = blockBlobClient.url
+
+    console.log(`[Azure] ✅ Base64 image uploaded: ${url}`)
+
+    return { url }
+  } catch (error) {
+    console.error('[Azure] ❌ Base64 upload error:', error)
+    return { error: error instanceof Error ? error.message : 'Upload failed' }
+  }
+}
+
+/**
  * Generate a SAS URL for direct client-side upload to Azure Blob Storage
  * This bypasses Vercel's 4.5MB body size limit for serverless functions
  */

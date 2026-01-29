@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition, useEffect } from 'react'
+import Image from 'next/image'
 import { Gift, Plus, Trash2, Loader2, Check, AlertCircle, Phone } from 'lucide-react'
 import { registerGift, getGuestGifts, removeGift, checkGiftRegistryAccess } from '@/features/event-cards/actions/gift-registry'
 import { getContrastColor } from '@/features/event-cards/config/event-themes'
@@ -18,6 +19,8 @@ interface GiftRegistryProps {
   primaryColor?: string
   locale: string
   fontFamily?: string | null
+  giftRegistryImage?: string | null  // AI-generated image showing registered gifts
+  giftRegistryEmptyImage?: string | null  // AI-generated empty gift box image
 }
 
 export function GiftRegistry({
@@ -26,6 +29,8 @@ export function GiftRegistry({
   primaryColor = '#3b82f6',
   locale,
   fontFamily,
+  giftRegistryImage,
+  giftRegistryEmptyImage,
 }: GiftRegistryProps) {
   const [isPending, startTransition] = useTransition()
   const [phone, setPhone] = useState('')
@@ -40,7 +45,14 @@ export function GiftRegistry({
   const [quantity, setQuantity] = useState(1)
 
   const fontStyle = fontFamily ? { fontFamily } : {}
-  const buttonTextColor = getContrastColor(primaryColor)
+
+  // Get contrasting color for text - used for all modal text
+  const contrastColor = getContrastColor(primaryColor)
+
+  // Combined style for text with font and contrast color
+  const textStyle = { ...fontStyle, color: contrastColor }
+  const labelStyle = { ...fontStyle, color: contrastColor, opacity: 0.8 }
+  const hintStyle = { ...fontStyle, color: contrastColor, opacity: 0.6 }
 
   // Load phone from localStorage
   useEffect(() => {
@@ -175,18 +187,32 @@ export function GiftRegistry({
           </div>
           <div>
             <h3
-              className="text-xl font-bold text-gray-900 dark:text-white"
-              style={fontStyle}
+              className="text-xl font-bold"
+              style={textStyle}
             >
               {locale === 'es' ? 'Registro de Regalos' : 'Gift Registry'}
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400" style={fontStyle}>
+            <p className="text-sm" style={labelStyle}>
               {locale === 'es'
                 ? 'Indica qué regalo traerás al evento'
                 : 'Let us know what gift you will bring'}
             </p>
           </div>
         </div>
+
+        {/* Gift Registry Image */}
+        {(giftRegistryImage || giftRegistryEmptyImage) && (
+          <div className="mb-6 rounded-lg overflow-hidden">
+            <div className="relative w-full aspect-video">
+              <Image
+                src={giftRegistryImage || giftRegistryEmptyImage || ''}
+                alt={locale === 'es' ? 'Registro de regalos' : 'Gift registry'}
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
+        )}
 
         {error && (
           <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 rounded-lg flex items-center gap-2">
@@ -198,8 +224,8 @@ export function GiftRegistry({
         <div className="space-y-4">
           <div>
             <label
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              style={fontStyle}
+              className="block text-sm font-medium mb-1"
+              style={labelStyle}
             >
               {locale === 'es'
                 ? 'Ingresa tu teléfono para verificar'
@@ -216,7 +242,7 @@ export function GiftRegistry({
                 placeholder="+598 99 123 456"
               />
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1" style={fontStyle}>
+            <p className="text-xs mt-1" style={hintStyle}>
               {locale === 'es'
                 ? 'Usa el mismo teléfono con el que confirmaste asistencia'
                 : 'Use the same phone you used to confirm attendance'}
@@ -229,7 +255,7 @@ export function GiftRegistry({
             style={{
               ...fontStyle,
               backgroundColor: primaryColor,
-              color: buttonTextColor,
+              color: contrastColor,
             }}
             className="w-full px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:brightness-110"
           >
@@ -268,12 +294,12 @@ export function GiftRegistry({
         </div>
         <div>
           <h3
-            className="text-xl font-bold text-gray-900 dark:text-white"
-            style={fontStyle}
+            className="text-xl font-bold"
+            style={textStyle}
           >
             {locale === 'es' ? 'Registro de Regalos' : 'Gift Registry'}
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400" style={fontStyle}>
+          <p className="text-sm" style={labelStyle}>
             {locale === 'es' ? `Hola, ${guestName}` : `Hello, ${guestName}`}
           </p>
         </div>
@@ -290,8 +316,8 @@ export function GiftRegistry({
       <div className="space-y-4 mb-6">
         <div>
           <label
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            style={fontStyle}
+            className="block text-sm font-medium mb-1"
+            style={labelStyle}
           >
             {locale === 'es' ? 'Nombre del regalo' : 'Gift name'} *
           </label>
@@ -308,8 +334,8 @@ export function GiftRegistry({
         <div className="grid grid-cols-3 gap-3">
           <div className="col-span-2">
             <label
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              style={fontStyle}
+              className="block text-sm font-medium mb-1"
+              style={labelStyle}
             >
               {locale === 'es' ? 'Descripción (opcional)' : 'Description (optional)'}
             </label>
@@ -324,8 +350,8 @@ export function GiftRegistry({
           </div>
           <div>
             <label
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              style={fontStyle}
+              className="block text-sm font-medium mb-1"
+              style={labelStyle}
             >
               {locale === 'es' ? 'Cantidad' : 'Qty'}
             </label>
@@ -347,7 +373,7 @@ export function GiftRegistry({
           style={{
             ...fontStyle,
             backgroundColor: primaryColor,
-            color: buttonTextColor,
+            color: contrastColor,
           }}
           className="w-full px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:brightness-110"
         >
@@ -364,8 +390,8 @@ export function GiftRegistry({
       {gifts.length > 0 && (
         <div>
           <h4
-            className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3"
-            style={fontStyle}
+            className="text-sm font-medium mb-3"
+            style={labelStyle}
           >
             {locale === 'es' ? 'Tus regalos registrados:' : 'Your registered gifts:'}
           </h4>
@@ -402,7 +428,7 @@ export function GiftRegistry({
       )}
 
       {gifts.length === 0 && (
-        <p className="text-center text-gray-500 dark:text-gray-400 text-sm" style={fontStyle}>
+        <p className="text-center text-sm" style={hintStyle}>
           {locale === 'es'
             ? 'Aún no has registrado ningún regalo'
             : "You haven't registered any gifts yet"}
